@@ -3,6 +3,7 @@ import * as Path from 'node:path'
 
 import postRoutes from './routes/posts.ts'
 import userRoutes from './routes/users.ts'
+import commentRoutes from './routes/comments.ts'
 
 const server = express()
 
@@ -10,6 +11,7 @@ server.use(express.json())
 
 server.use('/api/users', userRoutes)
 server.use('/api/posts', postRoutes)
+server.use('/api/comments', commentRoutes)
 
 if (process.env.NODE_ENV === 'production') {
   server.use(express.static(Path.resolve('public')))
