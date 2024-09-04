@@ -15,9 +15,13 @@ export async function getPostById(id: number, db = connection): Promise<Post> {
 
 export async function getPostsByUserId(
   userId: number,
+  id: number,
   db = connection,
 ): Promise<Post[]> {
-  return db('posts').where('userId', userId).select('*').orderBy('id', 'desc')
+  return db('posts')
+    .where({ userId, id })
+    .select('id', id)
+    .orderBy('id', 'desc')
 }
 
 // ╔════════════════════╗

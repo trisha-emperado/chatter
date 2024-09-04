@@ -37,10 +37,11 @@ router.get('/:id', async (req, res) => {
 
 // This gets the posts made by a user using their id ✦
 
-router.get('/:userId', async (req, res) => {
+router.get('/:userId/:id', async (req, res) => {
   try {
     const userId = parseInt(req.params.userId)
-    const userPosts = await db.getPostsByUserId(userId)
+    const postId = parseInt(req.params.id)
+    const userPosts = await db.getPostsByUserId(userId, postId)
     return res.json(userPosts)
   } catch (error) {
     console.error(error)

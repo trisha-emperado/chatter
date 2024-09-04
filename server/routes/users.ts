@@ -42,15 +42,25 @@ router.get('/:id', async (req, res) => {
 // This is how you would create a new user ✦
 
 router.post('/', checkJwt, async (req: JwtRequest, res) => {
-  const userId = req.auth?.sub
-  const { username, name } = req.body
+  const authId = req.auth?.sub
+  const {
+    username,
+    name,
+    age,
+    cohort,
+    current_role,
+    facilitator,
+    github_url,
+    profile_picture_url,
+    auth_id,
+  } = req.body
 
-  if (!userId) {
+  if (!authId) {
     return res.status(400).json({ message: 'User ID is required' })
   }
 
   try {
-    const existingUser = await db.getUserByAuthId(userId)
+    const existingUser = await db.getUserByAuthId(authId)
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' })
     }
@@ -58,12 +68,13 @@ router.post('/', checkJwt, async (req: JwtRequest, res) => {
     const newUser: Omit<User, 'id'> = {
       username: username || '',
       name: name || '',
-      current_role: '',
-      age: 0,
-      profile_picture_url: '',
-      cohort: '',
-      facilitator: '',
-      github_url: '',
+      current_role: current_role || '',
+      age: age || 0,
+      profile_picture_url: profile_picture_url || '',
+      cohort: cohort || '',
+      facilitator: facilitator || '',
+      github_url: github_url || '',
+      auth_id: auth_id || '',
     }
 
     const addedUser = await db.addNewUser(newUser)

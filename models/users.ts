@@ -1,5 +1,6 @@
 export interface User {
   id: number
+  auth_id: string
   username: string
   name: string
   current_role: string
