@@ -1,4 +1,5 @@
 import NavBar from './NavBar'
+import { Link } from 'react-router-dom'
 
 function App() {
   return (
@@ -9,6 +10,9 @@ function App() {
         </h1>
         <NavBar />
       </div>
+      <Link to="/userForm">
+        <button>Profile Information</button>
+      </Link>
     </>
   )
 }
