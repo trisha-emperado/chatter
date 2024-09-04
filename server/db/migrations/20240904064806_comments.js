@@ -3,14 +3,11 @@
  * @returns { Promise<void> }
  */
 export async function up(knex) {
-  return knex.schema.createTable('posts', (table) => {
+  return knex.schema.createTable('comments', (table) => {
     table.increments('id').primary()
     table.integer('user_id').references('id').inTable('users').onDelete('CASCADE')
+    table.integer('post_id').references('id').inTable('posts').onDelete('CASCADE')
     table.string('content')
-    table.string('image_url')
-    table.string('file_url')
-    table.integer('likes')
-    table.jsonb('comments')
     table.timestamp('created_at')
   })
 };
@@ -20,5 +17,5 @@ export async function up(knex) {
  * @returns { Promise<void> }
  */
 export async function down(knex) {
-  return knex.schema.dropTable('posts')
+  return knex.schema.dropTable('comments')
 };
