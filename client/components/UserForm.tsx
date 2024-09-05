@@ -3,8 +3,8 @@ import { useAddUser, useEditUser } from '../hooks/useUsers'
 import { User } from '../../models/users'
 import { useAuth0 } from '@auth0/auth0-react'
 
-function UserForm({ userID, isEditing }) {
-  const { getAccessTokenSilently, user } = useAuth0()
+function UserForm() {
+  const { getAccessTokenSilently } = useAuth0()
   const { mutate: addUser, isPending, isSuccess, isError } = useAddUser()
   const { mutate: editUser } = useEditUser()
   const userDetails = {
@@ -28,19 +28,16 @@ function UserForm({ userID, isEditing }) {
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target
-    setNewUser((prev) => ({ ...prev, [name]: value === 'yes' ? true : false }))
+    setNewUser((prev) => ({ ...prev, [name]: value }))
   }
-  console.log(isEditing)
+
+  console.log(newUser)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const token = await getAccessTokenSilently()
     e.preventDefault()
-    if (isEditing) {
-      const token = await getAccessTokenSilently()
-      editUser({ user: { ...newUser, auth_id: user?.sub }, userID, token })
-    } else {
-      const token = await getAccessTokenSilently()
-      addUser({ user: { ...newUser, auth_id: user?.sub }, token })
-    }
+    addUser({ user: newUser, token })
+    setNewUser(userDetails)
   }
 
   return (
@@ -127,6 +124,21 @@ function UserForm({ userID, isEditing }) {
               className="textInput"
               onChange={handleChange}
             />
+          </div>
+          <br></br>
+          <div className="userFormInput">
+            <label htmlFor="facilitator">Facilitator:</label>
+            <select
+              required
+              id="facilitator"
+              name="facilitator"
+              value={newUser.facilitator === false ? 'no' : 'yes'}
+              className="dropDownInput"
+              onChange={handleSelectChange}
+            >
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
           </div>
           <br></br>
           <div className="userFormInput">
