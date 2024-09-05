@@ -6,10 +6,15 @@ export function useUsers() {
   return useQuery({ queryKey: ['users'], queryFn: api.getAllUsers })
 }
 
+interface MutationData {
+  user: User
+  token: string
+}
+
 export function useAddUser() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (data: User) => api.addUser(data),
+    mutationFn: (data: MutationData) => api.addUser(data.user, data.token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] })
     },

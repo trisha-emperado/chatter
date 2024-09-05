@@ -1,7 +1,7 @@
 import request from 'superagent'
 import { User } from '../../models/users'
 
-const rootURL = '/api/v1/users'
+const rootURL = '/api'
 
 export async function getAllUsers(): Promise<User[]> {
   try {
@@ -13,6 +13,9 @@ export async function getAllUsers(): Promise<User[]> {
   }
 }
 
-export async function addUser(newUser: User) {
-  return await request.post(rootURL).send(newUser)
+export async function addUser(newUser: User, token: string) {
+  return await request
+    .post(rootURL + '/users')
+    .set('Authorization', `Bearer ${token}`)
+    .send(newUser)
 }
