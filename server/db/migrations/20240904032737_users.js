@@ -12,7 +12,7 @@ export async function up(knex) {
     table.integer('age')
     table.string('profile_picture_url').defaultTo('')
     table.string('cohort')
-    table.string('facilitator')
+    table.boolean('facilitator')
     table.string('github_url')
   })
 }

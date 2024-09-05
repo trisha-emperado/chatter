@@ -12,7 +12,7 @@ export async function seed(knex) {
       profile_picture_url:
         'https://static.vecteezy.com/system/resources/thumbnails/002/387/693/small_2x/user-profile-icon-free-vector.jpg',
       cohort: 'Karaka-24',
-      facilitator: 'John',
+      facilitator: false,
       github_url: 'https://github.com/giovanni-ambriz',
     },
   ])
