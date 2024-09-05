@@ -7,6 +7,6 @@ export interface User {
   age: number
   profile_picture_url: string
   cohort: string
-  facilitator: string
+  facilitator: boolean
   github_url: string
 }
