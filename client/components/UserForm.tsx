@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useAddUser } from '../hooks/useUsers'
-import { User } from '../../models/user'
+import { User } from '../../models/users'
 
 function UserForm() {
   const { mutate: addUser, isPending, isSuccess, isError } = useAddUser()

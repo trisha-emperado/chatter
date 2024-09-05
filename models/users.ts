@@ -1,11 +1,11 @@
 export interface User {
-  id: number
+  id?: number
   username: string
   name: string
   current_role: string
   age: number
   profile_picture_url: string
   cohort: string
-  facilitator: boolean
+  facilitator?: boolean
   github_url: string
 }

@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import * as api from '../apis/apiClient'
-import { User } from '../../models/user'
+import { User } from '../../models/users'
 
 export function useUsers() {
   return useQuery({ queryKey: ['users'], queryFn: api.getAllUsers })
