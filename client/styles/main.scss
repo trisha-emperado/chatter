@@ -73,8 +73,11 @@ button {
   font-size: calc(1vh + 1vw);
 }
 
-.feedTitle {
+.feedBox {
+  height: 100%;
+}
 
+.feedTitle {
   padding: 0 calc(1vh + 1vw);
 }
 
@@ -86,6 +89,24 @@ button {
 .feedFilters p {
   padding: 0 calc(1vh + 1vw);
   height: 100%;
+}
+
+.postsAndForm {
+  @include flexBox(column);
+  height: 100%;
+  background-color: red;
+}
+
+.postsBox {
+  background-color: plum;
+  height: 70%;
+  width: 100%;
+}
+
+.feedFormBox {
+  background-color: lightblue;
+  height: 30%;
+  width: 100%;
 }
 
 // ╔══════════════╗

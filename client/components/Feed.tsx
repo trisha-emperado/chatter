@@ -10,9 +10,11 @@ const Feed = () => {
           <p className="friendsPosts">Friends Posts</p>
         </div>
       </div>
-      <div className="postsBox"></div>
-      <div className="feedFormBox">
-        <FeedForm />
+      <div className="postsAndForm">
+        <div className="postsBox">Posts go here!</div>
+        <div className="feedFormBox">
+          <FeedForm />
+        </div>
       </div>
     </div>
   )
