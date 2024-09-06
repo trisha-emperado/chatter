@@ -9,8 +9,15 @@ export async function getAllPosts(db = connection): Promise<Post[]> {
   return db('posts').select('*').orderBy('id', 'desc')
 }
 
-export async function getPostById(id: number, db = connection): Promise<Post> {
-  return db('posts').where('id', id).select().first()
+export async function getPostById(
+  id: number,
+  db = connection,
+): Promise<Post & { username: string; profile_picture_url: string }> {
+  return db('posts')
+    .join('users', 'posts.user_id', 'users.id')
+    .where('posts.id', id)
+    .select('posts.*', 'users.username', 'users.profile_picture_url')
+    .first()
 }
 
 export async function getPostsByUserId(
