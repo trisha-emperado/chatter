@@ -6,6 +6,13 @@ export function useUsers() {
   return useQuery({ queryKey: ['users'], queryFn: api.getAllUsers })
 }
 
+export function useUsersByID(id: number) {
+  return useQuery({
+    queryKey: ['users', id],
+    queryFn: () => api.getUserByID(id),
+  })
+}
+
 interface MutationData {
   user: User
   token: string
