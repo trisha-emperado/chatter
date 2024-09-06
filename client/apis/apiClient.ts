@@ -29,3 +29,14 @@ export async function addUser(newUser: User, token: string) {
     .set('Authorization', `Bearer ${token}`)
     .send(newUser)
 }
+
+export async function editUser(
+  currentUser: User,
+  userID: number | undefined,
+  token: string,
+) {
+  return await request
+    .patch(rootURL + `/users/${userID}`)
+    .set('Authorization', `Bearer ${token}`)
+    .send(currentUser)
+}

@@ -14,6 +14,7 @@ export function useUsersByID(id: number) {
 }
 
 interface MutationData {
+  userID?: number
   user: User
   token: string
 }
@@ -22,6 +23,17 @@ export function useAddUser() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (data: MutationData) => api.addUser(data.user, data.token),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['users'] })
+    },
+  })
+}
+
+export function useEditUser() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (data: MutationData) =>
+      api.editUser(data.user, data.userID, data.token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] })
     },
