@@ -10,7 +10,11 @@ export async function getAllPosts(db = connection): Promise<Post[]> {
 }
 
 export async function getPostById(id: number, db = connection): Promise<Post> {
-  return db('posts').where('id', id).select().first()
+  const post = await db('posts').where('id', id).select().first()
+  if (post && typeof post.comments === 'string') {
+    post.comments = JSON.parse(post.comments)
+  }
+  return post
 }
 
 export async function getPostsByUserId(
