@@ -48,7 +48,9 @@ export async function getAllPosts() {
   }
 }
 
-export async function getPost(id: number): Promise<Post> {
+export async function getPost(
+  id: number,
+): Promise<Post & { username: string; profile_picture_url: string }> {
   try {
     const res = await request.get(`${rootURL}/posts/${id}`)
     return res.body
