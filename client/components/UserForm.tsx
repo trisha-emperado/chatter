@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
-import { useAddUser } from '../hooks/useUsers'
+import { useAddUser, useEditUser } from '../hooks/useUsers'
 import { User } from '../../models/users'
 import { useAuth0 } from '@auth0/auth0-react'
 import { Link } from 'react-router-dom'
 
-function UserForm() {
+function UserForm({ userID, isEditing }) {
   const { getAccessTokenSilently, user } = useAuth0()
   const { mutate: addUser, isPending, isSuccess, isError } = useAddUser()
+  const { mutate: editUser } = useEditUser()
   const userDetails = {
     username: '',
     name: '',
@@ -18,6 +19,7 @@ function UserForm() {
     github_url: '',
     auth_id: '',
   }
+
   const [newUser, setNewUser] = useState<User>(userDetails)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,14 +31,17 @@ function UserForm() {
     const { name, value } = e.target
     setNewUser((prev) => ({ ...prev, [name]: value === 'yes' ? true : false }))
   }
-  console.log(newUser)
+  console.log(isEditing)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
-    const token = await getAccessTokenSilently()
-    addUser({ user: { ...newUser, auth_id: user?.sub }, token })
-    setNewUser(userDetails)
+    if (isEditing) {
+      const token = await getAccessTokenSilently()
+      editUser({ user: { ...newUser, auth_id: user?.sub }, userID, token })
+    } else {
+      const token = await getAccessTokenSilently()
+      addUser({ user: { ...newUser, auth_id: user?.sub }, token })
+    }
   }
 
   return (
