@@ -15,7 +15,7 @@ function UserForm() {
     cohort: '',
     facilitator: false,
     github_url: '',
-    auth_id: user?.sub,
+    auth_id: '',
   }
   const [newUser, setNewUser] = useState<User>(userDetails)
 
@@ -26,15 +26,15 @@ function UserForm() {
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target
-    setNewUser((prev) => ({ ...prev, [name]: value }))
+    setNewUser((prev) => ({ ...prev, [name]: value === 'yes' ? true : false }))
   }
-
   console.log(newUser)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    const token = await getAccessTokenSilently()
     e.preventDefault()
-    addUser({ user: newUser, token })
+
+    const token = await getAccessTokenSilently()
+    addUser({ user: { ...newUser, auth_id: user?.sub }, token })
     setNewUser(userDetails)
   }
 
