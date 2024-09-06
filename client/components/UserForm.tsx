@@ -4,7 +4,7 @@ import { User } from '../../models/users'
 import { useAuth0 } from '@auth0/auth0-react'
 
 function UserForm() {
-  const { getAccessTokenSilently } = useAuth0()
+  const { getAccessTokenSilently, user } = useAuth0()
   const { mutate: addUser, isPending, isSuccess, isError } = useAddUser()
   const userDetails = {
     username: '',
@@ -15,6 +15,7 @@ function UserForm() {
     cohort: '',
     facilitator: false,
     github_url: '',
+    auth_id: user?.sub,
   }
   const [newUser, setNewUser] = useState<User>(userDetails)
 

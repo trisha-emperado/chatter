@@ -8,4 +8,5 @@ export interface User {
   cohort: string
   facilitator: boolean
   github_url: string
+  auth_id: string | undefined
 }
