@@ -1,7 +1,7 @@
-import NavBar from './NavBar'
+// import NavBar from './NavBar'
 import { useAuth0 } from '@auth0/auth0-react'
 import { useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 
 function App() {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0()
@@ -21,17 +21,9 @@ function App() {
     }
   }, [isAuthenticated, getAccessTokenSilently])
   return (
-    <>
-      <div className="app">
-        <h1 className="text-3xl font-bold underline">
-          Fullstack Boilerplate - with Fruits!
-        </h1>
-        <NavBar />
-      </div>
-      <Link to="/userForm">
-        <button>Profile Information</button>
-      </Link>
-    </>
+    <div className="app">
+      <Outlet />
+    </div>
   )
 }
 

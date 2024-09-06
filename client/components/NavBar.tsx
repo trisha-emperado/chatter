@@ -29,7 +29,6 @@ function NavBar() {
       <IfNotAuthenticated>
         <button onClick={handleSignIn}>Sign in</button>
       </IfNotAuthenticated>
-      <h1>Fruit FTW!</h1>
     </>
   )
 }

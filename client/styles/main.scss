@@ -1,0 +1,209 @@
+html,
+body,
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+button {
+  border: none;
+  background-color: transparent;
+}
+
+@mixin flexBox($direction: row) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: center;
+  align-items: center;
+}
+
+// ╔══════════╗
+// ║   Home   ║
+// ╚══════════╝
+
+.Home {
+  width: 100%;
+  height: 100vh;
+  @include flexBox();
+  background-image: url(https://w.wallhaven.cc/full/p8/wallhaven-p885j3.png);
+  background-size: cover;
+  background-position: center;
+}
+
+.homeContainer {
+  width: 90%;
+  height: 85%;
+  @include flexBox();
+  overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.452) 0 calc(2vh + 2vw) calc(3vh + 3vw);
+  border-radius: calc(2vh + 2vw);
+}
+
+.navBar01 {
+  background-color: white;
+  height: 100%;
+  width: 25%;
+}
+
+.feed02 {
+  background-color: white;
+  border: 1px solid black;
+  height: 100%;
+  width: 50%;
+}
+
+.sideBar03 {
+  background-color:white;
+  height: 100%;
+  width: 25%;
+}
+
+// ╔══════════╗
+// ║   Feed   ║
+// ╚══════════╝
+
+.feedNavBox {
+  background-color: pink;
+  @include flexBox();
+  justify-content: space-between;
+  font-size: calc(1vh + 1vw);
+}
+
+.feedTitle {
+
+  padding: 0 calc(1vh + 1vw);
+}
+
+.feedFilters {
+  @include flexBox();
+
+}
+
+.feedFilters p {
+  padding: 0 calc(1vh + 1vw);
+  height: 100%;
+}
+
+// ╔══════════════╗
+// ║   userForm   ║
+// ╚══════════════╝
+
+.userForm {
+  width: 100%;
+  height: 100vh;
+  @include flexBox()
+}
+
+.userFormContainer {
+  @include flexBox();
+  justify-content: space-evenly;
+  width: 70%;
+  height: 80%;
+  box-shadow: rgba(0, 0, 0, 0.452) 0 calc(1vh + 1vw) calc(3vh + 3vw);
+  border-radius: calc(1vh + 1vw);
+
+}
+
+.userFormImageBox {
+  background-image: url(/public/images/wallhaven-833p72.png);
+  background-size: cover;
+  @include flexBox();
+  align-items: flex-start;
+  text-align: left;
+  color: white;
+  width: 40%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: calc(1vh + 1vw) 0 0  calc(1vh + 1vw);;
+
+}
+
+.welcome {
+  padding-top: calc(5vh + 5vw);
+  font-size: calc(1.8vh + 1.8vw)
+}
+
+.userFormBox {
+  @include flexBox();
+  height: 100%;
+  width: 60%;
+}
+
+.userFormInputBox {
+  @include flexBox(column);
+  justify-content: space-between;
+  height: 80%;
+  width: 70%;
+}
+
+.userFormInputs {
+  overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: calc(3vh + 3vw);
+  scrollbar-width: none;
+  font-size: calc(0.5vh + 0.5vw);
+  width: 100%;
+  height: 100%;
+}
+
+.userFormInputs::-webkit-scrollbar {
+  display: none;
+}
+
+.dropDownInput {
+  background-color: transparent;
+  border: calc(0.1vh + 0.1vw) solid rgb(0, 102, 255);
+  border-radius: calc(1vh + 1vw);
+  padding: calc(0.5vh + 0.5vw) calc(1vh + 1vw);
+  width: calc(8vh + 8vw);
+
+}
+
+.textBox {
+  width: 100%;
+  font-size: calc(0.8vh + 0.8vw);
+  padding:  calc(1vh + 1vw) 0;
+  color: rgb(0, 102, 255);
+}
+
+.submitButton {
+  background-color: rgb(0, 102, 255);
+  color: white;
+  width: 100%;
+  border-radius: calc(1vh + 1vw);
+  padding: calc(0.5vh + 0.5vw) calc(1vh + 1vw);
+  margin: calc(0.5vh + 0.5vw);
+}
+
+.userFormInput {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: calc(0.5vh + 0.5vw) 0;
+}
+
+.userFormInput input {
+  border: calc(0.1vh + 0.1vw) solid rgb(0, 102, 255);
+  border-radius: calc(1vh + 1vw);
+  padding: calc(0.5vh + 0.5vw) calc(1vh + 1vw);
+  width: calc(8vh + 8vw);
+}
+
+.backButton {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgb(0, 102, 255);
+  color: white;
+  border-radius: calc(1vh + 1vw);
+  padding: calc(0.8vh + 0.8vw) calc(1.5vh + 1.5vw);
+  box-shadow: rgba(0, 0, 0, 0.292) 0 calc(0.5vh + 0.5vw) calc(1vh + 1vw);
+
+  margin: calc(1vh + 1vw);
+}
