@@ -14,8 +14,11 @@ export async function getAllUsers(): Promise<User[]> {
   }
 }
 
-export async function addUser(newUser: User) {
-  return await request.post(rootURL).send(newUser)
+export async function addUser(newUser: User, token: string) {
+  return await request
+    .post(rootURL + '/users')
+    .set('Authorization', `Bearer ${token}`)
+    .send(newUser)
 }
 
 export async function getAllPosts() {
@@ -29,28 +32,6 @@ export async function getAllPosts() {
 }
 
 export async function getPost(id: number): Promise<Post> {
-  try {
-    const res = await request.get(`${rootURL}/posts/${id}`)
-    return res.body
-  } catch (error) {
-    console.error('Failed to fetch any post', error)
-    throw new Error('Unable to fetch any post')
-  }
-}
-
-export async function getAllPosts() {
-  try {
-    const res = await request.get(rootURL + '/posts/')
-    return res.body
-  } catch (error) {
-    console.error('Failed to fetch posts', error)
-    throw new Error('Unable to fetch posts')
-  }
-}
-
-export async function getPost(
-  id: number,
-): Promise<Post & { username: string; profile_picture_url: string }> {
   try {
     const res = await request.get(`${rootURL}/posts/${id}`)
     return res.body
