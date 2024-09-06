@@ -1,12 +1,19 @@
 import { usePostDetails } from "../hooks/usePostDetails";
 import { useParams } from "react-router-dom";
+import { useState } from "react";
 
 export default function PostDetails() {
   const { id } = useParams<{ id: string }>();
   const { data: post, isPending, isError } = usePostDetails(Number(id));
+  const [isCommentFormVisible, setIsCommentFormVisible] = useState(false);
 
   if (isPending) return <p>Loading...</p>;
   if (isError) return <p>Error loading post</p>;
+
+  const commentForm = () => {
+    setIsCommentFormVisible(!isCommentFormVisible);
+  };
+
 
   return (
     <div>
@@ -17,11 +24,29 @@ export default function PostDetails() {
             alt={`${post.username}'s profile`}
           />
         )}
-        <p>Username: {post.username}</p>
+        <p>{post.username}</p>
       </div>
-      <p>Likes: {post.likes}</p>
-      <p>Content: {post.content}</p>
-      <p>Created At: {new Date(post.created_at).toLocaleString()}</p>
+
+      <div>
+        <p>{post.content}</p>
+      </div>
+      <div>
+        <p>Likes: {post.likes}</p>
+        <button onClick={commentForm}>
+          {isCommentFormVisible ? 'Cancel' : 'Comment'}
+        </button>
+      </div>
+
+      {isCommentFormVisible && (
+        <div>
+          <form>
+            <textarea
+              placeholder="Write a comment..."
+            />
+            <button type="submit">Comment</button>
+          </form>
+        </div>
+      )}
     </div>
   );
 }
