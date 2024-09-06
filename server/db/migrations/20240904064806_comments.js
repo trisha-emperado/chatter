@@ -8,7 +8,7 @@ export async function up(knex) {
     table.integer('user_id').references('id').inTable('users').onDelete('CASCADE')
     table.integer('post_id').references('id').inTable('posts').onDelete('CASCADE')
     table.string('content')
-    table.timestamp('created_at')
+    table.timestamp('created_at').defaultTo(knex.fn.now())
   })
 };
 

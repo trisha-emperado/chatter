@@ -14,8 +14,7 @@ export async function up(knex) {
     table.string('image_url')
     table.string('file_url')
     table.integer('likes')
-    table.jsonb('comments')
-    table.timestamp('created_at')
+    table.timestamp('created_at').defaultTo(knex.fn.now())
   })
 }
 

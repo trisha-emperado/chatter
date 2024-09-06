@@ -5,6 +5,5 @@ export interface Post {
   image_url: string
   file_url: string
   likes: number
-  comments: string[]
   created_at: string
 }
