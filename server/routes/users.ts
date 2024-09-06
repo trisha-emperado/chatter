@@ -72,9 +72,9 @@ router.post('/', checkJwt, async (req: JwtRequest, res) => {
       age: age || 0,
       profile_picture_url: profile_picture_url || '',
       cohort: cohort || '',
-      facilitator: facilitator || '',
+      facilitator: facilitator,
       github_url: github_url || '',
-      auth_id: auth_id || '',
+      auth_id: auth_id,
     }
 
     const addedUser = await db.addNewUser(newUser)

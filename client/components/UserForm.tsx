@@ -1,17 +1,21 @@
 import React, { useState } from 'react'
 import { useAddUser } from '../hooks/useUsers'
 import { User } from '../../models/users'
+import { useAuth0 } from '@auth0/auth0-react'
 
 function UserForm() {
+  const { getAccessTokenSilently, user } = useAuth0()
   const { mutate: addUser, isPending, isSuccess, isError } = useAddUser()
   const userDetails = {
     username: '',
     name: '',
     current_role: '',
-    age: '',
+    age: 0,
     profile_picture_url: '',
     cohort: '',
+    facilitator: false,
     github_url: '',
+    auth_id: '',
   }
   const [newUser, setNewUser] = useState<User>(userDetails)
 
@@ -20,9 +24,17 @@ function UserForm() {
     setNewUser((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target
+    setNewUser((prev) => ({ ...prev, [name]: value === 'yes' ? true : false }))
+  }
+  console.log(newUser)
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    addUser(newUser)
+
+    const token = await getAccessTokenSilently()
+    addUser({ user: { ...newUser, auth_id: user?.sub }, token })
     setNewUser(userDetails)
   }
 
@@ -110,6 +122,21 @@ function UserForm() {
               className="textInput"
               onChange={handleChange}
             />
+          </div>
+          <br></br>
+          <div className="userFormInput">
+            <label htmlFor="facilitator">Facilitator:</label>
+            <select
+              required
+              id="facilitator"
+              name="facilitator"
+              value={newUser.facilitator === false ? 'no' : 'yes'}
+              className="dropDownInput"
+              onChange={handleSelectChange}
+            >
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
           </div>
           <br></br>
           <div className="userFormInput">

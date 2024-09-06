@@ -6,6 +6,7 @@ export interface User {
   age: number
   profile_picture_url: string
   cohort: string
-  facilitator?: boolean
+  facilitator: boolean
   github_url: string
+  auth_id: string | undefined
 }
