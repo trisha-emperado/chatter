@@ -3,8 +3,13 @@ import { useAddUser, useEditUser } from '../hooks/useUsers'
 import { User } from '../../models/users'
 import { useAuth0 } from '@auth0/auth0-react'
 
-function UserForm() {
-  const { getAccessTokenSilently } = useAuth0()
+interface UserFormProps {
+  userID?: number
+  isEditing?: boolean
+}
+
+function UserForm({ userID, isEditing }: UserFormProps) {
+  const { getAccessTokenSilently, user } = useAuth0()
   const { mutate: addUser, isPending, isSuccess, isError } = useAddUser()
   const { mutate: editUser } = useEditUser()
   const userDetails = {
