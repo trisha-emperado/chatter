@@ -4,6 +4,7 @@ import UserForm from './components/UserForm.tsx'
 import Home from './components/Home.tsx'
 import PostDetails from './components/PostDetail.tsx'
 import Profile from './components/Profile.tsx'
+import Feed from './components/Feed.tsx'
 
 const routes = createRoutesFromElements(
   <Route path="/" element={<App />}>
@@ -13,6 +14,7 @@ const routes = createRoutesFromElements(
       element={<UserForm userID={undefined} isEditing={false} />}
     />
     <Route path="/user/:id" element={<Profile />} />
+    <Route path="/feed" element={<Feed />} />
     <Route path="/posts/:id" element={<PostDetails />} />
   </Route>,
 )

@@ -1,7 +1,6 @@
 import FeedForm from './FeedForm'
 import AllPosts from './AllPosts'
 import NavBar from './NavBar'
-import UserForm from './UserForm'
 import { Link } from 'react-router-dom'
 
 const Feed = () => {
