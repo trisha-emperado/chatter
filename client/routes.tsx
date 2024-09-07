@@ -8,7 +8,10 @@ import Profile from './components/Profile.tsx'
 const routes = createRoutesFromElements(
   <Route path="/" element={<App />}>
     <Route index element={<Home />} />
-    <Route path="/userForm" element={<UserForm />} />
+    <Route
+      path="/userForm"
+      element={<UserForm userID={undefined} isEditing={false} />}
+    />
     <Route path="/user/:id" element={<Profile />} />
     <Route path="/posts/:id" element={<PostDetails />} />
   </Route>,

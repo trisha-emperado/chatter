@@ -4,7 +4,12 @@ import { User } from '../../models/users'
 import { useAuth0 } from '@auth0/auth0-react'
 import { Link } from 'react-router-dom'
 
-function UserForm({ userID, isEditing }) {
+interface userFormProps {
+  userID: number | undefined
+  isEditing: boolean
+}
+
+function UserForm({ userID, isEditing }: userFormProps) {
   const { getAccessTokenSilently, user } = useAuth0()
   const { mutate: addUser, isPending, isSuccess, isError } = useAddUser()
   const { mutate: editUser } = useEditUser()

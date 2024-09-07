@@ -7,6 +7,27 @@ p {
   margin: 0;
   padding: 0;
   border: none;
+  font-family: regular;
+}
+
+@font-face {
+  font-family: bold;
+  src: url(/public/fonts/LEMONMILK-Bold.otf);
+}
+
+@font-face {
+  font-family: regular;
+  src: url(/public/fonts/LEMONMILK-Regular.otf);
+}
+
+@font-face {
+  font-family: medium;
+  src: url(/public/fonts/LEMONMILK-Medium.otf);
+}
+
+@font-face {
+  font-family: medium;
+  src: url(/public/fonts/LEMONMILK-Light.otf);
 }
 
 button {
@@ -145,7 +166,8 @@ button {
 
 .welcome {
   padding-top: calc(5vh + 5vw);
-  font-size: calc(1.8vh + 1.8vw)
+  font-size: calc(1.8vh + 1.8vw);
+  font-family: bold
 }
 
 .userFormBox {
@@ -193,6 +215,11 @@ button {
   color: rgb(0, 102, 255);
 }
 
+.editH1 {
+  font-family: bold;
+
+}
+
 .submitButton {
   background-color: rgb(0, 102, 255);
   color: white;
@@ -200,6 +227,8 @@ button {
   border-radius: calc(1vh + 1vw);
   padding: calc(0.5vh + 0.5vw) calc(1vh + 1vw);
   margin: calc(0.5vh + 0.5vw);
+  font-family: bold;
+
 }
 
 .userFormInput {
@@ -225,6 +254,11 @@ button {
   border-radius: calc(1vh + 1vw);
   padding: calc(0.8vh + 0.8vw) calc(1.5vh + 1.5vw);
   box-shadow: rgba(0, 0, 0, 0.292) 0 calc(0.5vh + 0.5vw) calc(1vh + 1vw);
-
+  font-family: bold;
   margin: calc(1vh + 1vw);
+}
+
+.userFormInput label {
+  color: rgb(255, 149, 0);
+  text-shadow: 0 0 calc(0.5vh + 1vw)  rgb(255, 149, 0);
 }
