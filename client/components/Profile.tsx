@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import UserForm from './UserForm'
 import { useUsersByID } from '../hooks/useUsers'
 import { useAuth0 } from '@auth0/auth0-react'
+import { useDeleteUser } from '../hooks/useUsers'
 
 function Profile() {
   const { id } = useParams()
@@ -11,6 +12,7 @@ function Profile() {
 
   const { data: user, isPending, isError } = useUsersByID(userID)
   const [editUser, setEditUser] = useState(false)
+
   const [isFollowing, setIsFollowing] = useState(false)
 
   //Check if logged-in user is following this profile
@@ -30,6 +32,10 @@ function Profile() {
     }
     checkFollowingStatus()
   }, [authUser, user])
+  
+  const { user: authUser, getAccessTokenSilently, logout } = useAuth0()
+
+  const deleteMutation = useDeleteUser()
 
   if (isPending) {
     return <div>Loading...</div>
@@ -86,6 +92,16 @@ function Profile() {
     setEditUser(true)
   }
 
+  const handleDeleteAccount = async () => {
+    try {
+      const token = await getAccessTokenSilently()
+      deleteMutation.mutate({ id: userID, token })
+      logout()
+    } catch (error) {
+      console.error('Error deleting account:', error)
+    }
+  }
+
   if (editUser) {
     return <UserForm userID={id} isEditing={true} />
   }
@@ -125,11 +141,29 @@ function Profile() {
               </div>
               <div>
                 {authUser && authUser.sub === user.auth_id ? (
+
                   <button onClick={handleEditProfile}>Edit</button>
                 ) : isFollowing ? (
                   <button onClick={handleUnfollow}>Unfollow</button>
                 ) : (
                   <button onClick={handleFollow}>Follow</button>
+                  <>
+                    <button
+                      className="editUserButton"
+                      onClick={handleEditProfile}
+                    >
+                      Edit
+                    </button>
+                    <br></br>
+                    <button
+                      className="deleteUserButton"
+                      onClick={handleDeleteAccount}
+                    >
+                      Delete Account
+                    </button>
+                  </>
+                ) : (
+                  <button className="followUserButton">Follow</button>
                 )}
               </div>
             </div>

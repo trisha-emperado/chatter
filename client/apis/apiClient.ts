@@ -4,6 +4,10 @@ import { Post } from '../../models/posts'
 
 const rootURL = '/api/v1'
 
+// ╔═══════════════════╗
+// ║    User Routes    ║
+// ╚═══════════════════╝
+
 export async function getAllUsers(): Promise<User[]> {
   try {
     const res = await request.get(rootURL + '/users')
@@ -51,6 +55,16 @@ export async function editUser(
     .set('Authorization', `Bearer ${token}`)
     .send(currentUser)
 }
+
+export async function deleteUserById(id: number, token: string) {
+  return await request
+    .del(rootURL + `/users/${id}`)
+    .set('Authorization', `Bearer ${token}`)
+}
+
+// ╔═══════════════════╗
+// ║     Post Routes   ║
+// ╚═══════════════════╝
 
 export async function getAllPosts() {
   const res = await request.get(rootURL + '/posts/')
