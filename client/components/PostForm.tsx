@@ -13,8 +13,8 @@ const emptyPost: Post = {
 };
 
 export default function PostForm() {
-  const [newPost, setNewPost] = useState<Post>(emptyPost);
-  const { content, image_url, file_url } = newPost;
+  const [newPost, setNewPost] = useState(emptyPost);
+  const { content: addingContent, image_url: addingImageUrl, file_url: addingFileUrl } = newPost;
   const { mutate: addPost, isPending, isError } = useNewPost();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -35,13 +35,9 @@ export default function PostForm() {
 
     try {
       await addPost({
-        id: 0,
-        user_id: 1,
-        content,
-        image_url: image_url || '',
-        file_url: file_url || '',
-        likes: 0,
-        created_at: new Date(),
+        ...newPost,
+        image_url: addingImageUrl || '',
+        file_url: addingFileUrl || ''
       });
       console.log('New post submitted:', newPost);
       setNewPost(emptyPost);
@@ -63,27 +59,27 @@ export default function PostForm() {
           required
         />
 
-        <label htmlFor="image_url">Image URL:</label>
+        <label htmlFor="image">Image URL:</label>
         <input
           type="file"
           name="image_url"
-          id="image_url"
-          value={image_url}
+          id="image"
+          value={addingImageUrl}
           onChange={handleChange}
           placeholder="Image URL"
         />
 
-        <label htmlFor="file_url">File URL:</label>
+        <label htmlFor="file">File URL:</label>
         <input
           type="file"
           name="file_url"
-          id="file_url"
-          value={file_url}
+          id="file"
+          value={addingFileUrl}
           onChange={handleChange}
           placeholder="File URL"
         />
 
-        <button type="submit" disabled={content === '' || isPending}>
+        <button type="submit" disabled={addingContent === '' || isPending}>
           {isPending ? 'Posting...' : 'Make Post'}
         </button>
 
