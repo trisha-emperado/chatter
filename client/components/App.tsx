@@ -1,4 +1,5 @@
 import NavBar from './NavBar'
+import Feed from './components/Feed.tsx'
 import { useAuth0 } from '@auth0/auth0-react'
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
@@ -22,9 +23,9 @@ function App() {
   }, [isAuthenticated, getAccessTokenSilently])
   return (
     <>
-      <div className="app">
+      {/* <div className="app">
         <NavBar />
-      </div>
+      </div> */}
     </>
   )
 }

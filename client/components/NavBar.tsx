@@ -1,7 +1,6 @@
 import { IfAuthenticated, IfNotAuthenticated } from './Authenticated.tsx'
 import { useAuth0 } from '@auth0/auth0-react'
 import { Link } from 'react-router-dom'
-import React from 'react'
 
 function NavBar() {
   const { loginWithRedirect, logout, user } = useAuth0()
@@ -26,7 +25,11 @@ function NavBar() {
             </p>
             <p>Email: {user?.email}</p>
             <Link to="/userForm">
-              <button>Profile Information</button>
+              <button className="profile-info-btn">Profile Information</button>
+            </Link>
+
+            <Link to="/feed">
+              <button className="feed-btn">News Feed</button>
             </Link>
           </div>
         )}
