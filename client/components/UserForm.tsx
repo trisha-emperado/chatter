@@ -147,21 +147,6 @@ function UserForm({ userID, isEditing }: UserFormProps) {
           </div>
           <br></br>
           <div className="userFormInput">
-            <label htmlFor="facilitator">Facilitator:</label>
-            <select
-              required
-              id="facilitator"
-              name="facilitator"
-              value={newUser.facilitator === false ? 'no' : 'yes'}
-              className="dropDownInput"
-              onChange={handleSelectChange}
-            >
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </select>
-          </div>
-          <br></br>
-          <div className="userFormInput">
             <label htmlFor="github_url">GitHub:</label>
             <input
               required
