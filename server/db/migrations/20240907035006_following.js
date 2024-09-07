@@ -3,9 +3,13 @@
  * @returns { Promise<void> }
  */
 export async function up(knex) {
-  return knex.schema.createTable('following', (table) => {
-    table.integer('follower_id').references('id').inTable('users').onDelete('CASCADE')
-    table.integer('followed_id').references('id').inTable('users').onDelete('CASCADE')
+  return knex.schema.createTable('followers', (table) => {
+    table.increments('id').primary()
+    table.integer('follower_id').unsigned().notNullable()
+    table.integer('following_id').unsigned().notNullable()
+    table.foreign('follower_id').references('id').inTable('users').onDelete('CASCADE')
+    table.foreign('following_id').references('id').inTable('users').onDelete('CASCADE')
+    table.timestamps(true, true)
   })
 };
 
