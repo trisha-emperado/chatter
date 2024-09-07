@@ -35,7 +35,6 @@ function UserForm({ userID, isEditing }: UserFormProps) {
     const { name, value } = e.target
     setNewUser((prev) => ({ ...prev, [name]: value === 'yes' ? true : false }))
   }
-  console.log(isEditing)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
