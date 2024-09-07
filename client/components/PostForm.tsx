@@ -1,16 +1,21 @@
 import { useState } from 'react';
-import { PostData } from '../../models/posts';
+import { Post } from '../../models/posts';
+import { useNewPost } from '../hooks/usePosts';
 
-const emptyPost: PostData = {
+const emptyPost: Post = {
+  id: 0,
+  user_id: 1,
   content: '',
   image_url: '',
   file_url: '',
+  likes: 0,
+  created_at: new Date(),
 };
 
 export default function PostForm() {
-  const [newPost, setNewPost] = useState(emptyPost);
-
-  const { content: addingContent, image_url: addingImageUrl, file_url: addingFileUrl } = newPost;
+  const [newPost, setNewPost] = useState<Post>(emptyPost);
+  const { content, image_url, file_url } = newPost;
+  const { mutate: addPost, isPending, isError } = useNewPost();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -20,17 +25,29 @@ export default function PostForm() {
     });
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (addingContent.trim() === '') {
+    if (content.trim() === '') {
       console.error('Invalid input: Content must be entered');
       return;
     }
 
-    console.log('New post submitted:', newPost);
-
-    setNewPost(emptyPost);
+    try {
+      await addPost({
+        id: 0,
+        user_id: 1,
+        content,
+        image_url: image_url || '',
+        file_url: file_url || '',
+        likes: 0,
+        created_at: new Date(),
+      });
+      console.log('New post submitted:', newPost);
+      setNewPost(emptyPost);
+    } catch (error) {
+      console.error('Error creating post:', error);
+    }
   };
 
   return (
@@ -40,35 +57,37 @@ export default function PostForm() {
         <textarea
           name="content"
           id="content"
-          value={addingContent}
+          value={content}
           onChange={handleChange}
           placeholder="What's on your mind?"
           required
         />
 
-        <label htmlFor="image">Image:</label>
+        <label htmlFor="image_url">Image URL:</label>
         <input
           type="file"
-          name="image"
-          id="image"
-          value={addingImageUrl}
+          name="image_url"
+          id="image_url"
+          value={image_url}
           onChange={handleChange}
-          placeholder="Image"
+          placeholder="Image URL"
         />
 
-        <label htmlFor="file">File:</label>
+        <label htmlFor="file_url">File URL:</label>
         <input
           type="file"
-          name="file"
-          id="file"
-          value={addingFileUrl}
+          name="file_url"
+          id="file_url"
+          value={file_url}
           onChange={handleChange}
-          placeholder="File"
+          placeholder="File URL"
         />
 
-        <button type="submit" disabled={addingContent === ''}>
-          Make Post
+        <button type="submit" disabled={content === '' || isPending}>
+          {isPending ? 'Posting...' : 'Make Post'}
         </button>
+
+        {isError && <p>Error creating post</p>}
       </form>
     </div>
   );
