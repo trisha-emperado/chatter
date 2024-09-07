@@ -35,6 +35,17 @@ router.get('/:id', async (req, res) => {
   }
 })
 
+router.get('/authId/:authId', async (req, res) => {
+  try {
+    const authId = req.params.authId
+    const userByAuthId = await db.getUserByAuthId(authId)
+    return res.json(userByAuthId)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: 'Something went wrong' })
+  }
+})
+
 // ╔═════════════════╗
 // ║   Post Routes   ║
 // ╚═════════════════╝

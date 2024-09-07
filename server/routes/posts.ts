@@ -70,7 +70,6 @@ router.post('/', checkJwt, async (req: JwtRequest, res) => {
       image_url: image_url || null,
       file_url: file_url || null,
       likes: 0,
-      comments: [],
       created_at: new Date(),
     }
 
@@ -89,7 +88,7 @@ router.post('/', checkJwt, async (req: JwtRequest, res) => {
 // This is how you would edit a post by id ✦
 
 router.patch('/:id', checkJwt, async (req: JwtRequest, res) => {
-  const { content, image_url, file_url, comments, likes } = req.body
+  const { content, image_url, file_url, likes } = req.body
   const id = parseInt(req.params.id)
   const user_id = req.auth?.sub
 
@@ -104,7 +103,6 @@ router.patch('/:id', checkJwt, async (req: JwtRequest, res) => {
       image_url: image_url || null,
       file_url: file_url || null,
       likes: likes,
-      comments: comments || [],
     }
 
     const editedPost = await db.editPostById(id, editedPostData)

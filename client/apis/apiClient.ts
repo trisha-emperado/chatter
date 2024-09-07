@@ -24,6 +24,16 @@ export async function getUserByID(id: number): Promise<User> {
   }
 }
 
+export async function getUserByAuthId(authId: string): Promise<User> {
+  try {
+    const res = await request.get(rootURL + `/users/authId/${authId}`)
+    return res.body as User
+  } catch (error) {
+    console.error('Failed to fetch that user', error)
+    throw new Error('Unable to fetch that user')
+  }
+}
+
 export async function addUser(newUser: User, token: string) {
   return await request
     .post(rootURL + '/users')
@@ -43,23 +53,18 @@ export async function editUser(
 }
 
 export async function getAllPosts() {
-  try {
-    const res = await request.get(rootURL + '/posts/')
-    return res.body
-  } catch (error) {
-    console.error('Failed to fetch posts', error)
-    throw new Error('Unable to fetch posts')
-  }
+  const res = await request.get(rootURL + '/posts/')
+  return res.body
 }
 
 export async function getPost(
   id: number,
 ): Promise<Post & { username: string; profile_picture_url: string }> {
-  try {
-    const res = await request.get(`${rootURL}/posts/${id}`)
-    return res.body
-  } catch (error) {
-    console.error('Failed to fetch any post', error)
-    throw new Error('Unable to fetch any post')
-  }
+  const res = await request.get(`${rootURL}/posts/${id}`)
+  return res.body
+}
+
+export async function addNewPost(newPost: Post) {
+  const res = await request.post(rootURL + '/posts/').send(newPost)
+  return res.body
 }

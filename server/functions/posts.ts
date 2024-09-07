@@ -38,7 +38,7 @@ export async function getPostsByUserId(
 export async function addNewPost(
   newPost: Partial<Post>,
   db = connection,
-): Promise<Post[]> {
+): Promise<Post> {
   const [newPostId] = await db('posts').insert(newPost, ['*'])
   return newPostId
 }
