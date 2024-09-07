@@ -25,6 +25,10 @@ function NavBar() {
             </p>
             <p>Email: {user?.email}</p>
 
+            <Link to={`/user/${user.sub}`}>
+              <button className="my-profile-btn">My Profile</button>
+            </Link>
+
             <Link to="/feed">
               <button className="feed-btn">Feed</button>
             </Link>
