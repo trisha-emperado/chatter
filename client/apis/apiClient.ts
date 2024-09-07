@@ -14,11 +14,32 @@ export async function getAllUsers(): Promise<User[]> {
   }
 }
 
+export async function getUserByID(id: number): Promise<User> {
+  try {
+    const res = await request.get(rootURL + `/users/${id}`)
+    return res.body as User
+  } catch (error) {
+    console.error('Failed to fetch that user', error)
+    throw new Error('Unable to fetch that user')
+  }
+}
+
 export async function addUser(newUser: User, token: string) {
   return await request
     .post(rootURL + '/users')
     .set('Authorization', `Bearer ${token}`)
     .send(newUser)
+}
+
+export async function editUser(
+  currentUser: User,
+  userID: number | undefined,
+  token: string,
+) {
+  return await request
+    .patch(rootURL + `/users/${userID}`)
+    .set('Authorization', `Bearer ${token}`)
+    .send(currentUser)
 }
 
 export async function getAllPosts() {
@@ -31,7 +52,9 @@ export async function getAllPosts() {
   }
 }
 
-export async function getPost(id: number): Promise<Post> {
+export async function getPost(
+  id: number,
+): Promise<Post & { username: string; profile_picture_url: string }> {
   try {
     const res = await request.get(`${rootURL}/posts/${id}`)
     return res.body
