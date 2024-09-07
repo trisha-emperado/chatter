@@ -36,7 +36,7 @@ export default function PostForm() {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="content">Content:</label>
+        <label htmlFor="content">Post:</label>
         <textarea
           name="content"
           id="content"
@@ -46,28 +46,28 @@ export default function PostForm() {
           required
         />
 
-        <label htmlFor="image_url">Image URL:</label>
+        <label htmlFor="image">Image:</label>
         <input
-          type="text"
-          name="image_url"
-          id="image_url"
+          type="file"
+          name="image"
+          id="image"
           value={addingImageUrl}
           onChange={handleChange}
-          placeholder="Image URL"
+          placeholder="Image"
         />
 
-        <label htmlFor="file_url">File URL:</label>
+        <label htmlFor="file">File:</label>
         <input
-          type="text"
-          name="file_url"
-          id="file_url"
+          type="file"
+          name="file"
+          id="file"
           value={addingFileUrl}
           onChange={handleChange}
-          placeholder="File URL"
+          placeholder="File"
         />
 
         <button type="submit" disabled={addingContent === ''}>
-          Post
+          Make Post
         </button>
       </form>
     </div>
