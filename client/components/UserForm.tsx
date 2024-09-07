@@ -34,7 +34,7 @@ function UserForm({ userID, isEditing }: userFormProps) {
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target
-    setNewUser((prev) => ({ ...prev, [name]: value === 'yes' ? true : false }))
+    setNewUser((prev) => ({ ...prev, [name]: value }))
   }
   console.log(isEditing)
 
