@@ -25,7 +25,7 @@ function NavBar() {
             </p>
             <p>Email: {user?.email}</p>
             <Link to="/userForm">
-              <button className="profile-info-btn">Profile Information</button>
+              <button className="profile-info-btn">{user?.nickname}</button>
             </Link>
 
             <Link to="/feed">
