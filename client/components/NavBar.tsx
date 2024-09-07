@@ -24,12 +24,10 @@ function NavBar() {
               Signed in as: {user?.nickname} / {user?.given_name}
             </p>
             <p>Email: {user?.email}</p>
-            <Link to="/userForm">
-              <button className="profile-info-btn">{user?.nickname}</button>
-            </Link>
+           
 
             <Link to="/feed">
-              <button className="feed-btn">News Feed</button>
+              <button className="feed-btn">Feed</button>
             </Link>
           </div>
         )}
