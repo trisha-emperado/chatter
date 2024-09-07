@@ -11,6 +11,7 @@ router.post('/follow', async (req, res) => {
     await db.followUser(follower_id, following_id)
     res.status(200).json({ message: 'Followed successfully' })
   } catch (err) {
+    console.error('Error in follow route:', err)
     res.status(500).json({ error: 'Failed to follow user' })
   }
 })
@@ -22,6 +23,7 @@ router.post('/unfollow', async (req, res) => {
     await db.unfollowUser(follower_id, following_id)
     res.status(200).json({ message: 'Unfollowed successfully' })
   } catch (err) {
+    console.error('Error in unfollow route:', err)
     res.status(500).json({ error: 'Failed to unfollow user' })
   }
 })

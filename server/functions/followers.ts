@@ -5,8 +5,8 @@ import connection from '../db/connection.ts'
 // ╚═══════════════════╝
 
 export async function followUser(
-  follower_id: number,
-  following_id: number,
+  follower_id: string,
+  following_id: string,
   db = connection,
 ) {
   return db('followers').insert({ follower_id, following_id })
@@ -17,8 +17,8 @@ export async function followUser(
 // ╚═══════════════════╝
 
 export async function unfollowUser(
-  follower_id: number,
-  following_id: number,
+  follower_id: string,
+  following_id: string,
   db = connection,
 ) {
   return db('followers').where({ follower_id, following_id }).del()
@@ -28,8 +28,8 @@ export async function unfollowUser(
 // ║  Check if user is following another user  ║
 // ╚═══════════════════════════════════════════╝
 export async function isFollowing(
-  follower_id: number,
-  following_id: number,
+  follower_id: string,
+  following_id: string,
   db = connection,
 ) {
   return db('followers').where({ follower_id, following_id }).first()
