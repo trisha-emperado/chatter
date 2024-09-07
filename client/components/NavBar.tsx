@@ -1,5 +1,7 @@
 import { IfAuthenticated, IfNotAuthenticated } from './Authenticated.tsx'
 import { useAuth0 } from '@auth0/auth0-react'
+import { Link } from 'react-router-dom'
+import React from 'react'
 
 function NavBar() {
   const { loginWithRedirect, logout, user } = useAuth0()
@@ -23,13 +25,15 @@ function NavBar() {
               Signed in as: {user?.nickname} / {user?.given_name}
             </p>
             <p>Email: {user?.email}</p>
+            <Link to="/userForm">
+              <button>Profile Information</button>
+            </Link>
           </div>
         )}
       </IfAuthenticated>
       <IfNotAuthenticated>
         <button onClick={handleSignIn}>Sign in</button>
       </IfNotAuthenticated>
-      
     </>
   )
 }

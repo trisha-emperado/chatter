@@ -25,9 +25,6 @@ function App() {
       <div className="app">
         <NavBar />
       </div>
-      <Link to="/userForm">
-        <button>Profile Information</button>
-      </Link>
     </>
   )
 }
