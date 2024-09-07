@@ -28,11 +28,6 @@ export default function PostForm() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (content.trim() === '') {
-      console.error('Invalid input: Content must be entered');
-      return;
-    }
-
     try {
       await addPost({
         ...newPost,
@@ -53,7 +48,7 @@ export default function PostForm() {
         <textarea
           name="content"
           id="content"
-          value={content}
+          value={addingContent}
           onChange={handleChange}
           placeholder="What's on your mind?"
           required
