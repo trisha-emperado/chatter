@@ -22,14 +22,8 @@ function App() {
   }, [isAuthenticated, getAccessTokenSilently])
   return (
     <>
-      <div className="app">
-        <h1 className="text-3xl font-bold underline">
-          Fullstack Boilerplate - with Fruits!
-        </h1>
-        <NavBar />
-      </div>
       <Link to="/userForm">
-        <button>Profile Information</button>
+        <button className="profile-info-btn">User Form</button>
       </Link>
     </>
   )
