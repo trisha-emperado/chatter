@@ -5,8 +5,8 @@ import Layout from './components/Layout.tsx'
 import Profile from './components/Profile.tsx'
 
 const routes = createRoutesFromElements(
-  <Route path="/" element={<App />}>
-    <Route index element={<Layout />} />
+  <Route path="/" element={<Layout />}>
+    <Route index element={<App />} />
     <Route
       path="/userForm"
       element={<UserForm userID={undefined} isEditing={undefined} />}
