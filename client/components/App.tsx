@@ -31,13 +31,6 @@ function App() {
   return (
     <>
       <div className="app">
-        <div className="chatterIconPicture">
-          <img
-            src="../../images/chatterIcon.png"
-            alt="Chatter Icon"
-            className="chatterIcon"
-          />
-        </div>
         <h1 className="text-3xl font-bold underline">Welcome to Chatter!</h1>
       </div>
     </>
