@@ -2,6 +2,12 @@ import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import * as api from '../apis/apiClient'
 import { User } from '../../models/users'
 
+interface MutationData {
+  userID?: number
+  user: User
+  token: string
+}
+
 export function useUsers() {
   return useQuery({ queryKey: ['users'], queryFn: api.getAllUsers })
 }
@@ -13,10 +19,11 @@ export function useUsersByID(id: number) {
   })
 }
 
-interface MutationData {
-  userID?: number
-  user: User
-  token: string
+export function useUserByAuthId(authId: string) {
+  return useQuery({
+    queryKey: ['users', authId],
+    queryFn: () => api.getUserByAuthId(authId),
+  })
 }
 
 export function useAddUser() {

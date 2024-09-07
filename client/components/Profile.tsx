@@ -17,7 +17,7 @@ function Profile() {
   }
 
   if (isError) {
-    return <div>Error fetching that user...</div>
+    return <div>Error fetching your feed...</div>
   }
 
   if (isNaN(userID)) {
