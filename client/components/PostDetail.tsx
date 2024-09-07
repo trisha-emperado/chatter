@@ -1,4 +1,4 @@
-import { usePostDetails } from "../hooks/usePostDetails";
+import { usePostDetails } from "../hooks/usePosts";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 
@@ -17,7 +17,7 @@ export default function PostDetails() {
 
   return (
     <div>
-      <div>
+      <div className="post-profile-picture">
         {post.profile_picture_url && (
           <img
             src={post.profile_picture_url}
@@ -27,7 +27,7 @@ export default function PostDetails() {
         <p>{post.username}</p>
       </div>
 
-      <div>
+      <div className="post-content">
         <p>{post.content}</p>
       </div>
       <div>
