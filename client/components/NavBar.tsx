@@ -24,11 +24,8 @@ function NavBar() {
               Signed in as: {user?.nickname} / {user?.given_name}
             </p>
             <p>Email: {user?.email}</p>
-            <Link to="/userForm">
-              <button className="profile-info-btn">User Form</button>
-            </Link>
 
-            <Link to={`/user/${user?.sub}`}>
+            <Link to={`/user/${user.sub}`}>
               <button className="my-profile-btn">My Profile</button>
             </Link>
 

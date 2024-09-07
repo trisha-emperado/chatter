@@ -6,7 +6,6 @@ import { useAuth0 } from '@auth0/auth0-react'
 
 function Profile() {
   const { id } = useParams()
-  console.log('Raw ID from params:', id) // Log raw parameter
   const userID = Number(id)
 
   const { data: user, isPending, isError } = useUsersByID(userID)
