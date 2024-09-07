@@ -1,19 +1,18 @@
-import { usePostDetails } from "../hooks/usePostDetails";
-import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { usePostDetails } from '../hooks/usePostDetails'
+import { useParams } from 'react-router-dom'
+import { useState } from 'react'
 
 export default function PostDetails() {
-  const { id } = useParams<{ id: string }>();
-  const { data: post, isPending, isError } = usePostDetails(Number(id));
-  const [isCommentFormVisible, setIsCommentFormVisible] = useState(false);
+  const { id } = useParams<{ id: string }>()
+  const { data: post, isPending, isError } = usePostDetails(Number(id))
+  const [isCommentFormVisible, setIsCommentFormVisible] = useState(false)
 
-  if (isPending) return <p>Loading...</p>;
-  if (isError) return <p>Error loading post</p>;
+  if (isPending) return <p>Loading...</p>
+  if (isError || !post) return <p>Error loading post</p>
 
   const commentForm = () => {
-    setIsCommentFormVisible(!isCommentFormVisible);
-  };
-
+    setIsCommentFormVisible(!isCommentFormVisible)
+  }
 
   return (
     <div>
@@ -40,13 +39,11 @@ export default function PostDetails() {
       {isCommentFormVisible && (
         <div>
           <form>
-            <textarea
-              placeholder="Write a comment..."
-            />
+            <textarea placeholder="Write a comment..." />
             <button type="submit">Comment</button>
           </form>
         </div>
       )}
     </div>
-  );
+  )
 }

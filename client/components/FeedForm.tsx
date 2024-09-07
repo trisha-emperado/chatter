@@ -20,7 +20,7 @@ const FeedForm = () => {
       }
 
       await request
-        .post('/api/posts')
+        .post('/api/v1/posts')
         .set('Authorization', `Bearer ${token}`)
         .send(newPost)
     },
