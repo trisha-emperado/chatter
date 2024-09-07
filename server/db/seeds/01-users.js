@@ -5,8 +5,8 @@ export async function seed(knex) {
     {
       id: 1,
       auth_id: 'authidhere',
-      username: 'giogiorgio',
-      name: 'Giovanni',
+      username: 'Random Test User',
+      name: 'User',
       current_role: 'Student',
       age: 30,
       profile_picture_url:

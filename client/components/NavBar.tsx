@@ -24,7 +24,6 @@ function NavBar() {
               Signed in as: {user?.nickname} / {user?.given_name}
             </p>
             <p>Email: {user?.email}</p>
-           
 
             <Link to="/feed">
               <button className="feed-btn">Feed</button>

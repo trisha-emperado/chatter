@@ -3,6 +3,7 @@ import { Post } from '../../models/posts.ts'
 import checkJwt, { JwtRequest } from '../auth0.ts'
 
 import * as db from '../functions/posts.ts'
+import connection from '../db/connection.ts'
 
 const router = Router()
 
@@ -12,10 +13,20 @@ const router = Router()
 
 // This gets all the posts ✦
 
+router.get('/post', async (req, res) => {
+  try {
+    const postsWithUserDetails = await db.getPosts()
+    res.json(postsWithUserDetails)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: 'Something went wrong' })
+  }
+})
+
 router.get('/', async (req, res) => {
   try {
-    const posts = await db.getAllPosts()
-    res.json(posts)
+    const postsWithUserDetails = await db.getAllPosts()
+    res.json(postsWithUserDetails)
   } catch (error) {
     console.error(error)
     res.status(500).json({ message: 'Something went wrong' })
@@ -57,15 +68,24 @@ router.get('/:userId/:id', async (req, res) => {
 
 router.post('/', checkJwt, async (req: JwtRequest, res) => {
   const { content, image_url, file_url } = req.body
-  const user_id = req.auth?.sub
+  const userAuthId = req.auth?.sub // This is the user identifier from JWT
 
-  if (user_id === undefined) {
-    return res.status(400).json({ message: 'User ID is required' })
+  if (!userAuthId) {
+    return res.status(400).json({ message: 'User ID from JWT is required' })
   }
 
   try {
+    // Fetch the actual user_id from the database based on userAuthId
+    const user = await connection('users').where('auth_id', userAuthId).first()
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' })
+    }
+
+    const userId = user.id // This is the user_id you want to use
+
     const newPostData: Partial<Post> = {
-      user_id: parseInt(user_id),
+      user_id: userId, // Use the user_id from the database
       content: content,
       image_url: image_url || null,
       file_url: file_url || null,
@@ -73,11 +93,12 @@ router.post('/', checkJwt, async (req: JwtRequest, res) => {
       created_at: new Date(),
     }
 
-    const newPost = await db.addNewPost(newPostData)
-    res.json(newPost)
+    // Add new post to the database
+    const newPost = await connection('posts').insert(newPostData).returning('*')
+    res.json(newPost[0]) // Respond with the newly created post
   } catch (error) {
-    console.error(error)
-    res.status(500).json({ message: 'Something went wrong' })
+    console.error('Error adding new post:', error)
+    res.status(500).json({ message: 'Something went wrong', error: error })
   }
 })
 
@@ -98,7 +119,6 @@ router.patch('/:id', checkJwt, async (req: JwtRequest, res) => {
 
   try {
     const editedPostData: Partial<Post> = {
-      user_id: parseInt(user_id),
       content: content,
       image_url: image_url || null,
       file_url: file_url || null,

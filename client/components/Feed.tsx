@@ -1,7 +1,5 @@
-import FeedForm from './FeedForm'
 import AllPosts from './AllPosts'
-import NavBar from './NavBar'
-import { Link } from 'react-router-dom'
+import PostForm from './PostForm'
 
 const Feed = () => {
   return (
@@ -15,12 +13,10 @@ const Feed = () => {
       </div>
       <div className="postsAndForm">
         <div className="postsBox">
-          <NavBar />
           <AllPosts />
-          <Link to="/userForm">User Form</Link>
         </div>
         <div className="feedFormBox">
-          <FeedForm />
+          <PostForm />
         </div>
       </div>
     </div>

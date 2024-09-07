@@ -6,10 +6,11 @@ import { useAuth0 } from '@auth0/auth0-react'
 
 const FeedForm = () => {
   const [content, setContent] = useState('')
+  const { getAccessTokenSilently, user } = useAuth0() // Get user object
+
+  console.log('Auth0 user:', user)
 
   const queryClient = useQueryClient()
-
-  const { getAccessTokenSilently } = useAuth0()
 
   const mutation = useMutation({
     mutationFn: async (newPost: Partial<Post>) => {
@@ -19,13 +20,23 @@ const FeedForm = () => {
         throw new Error('No authentication token found')
       }
 
+      // Include user_id and other fields
+      const postData = {
+        content: newPost.content,
+        user_id: user?.sub, // Use user ID from Auth0
+        // Add other fields if needed, e.g., image_url, file_url
+      }
+
       await request
         .post('/api/v1/posts')
         .set('Authorization', `Bearer ${token}`)
-        .send(newPost)
+        .send(postData)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts'] })
+    },
+    onError: (error) => {
+      console.error('Error creating post:', error)
     },
   })
 
@@ -35,15 +46,24 @@ const FeedForm = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    mutation.mutate({ content: content })
+    mutation.mutate({ content }) // Send content and other fields
     setContent('')
   }
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <input type="text" onChange={handleChange} value={content} />
-        <button type="submit"></button>
+        <input
+          type="text"
+          onChange={handleChange}
+          value={content}
+          placeholder="What's on your mind?"
+        />
+        <button type="submit" disabled={mutation.isPending}>
+          {mutation.isPending ? 'Submitting...' : 'Submit'}
+        </button>
+        {mutation.isError && <p>Error submitting post. Please try again.</p>}
+        {mutation.isSuccess && <p>Post submitted successfully!</p>}
       </form>
     </div>
   )

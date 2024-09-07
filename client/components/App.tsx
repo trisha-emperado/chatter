@@ -23,13 +23,13 @@ function App() {
 
   return (
     <div className="app">
-      <div className="chatterIconPicture">
+      {/* <div className="chatterIconPicture">
         <img
           src="../../images/chatterIcon.png"
           alt="Chatter Icon"
           className="chatterIcon"
         />
-      </div>
+      </div> */}
       <Outlet />
     </div>
   )
