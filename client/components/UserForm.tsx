@@ -4,11 +4,10 @@ import { User } from '../../models/users'
 import { useAuth0 } from '@auth0/auth0-react'
 
 interface UserFormProps {
-  userID?: number
-  isEditing?: boolean
+  userID?:
 }
 
-function UserForm({ userID, isEditing }: UserFormProps) {
+function UserForm({ userID, isEditing }) {
   const { getAccessTokenSilently, user } = useAuth0()
   const { mutate: addUser, isPending, isSuccess, isError } = useAddUser()
   const { mutate: editUser } = useEditUser()
@@ -33,16 +32,19 @@ function UserForm({ userID, isEditing }: UserFormProps) {
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target
-    setNewUser((prev) => ({ ...prev, [name]: value }))
+    setNewUser((prev) => ({ ...prev, [name]: value === 'yes' ? true : false }))
   }
-
-  console.log(newUser)
+  console.log(isEditing)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    const token = await getAccessTokenSilently()
     e.preventDefault()
-    addUser({ user: newUser, token })
-    setNewUser(userDetails)
+    if (isEditing) {
+      const token = await getAccessTokenSilently()
+      editUser({ user: { ...newUser, auth_id: user?.sub }, userID, token })
+    } else {
+      const token = await getAccessTokenSilently()
+      addUser({ user: { ...newUser, auth_id: user?.sub }, token })
+    }
   }
 
   return (
