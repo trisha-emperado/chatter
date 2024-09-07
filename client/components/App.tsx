@@ -35,7 +35,7 @@ function App() {
         <NavBar />
       </div>
       <Link to="/userForm">
-        <button>Profile Information</button>
+        <button className="profile-info-btn">User Form</button>
       </Link>
     </>
   )
