@@ -1,5 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import * as api from '../apis/apiClient'
+import { useAuth0 } from '@auth0/auth0-react'
+import { PostData } from '../../models/posts'
 
 export function usePostDetails(id: number) {
   return useQuery({
@@ -17,8 +19,48 @@ export function usePosts() {
 
 export function useNewPost() {
   const queryClient = useQueryClient()
+  const { getAccessTokenSilently } = useAuth0()
   return useMutation({
-    mutationFn: api.addNewPost,
+    mutationFn: async (newPost: PostData) => {
+      const token = await getAccessTokenSilently()
+      return api.addNewPost(newPost, token)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts'] })
+    },
+  })
+}
+
+export function useToggleLike(postId: number) {
+  const queryClient = useQueryClient()
+
+  const likeMutation = useMutation({
+    mutationFn: () => api.likePost(postId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts', postId] })
+    },
+  })
+
+  const unlikeMutation = useMutation({
+    mutationFn: () => api.unlikePost(postId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts', postId] })
+    },
+  })
+
+  return {
+    likePost: likeMutation.mutate,
+    unlikePost: unlikeMutation.mutate,
+    isLiking: likeMutation.isPending,
+    isUnliking: unlikeMutation.isPending,
+  }
+}
+
+export function useDeletePost() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (id: number) => api.deletePost(id, token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts'] })
     },

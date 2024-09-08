@@ -3,5 +3,5 @@ export interface Comment {
   user_id: number
   post_id: number
   content: string
-  created_at: Date
+  created_at?: Date
 }
