@@ -4,13 +4,21 @@ import UserForm from './UserForm'
 import { useUsersByID } from '../hooks/useUsers'
 import { useAuth0 } from '@auth0/auth0-react'
 import { useDeleteUser } from '../hooks/useUsers'
+import { useNavigate } from 'react-router-dom'
 
 function Profile() {
   const { id } = useParams()
   const userID = Number(id)
+  const navigate = useNavigate()
   const { data: user, isPending, isError } = useUsersByID(userID)
   const [editUser, setEditUser] = useState(false)
-  const { user: authUser, getAccessTokenSilently, logout } = useAuth0()
+  const {
+    user: authUser,
+    getAccessTokenSilently,
+    logout,
+    isAuthenticated,
+    isLoading: isAuthLoading,
+  } = useAuth0()
 
   const deleteMutation = useDeleteUser()
 
@@ -33,6 +41,10 @@ function Profile() {
     }
     checkFollowingStatus()
   }, [authUser, user])
+
+  if (isAuthLoading) {
+    return <div>Loading authentication...</div>
+  }
 
   if (isPending) {
     return <div>Loading...</div>
@@ -101,6 +113,11 @@ function Profile() {
 
   if (editUser) {
     return <UserForm userID={id} isEditing={true} />
+  }
+
+  if (!isAuthenticated) {
+    navigate('/signinfirst')
+    return null
   }
 
   return (

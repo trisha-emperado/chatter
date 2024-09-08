@@ -2,9 +2,9 @@ export interface Post {
   id: number
   user_id: string
   content: string
-  image_url: string
-  file_url: string
-  likes: number
+  image_url?: string
+  file_url?: string
+  likes?: number
   created_at: Date
 }
 

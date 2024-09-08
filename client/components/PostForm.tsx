@@ -1,20 +1,16 @@
 import { useState } from 'react';
-import { Post } from '../../models/posts';
+import { PostData } from '../../models/posts';
 import { useNewPost } from '../hooks/usePosts';
 
-const emptyPost: Post = {
-  id: 0,
-  user_id: 1,
+const emptyPostData: PostData = {
   content: '',
   image_url: '',
   file_url: '',
-  likes: 0,
-  created_at: new Date(),
 };
 
 export default function PostForm() {
-  const [newPost, setNewPost] = useState(emptyPost);
-  const { content: addingContent, image_url: addingImageUrl, file_url: addingFileUrl } = newPost;
+  const [newPost, setNewPost] = useState(emptyPostData);
+  const { content, image_url, file_url } = newPost;
   const { mutate: addPost, isPending, isError } = useNewPost();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -29,13 +25,9 @@ export default function PostForm() {
     event.preventDefault();
 
     try {
-      await addPost({
-        ...newPost,
-        image_url: addingImageUrl || '',
-        file_url: addingFileUrl || ''
-      });
+      await addPost(newPost);
       console.log('New post submitted:', newPost);
-      setNewPost(emptyPost);
+      setNewPost(emptyPostData);
     } catch (error) {
       console.error('Error creating post:', error);
     }
@@ -48,7 +40,7 @@ export default function PostForm() {
         <textarea
           name="content"
           id="content"
-          value={addingContent}
+          value={content}
           onChange={handleChange}
           placeholder="What's on your mind?"
           required
@@ -56,25 +48,25 @@ export default function PostForm() {
 
         <label htmlFor="image">Image URL:</label>
         <input
-          type="file"
+          type="text"
           name="image_url"
           id="image"
-          value={addingImageUrl}
+          value={image_url}
           onChange={handleChange}
           placeholder="Image URL"
         />
 
         <label htmlFor="file">File URL:</label>
         <input
-          type="file"
+          type="text"
           name="file_url"
           id="file"
-          value={addingFileUrl}
+          value={file_url}
           onChange={handleChange}
           placeholder="File URL"
         />
 
-        <button type="submit" disabled={addingContent === '' || isPending}>
+        <button type="submit" disabled={content === '' || isPending}>
           {isPending ? 'Posting...' : 'Make Post'}
         </button>
 
