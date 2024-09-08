@@ -56,26 +56,19 @@ router.get('/:userId/:id', async (req, res) => {
 // This is how you would create a new post ✦
 
 router.post('/', checkJwt, async (req: JwtRequest, res) => {
-  console.log('Post route hit')
-
   const { content, image_url, file_url, likes } = req.body
   const authId = req.auth?.sub
-  console.log('Auth ID:', authId)
 
   if (!authId) {
     return res.status(400).json({ message: 'User ID is required' })
   }
 
   try {
-    // Query to find user by authId
     const user = await connection('users').where({ auth_id: authId }).first()
 
     if (!user) {
-      console.log('User not found')
       return res.status(404).json({ message: 'User not found' })
     }
-
-    console.log('User found:', user)
 
     const newPostData: PostData = {
       user_id: user.id,
@@ -85,12 +78,9 @@ router.post('/', checkJwt, async (req: JwtRequest, res) => {
       likes: likes || 0,
     }
 
-    console.log('New Post Data:', newPostData)
-
     const newPost = await db.addNewPost(newPostData)
     res.json(newPost)
   } catch (error) {
-    console.error(error)
     res.status(500).json({ message: 'Something went wrong' })
   }
 })
