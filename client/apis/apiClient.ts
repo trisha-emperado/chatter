@@ -68,3 +68,11 @@ export async function addNewPost(newPost: Post) {
   const res = await request.post(rootURL + '/posts/').send(newPost)
   return res.body
 }
+
+export async function likePost(postId: number): Promise<void> {
+  await request.post(`${rootURL}/posts/${postId}/like`)
+}
+
+export async function unlikePost(postId: number): Promise<void> {
+  await request.post(`${rootURL}/posts/${postId}/unlike`)
+}

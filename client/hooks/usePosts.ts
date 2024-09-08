@@ -24,3 +24,28 @@ export function useNewPost() {
     },
   })
 }
+
+export function useToggleLike(postId: number) {
+  const queryClient = useQueryClient()
+
+  const likeMutation = useMutation({
+    mutationFn: () => api.likePost(postId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts', postId] })
+    },
+  })
+
+  const unlikeMutation = useMutation({
+    mutationFn: () => api.unlikePost(postId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts', postId] })
+    },
+  })
+
+  return {
+    likePost: likeMutation.mutate,
+    unlikePost: unlikeMutation.mutate,
+    isLiking: likeMutation.isPending,
+    isUnliking: unlikeMutation.isPending,
+  }
+}
