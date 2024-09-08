@@ -8,10 +8,11 @@ import { useDeleteUser } from '../hooks/useUsers'
 function Profile() {
   const { id } = useParams()
   const userID = Number(id)
-  const { user: authUser } = useAuth0()
-
   const { data: user, isPending, isError } = useUsersByID(userID)
   const [editUser, setEditUser] = useState(false)
+  const { user: authUser, getAccessTokenSilently, logout } = useAuth0()
+
+  const deleteMutation = useDeleteUser()
 
   const [isFollowing, setIsFollowing] = useState(false)
 
@@ -32,10 +33,6 @@ function Profile() {
     }
     checkFollowingStatus()
   }, [authUser, user])
-  
-  const { user: authUser, getAccessTokenSilently, logout } = useAuth0()
-
-  const deleteMutation = useDeleteUser()
 
   if (isPending) {
     return <div>Loading...</div>
@@ -58,7 +55,7 @@ function Profile() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          follower_id: authUser.sub,
+          follower_id: authUser?.sub,
           following_id: user.auth_id,
         }),
       })
@@ -77,7 +74,7 @@ function Profile() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          follower_id: authUser.sub,
+          follower_id: authUser?.sub,
           following_id: user.auth_id,
         }),
       })
@@ -141,19 +138,8 @@ function Profile() {
               </div>
               <div>
                 {authUser && authUser.sub === user.auth_id ? (
-
-                  <button onClick={handleEditProfile}>Edit</button>
-                ) : isFollowing ? (
-                  <button onClick={handleUnfollow}>Unfollow</button>
-                ) : (
-                  <button onClick={handleFollow}>Follow</button>
                   <>
-                    <button
-                      className="editUserButton"
-                      onClick={handleEditProfile}
-                    >
-                      Edit
-                    </button>
+                    <button onClick={handleEditProfile}>Edit</button>
                     <br></br>
                     <button
                       className="deleteUserButton"
@@ -162,8 +148,10 @@ function Profile() {
                       Delete Account
                     </button>
                   </>
+                ) : isFollowing ? (
+                  <button onClick={handleUnfollow}>Unfollow</button>
                 ) : (
-                  <button className="followUserButton">Follow</button>
+                  <button onClick={handleFollow}>Follow</button>
                 )}
               </div>
             </div>
