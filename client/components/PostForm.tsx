@@ -3,9 +3,7 @@ import { Post } from '../../models/posts'
 import { useNewPost } from '../hooks/usePosts'
 import { useAuth0 } from '@auth0/auth0-react'
 
-const emptyPost: Post = {
-  id: 0,
-  user_id: 1,
+const emptyPostData: PostData = {
   content: '',
   image_url: '',
   file_url: '',
