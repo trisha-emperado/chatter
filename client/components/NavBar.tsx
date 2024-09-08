@@ -19,16 +19,27 @@ function NavBar() {
         {user && (
           <div className="mainNavBox">
             <div className="navImageBox">
-              <img src={user?.picture} alt="profile pic" className="navImage" />
+              <div className="navImages">
+                <img
+                  src={user?.picture}
+                  alt="profile pic"
+                  className="navImage"
+                />
+              </div>
+
               <p className="navText">Signed in as: {user?.given_name}</p>
+              <p className="userEmail">{user?.email}</p>
             </div>
             <div className="navButtonsBox">
-              <Link to={`/user/${user.sub}`}>
-                <button className="my-profile-btn btn">My Profile</button>
-              </Link>
-
               <Link to="/feed">
                 <button className="feed-btn btn">Feed</button>
+              </Link>
+
+              {/* <Link to={`/user/${user.sub}`}>
+                <button className="my-profile-btn btn">My Profile</button>
+              </Link> */}
+              <Link to={`/userForm`}>
+                <button className="my-profile-btn btn">My Profile</button>
               </Link>
 
               <button className="friends-btn btn">Friends</button>

@@ -1,5 +1,7 @@
 import Feed from './Feed'
 import NavBar from './NavBar'
+import PostForm from './PostForm'
+import SideBar from './SideBar'
 
 const Home = () => {
   return (
@@ -11,7 +13,12 @@ const Home = () => {
         <div className="feed02">
           <Feed />
         </div>
-        <div className="sideBar03">SideBar</div>
+        <div className="sideBar03">
+          <SideBar />
+        </div>
+      </div>
+      <div className="feedFormBox">
+        <PostForm />
       </div>
     </div>
   )

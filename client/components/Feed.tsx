@@ -1,11 +1,10 @@
 import AllPosts from './AllPosts'
-import PostForm from './PostForm'
 
 const Feed = () => {
   return (
     <div className="feedBox">
       <div className="feedNavBox">
-        <h3 className="feedTitle">Feed</h3>
+        <p className="feedTitle">Feed</p>
         <div className="feedFilters">
           <p className="allPosts">All Posts</p>
           <p className="friendsPosts">Friends Posts</p>
@@ -14,9 +13,6 @@ const Feed = () => {
       <div className="postsAndForm">
         <div className="postsBox">
           <AllPosts />
-        </div>
-        <div className="feedFormBox">
-          <PostForm />
         </div>
       </div>
     </div>

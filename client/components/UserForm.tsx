@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useAddUser, useEditUser } from '../hooks/useUsers'
 import { User } from '../../models/users'
 import { useAuth0 } from '@auth0/auth0-react'
-import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 
 interface UserFormProps {
@@ -11,11 +10,10 @@ interface UserFormProps {
 }
 
 function UserForm({ userID, isEditing }: UserFormProps) {
-  const navigate = useNavigate()
   const { getAccessTokenSilently, user } = useAuth0()
   const { mutate: addUser, isPending, isSuccess, isError } = useAddUser()
   const { mutate: editUser } = useEditUser()
-  const [newUser, setNewUser] = useState<User>({
+  const userDetails = {
     username: '',
     name: '',
     current_role: '',
@@ -25,35 +23,9 @@ function UserForm({ userID, isEditing }: UserFormProps) {
     facilitator: false,
     github_url: '',
     auth_id: '',
-  })
-  const [loading, setLoading] = useState(true)
+  }
 
-  useEffect(() => {
-    const fetchUserDetails = async () => {
-      if (userID) {
-        try {
-          const token = await getAccessTokenSilently()
-          const response = await fetch(`/api/users/${userID}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
-          const data = await response.json()
-          setNewUser(data)
-        } catch (error) {
-          console.error('Error fetching user details:', error)
-        } finally {
-          setLoading(false)
-        }
-      }
-    }
-
-    if (isEditing) {
-      fetchUserDetails()
-    } else {
-      setLoading(false)
-    }
-  }, [isEditing, userID, getAccessTokenSilently])
+  const [newUser, setNewUser] = useState<User>(userDetails)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -62,31 +34,18 @@ function UserForm({ userID, isEditing }: UserFormProps) {
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target
-    setNewUser((prev) => ({ ...prev, [name]: value === 'yes' }))
+    setNewUser((prev) => ({ ...prev, [name]: value === 'yes' ? true : false }))
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const token = await getAccessTokenSilently()
     if (isEditing) {
+      const token = await getAccessTokenSilently()
       editUser({ user: { ...newUser, auth_id: user?.sub }, userID, token })
     } else {
-      addUser({ user: { ...newUser, auth_id: user?.sub }, token })
-    try {
       const token = await getAccessTokenSilently()
-      if (isEditing) {
-        editUser({ user: { ...newUser, auth_id: user?.sub }, userID, token })
-      } else {
-        addUser({ user: { ...newUser, auth_id: user?.sub }, token })
-      }
-    } catch (error) {
-      console.error('Error getting token or submitting form:', error)
+      addUser({ user: { ...newUser, auth_id: user?.sub }, token })
     }
-    navigate('/feed')
-  }
-
-  if (loading) {
-    return <div>Loading...</div>
   }
 
   return (
