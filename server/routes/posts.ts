@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { Post, PostData } from '../../models/posts.ts'
+import { Post } from '../../models/posts.ts'
 import checkJwt, { JwtRequest } from '../auth0.ts'
 
 import * as db from '../functions/posts.ts'
@@ -68,24 +68,23 @@ router.get('/:userId/:id', async (req, res) => {
 
 router.post('/', checkJwt, async (req: JwtRequest, res) => {
   const { content, image_url, file_url } = req.body
-  const userAuthId = req.auth?.sub // This is the user identifier from JWT
+  const userAuthId = req.auth?.sub
 
   if (!userAuthId) {
     return res.status(400).json({ message: 'User ID from JWT is required' })
   }
 
   try {
-    // Fetch the actual user_id from the database based on userAuthId
     const user = await connection('users').where('auth_id', userAuthId).first()
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' })
     }
 
-    const userId = user.id // This is the user_id you want to use
+    const userId = user.id
 
     const newPostData: Partial<Post> = {
-      user_id: userId, // Use the user_id from the database
+      user_id: userId,
       content: content,
       image_url: image_url || null,
       file_url: file_url || null,
@@ -93,9 +92,8 @@ router.post('/', checkJwt, async (req: JwtRequest, res) => {
       created_at: new Date(),
     }
 
-    // Add new post to the database
     const newPost = await connection('posts').insert(newPostData).returning('*')
-    res.json(newPost[0]) // Respond with the newly created post
+    res.json(newPost[0])
   } catch (error) {
     console.error('Error adding new post:', error)
     res.status(500).json({ message: 'Something went wrong', error: error })

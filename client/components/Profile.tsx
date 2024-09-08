@@ -4,6 +4,7 @@ import UserForm from './UserForm'
 import { useUsersByID } from '../hooks/useUsers'
 import { useAuth0 } from '@auth0/auth0-react'
 import { useDeleteUser } from '../hooks/useUsers'
+import { useNavigate } from 'react-router-dom'
 
 function Profile() {
   const { id } = useParams()
@@ -17,9 +18,6 @@ function Profile() {
     logout,
     isAuthenticated,
   } = useAuth0()
-
-  const deleteMutation = useDeleteUser()
-  const { user: authUser, getAccessTokenSilently, logout } = useAuth0()
 
   const deleteMutation = useDeleteUser()
 
@@ -65,7 +63,6 @@ function Profile() {
         },
         body: JSON.stringify({
           follower_id: authUser?.sub,
-          follower_id: authUser?.sub,
           following_id: user.auth_id,
         }),
       })
@@ -84,7 +81,6 @@ function Profile() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          follower_id: authUser?.sub,
           follower_id: authUser?.sub,
           following_id: user.auth_id,
         }),
@@ -112,6 +108,10 @@ function Profile() {
 
   if (editUser) {
     return <UserForm userID={id} isEditing={true} />
+  }
+
+  if (!isAuthenticated) {
+    navigate('/signinfirst')
   }
 
   return (
@@ -151,8 +151,6 @@ function Profile() {
                 {authUser && authUser.sub === user.auth_id ? (
                   <>
                     <button onClick={handleEditProfile}>Edit</button>
-                  <>
-                    <button onClick={handleEditProfile}>Edit</button>
                     <br></br>
                     <button
                       className="deleteUserButton"
@@ -163,10 +161,7 @@ function Profile() {
                   </>
                 ) : isFollowing ? (
                   <button onClick={handleUnfollow}>Unfollow</button>
-                ) : isFollowing ? (
-                  <button onClick={handleUnfollow}>Unfollow</button>
                 ) : (
-                  <button onClick={handleFollow}>Follow</button>
                   <button onClick={handleFollow}>Follow</button>
                 )}
               </div>

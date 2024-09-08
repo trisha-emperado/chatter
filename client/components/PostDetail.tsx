@@ -56,7 +56,7 @@ export default function PostDetails() {
   }
 
   if (isPending) return <p>Loading...</p>
-  if (isError || !post) return <p>Error loading post</p>
+  if (isError) return <p>Error loading post</p>
 
   const commentForm = () => {
     setIsCommentFormVisible(!isCommentFormVisible)
