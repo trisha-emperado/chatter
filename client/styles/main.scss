@@ -600,15 +600,19 @@ input[type="file"] {
 // ║   SignInPage   ║
 // ╚════════════════╝
 
-.officalBox { height: 100vh;
-  width: 100%;}
+.officalBox { 
+  height: 100vh;
+  width: 100%;
+}
 
 .app {
   height: 100%;
   width: 100%;
+  
 }
 
 .signInPageContainer {
+  @include flexBox();
   width: 100%;
   height: 100%;
 }
@@ -616,9 +620,8 @@ input[type="file"] {
 .signInPageBox {
   @include flexBox();
   justify-content: space-evenly;
-  width: 100%;
+  width: 60%;
   height: 100%;
-  background-color: red;
   font-family: bold;
 }
 
@@ -629,7 +632,7 @@ input[type="file"] {
   width: calc(12vh + 12vw);
   border-radius: calc(0.5vh + 0.5vw);
   font-size: calc(2vh + 2vw);
-  box-shadow: 
+  box-shadow:
   rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
   rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
   rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
@@ -637,6 +640,38 @@ input[type="file"] {
   color: white;
 }
 
-.signnBox {
+.letsSign {
   font-family: bold;
+}
+
+// ╔══════════════╗
+// ║   Comments   ║
+// ╚══════════════╝
+
+.comment {
+  display: flex;
+  padding: calc(1vh + 1vw) 0;
+}
+
+.commentNav {
+  display: flex;
+  align-items: flex-start;
+}
+
+.commentUserImg {
+  width: calc(2vh + 2vw);
+  margin-right: calc(0.5vh + 0.5vw);
+  border-radius: 50%;
+}
+
+.commentContentBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.showCommentButton {
+  font-family: regularFont;
 }

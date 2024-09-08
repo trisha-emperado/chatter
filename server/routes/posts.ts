@@ -14,8 +14,8 @@ const router = Router()
 
 router.get('/', async (req, res) => {
   try {
-    const posts = await db.getAllPosts()
-    res.json(posts)
+    const postsWithUserDetails = await db.getAllPostsWithComments()
+    res.json(postsWithUserDetails)
   } catch (error) {
     console.error(error)
     res.status(500).json({ message: 'Something went wrong' })

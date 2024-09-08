@@ -2,6 +2,7 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { useEffect } from 'react'
 import UserForm from './UserForm'
 import { useUserByAuthId } from '../hooks/useUsers'
+import Home from './Home'
 
 function App() {
   const { isAuthenticated, getAccessTokenSilently, user } = useAuth0()
@@ -30,9 +31,7 @@ function App() {
 
   return (
     <>
-      <div className="app">
-        <h1 className="text-3xl font-bold underline">Welcome to Chatter!</h1>
-      </div>
+      <Home />
     </>
   )
 }

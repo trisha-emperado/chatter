@@ -47,7 +47,7 @@ function SignInPage() {
             />
           </div>
           <div className="signnBox">
-            <h3>Lets get you signed in!</h3>
+            <h3 className="letsSign">Lets get you signed in!</h3>
             <button className="signButtonn" onClick={handleSignIn}>
               Sign in
             </button>

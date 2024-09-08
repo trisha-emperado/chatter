@@ -18,22 +18,41 @@ function NavBar() {
   return (
     <>
       <IfAuthenticated>
-        <button onClick={handleSignOut}>Sign out</button>
         {user && (
-          <div>
-            <img src={user?.picture} alt="profile pic" />
-            <p>
-              Signed in as: {user?.nickname} / {user?.given_name}
-            </p>
-            <p>Email: {user?.email}</p>
+          <div className="mainNavBox">
+            <div className="navImageBox">
+              <div className="navImages">
+                <img
+                  src={user?.picture}
+                  alt="profile pic"
+                  className="navImage"
+                />
+              </div>
 
-            <Link to={`/user/${userData?.id}`}>
-              <button className="my-profile-btn">My Profile</button>
-            </Link>
+              <p className="navText">
+                Signed in as: {user?.preferred_username}
+              </p>
+              <p className="userEmail">{user?.email}</p>
+            </div>
+            <div className="navButtonsBox">
+              <Link to="/feed">
+                <button className="feed-btn btn">Feed</button>
+              </Link>
 
-            <Link to="/feed">
-              <button className="feed-btn">Feed</button>
-            </Link>
+              <Link to={`/user/${userData?.id}`}>
+                <button className="my-profile-btn btn">My Profile</button>
+              </Link>
+              <Link to={`/userForm`}>
+                <button className="my-profile-btn btn">My details</button>
+              </Link>
+
+              <button className="friends-btn btn">Friends</button>
+            </div>
+            <div className="signoutBox">
+              <button className="sign-out" onClick={handleSignOut}>
+                Sign out
+              </button>
+            </div>
           </div>
         )}
       </IfAuthenticated>
