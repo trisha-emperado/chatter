@@ -1,13 +1,19 @@
-import React, { useState } from 'react'
-import { useAddUser } from '../hooks/useUsers'
+import React, { useState, useEffect } from 'react'
+import { useAddUser, useEditUser } from '../hooks/useUsers'
 import { User } from '../../models/users'
 import { useAuth0 } from '@auth0/auth0-react'
 import { Link } from 'react-router-dom'
 
-function UserForm() {
+interface UserFormProps {
+  userID: number | undefined
+  isEditing: boolean
+}
+
+function UserForm({ userID, isEditing }: UserFormProps) {
   const { getAccessTokenSilently, user } = useAuth0()
   const { mutate: addUser, isPending, isSuccess, isError } = useAddUser()
-  const userDetails = {
+  const { mutate: editUser } = useEditUser()
+  const [newUser, setNewUser] = useState<User>({
     username: '',
     name: '',
     current_role: '',
@@ -17,8 +23,35 @@ function UserForm() {
     facilitator: false,
     github_url: '',
     auth_id: '',
-  }
-  const [newUser, setNewUser] = useState<User>(userDetails)
+  })
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      if (userID) {
+        try {
+          const token = await getAccessTokenSilently()
+          const response = await fetch(`/api/users/${userID}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          const data = await response.json()
+          setNewUser(data)
+        } catch (error) {
+          console.error('Error fetching user details:', error)
+        } finally {
+          setLoading(false)
+        }
+      }
+    }
+
+    if (isEditing) {
+      fetchUserDetails()
+    } else {
+      setLoading(false)
+    }
+  }, [isEditing, userID, getAccessTokenSilently])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -27,16 +60,25 @@ function UserForm() {
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target
-    setNewUser((prev) => ({ ...prev, [name]: value === 'yes' ? true : false }))
+    setNewUser((prev) => ({ ...prev, [name]: value === 'yes' }))
   }
-  console.log(newUser)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    try {
+      const token = await getAccessTokenSilently()
+      if (isEditing) {
+        editUser({ user: { ...newUser, auth_id: user?.sub }, userID, token })
+      } else {
+        addUser({ user: { ...newUser, auth_id: user?.sub }, token })
+      }
+    } catch (error) {
+      console.error('Error getting token or submitting form:', error)
+    }
+  }
 
-    const token = await getAccessTokenSilently()
-    addUser({ user: { ...newUser, auth_id: user?.sub }, token })
-    setNewUser(userDetails)
+  if (loading) {
+    return <div>Loading...</div>
   }
 
   return (
@@ -60,7 +102,7 @@ function UserForm() {
               <h1 className="editH1">Edit your details</h1>
             </div>
             <div className="userFormInputs">
-              <div className="userFormInput">
+              <div className="userFormInput userName">
                 <label htmlFor="username">Username:</label>
                 <input
                   required
@@ -144,7 +186,7 @@ function UserForm() {
                   required
                   id="facilitator"
                   name="facilitator"
-                  value={newUser.facilitator === false ? 'no' : 'yes'}
+                  value={newUser.facilitator ? 'yes' : 'no'}
                   className="dropDownInput"
                   onChange={handleSelectChange}
                 >
