@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import UserForm from './UserForm'
 import { useUsersByID } from '../hooks/useUsers'
 import { useAuth0 } from '@auth0/auth0-react'
@@ -21,6 +21,26 @@ function Profile() {
 
   const deleteMutation = useDeleteUser()
 
+  const [isFollowing, setIsFollowing] = useState(false)
+
+  //Check if logged-in user is following this profile
+  useEffect(() => {
+    const checkFollowingStatus = async () => {
+      if (authUser && user) {
+        try {
+          const response = await fetch(
+            `/api/v1/followers/isFollowing?follower_id=${authUser.sub}&following_id=${user.auth_id}`,
+          )
+          const data = await response.json()
+          setIsFollowing(data.isFollowing)
+        } catch (err) {
+          console.error('Error checking following status', err)
+        }
+      }
+    }
+    checkFollowingStatus()
+  }, [authUser, user])
+
   if (isPending) {
     return <div>Loading...</div>
   }
@@ -33,6 +53,45 @@ function Profile() {
     return <div>That user ID does not exist.</div>
   }
 
+  // HANDLE FOLLOW
+  const handleFollow = async () => {
+    try {
+      await fetch('/api/v1/followers/follow', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          follower_id: authUser?.sub,
+          following_id: user.auth_id,
+        }),
+      })
+      setIsFollowing(true)
+    } catch (err) {
+      console.error('Error following user', err)
+    }
+  }
+
+  // HANDLE UNFOLLOW
+  const handleUnfollow = async () => {
+    try {
+      await fetch('/api/v1/followers/unfollow', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          follower_id: authUser?.sub,
+          following_id: user.auth_id,
+        }),
+      })
+      setIsFollowing(false)
+    } catch (err) {
+      console.error('Error unfollowing user', err)
+    }
+  }
+
+  //HANDLE EDIT PROFILE
   const handleEditProfile = () => {
     setEditUser(true)
   }
@@ -91,12 +150,7 @@ function Profile() {
               <div>
                 {authUser && authUser.sub === user.auth_id ? (
                   <>
-                    <button
-                      className="editUserButton"
-                      onClick={handleEditProfile}
-                    >
-                      Edit
-                    </button>
+                    <button onClick={handleEditProfile}>Edit</button>
                     <br></br>
                     <button
                       className="deleteUserButton"
@@ -105,8 +159,10 @@ function Profile() {
                       Delete Account
                     </button>
                   </>
+                ) : isFollowing ? (
+                  <button onClick={handleUnfollow}>Unfollow</button>
                 ) : (
-                  <button className="followUserButton">Follow</button>
+                  <button onClick={handleFollow}>Follow</button>
                 )}
               </div>
             </div>
