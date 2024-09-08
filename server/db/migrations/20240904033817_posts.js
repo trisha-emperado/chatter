@@ -9,7 +9,7 @@ export async function up(knex) {
     table.string('content')
     table.string('image_url')
     table.string('file_url')
-    table.integer('likes')
+    table.integer('likes').defaultTo(0)
     table.timestamp('created_at').defaultTo(knex.fn.now())
   })
 }

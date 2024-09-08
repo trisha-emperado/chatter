@@ -58,7 +58,6 @@ export function useToggleLike(postId: number) {
 
 export function useDeletePost() {
   const queryClient = useQueryClient()
-
   return useMutation({
     mutationFn: (id: number) => api.deletePost(id, token),
     onSuccess: () => {
