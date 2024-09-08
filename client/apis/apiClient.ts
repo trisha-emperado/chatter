@@ -104,5 +104,5 @@ export async function addComment(
   postId: number,
   content: string,
 ): Promise<void> {
-  await request.post(`${rootURL}/posts/${postId}/comments`).send({ content })
+  await request.post(`${rootURL}/comments/${postId}`).send({ content })
 }

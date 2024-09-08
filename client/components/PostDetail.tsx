@@ -16,7 +16,8 @@ export default function PostDetails() {
   const { mutate: deletePost, isPending: isDeleting } = useDeletePost();
   const { mutate: addComment, isPending: isCommenting } = useAddComment(Number(id));
 
-  const currentUser = useAuth0().user?.sub;
+  const { user } = useAuth0();
+  const currentUser = user?.sub;
 
   const handleLikeToggle = () => {
     if (hasLiked) {
@@ -30,12 +31,17 @@ export default function PostDetails() {
 
   const handleCommentSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    addComment(commentContent, {
-      onSuccess: () => {
-        setCommentContent('');
-        setIsCommentFormVisible(false);
-      },
-    });
+    if (commentContent.trim()) {
+      addComment(commentContent, {
+        onSuccess: () => {
+          setCommentContent('');
+          setIsCommentFormVisible(false);
+        },
+        onError: () => {
+          alert('Failed to add comment.');
+        }
+      });
+    }
   };
 
   const handleDelete = () => {
