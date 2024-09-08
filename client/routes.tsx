@@ -1,9 +1,10 @@
 import { createRoutesFromElements, Route } from 'react-router-dom'
 import App from './components/App.tsx'
 import UserForm from './components/UserForm.tsx'
+// import Profile from './components/Profile.tsx'
+import Feed from './components/Feed.tsx'
 import Home from './components/Home.tsx'
 import PostDetails from './components/PostDetail.tsx'
-import Profile from './components/Profile.tsx'
 import PostForm from './components/PostForm.tsx'
 
 const routes = createRoutesFromElements(
@@ -13,8 +14,8 @@ const routes = createRoutesFromElements(
       path="/userForm"
       element={<UserForm userID={undefined} isEditing={false} />}
     />
-    <Route path="/user/:id" element={<Profile />} />
-    <Route path="/feed" element={<Home />} />
+    {/* <Route path="/user/:id" element={<Profile />} /> */}
+    <Route path="/feed" element={<Feed />} />
     <Route path="/posts/:id" element={<PostDetails />} />
     <Route path="/postForm" element={<PostForm />} />
   </Route>,

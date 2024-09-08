@@ -4,6 +4,10 @@ import { Post } from '../../models/posts'
 
 const rootURL = '/api/v1'
 
+// ╔═══════════════════╗
+// ║    User Routes    ║
+// ╚═══════════════════╝
+
 export async function getAllUsers(): Promise<User[]> {
   try {
     const res = await request.get(rootURL + '/users')
@@ -24,9 +28,29 @@ export async function getUserByID(id: number): Promise<User> {
   }
 }
 
+export async function getUserByAuthId(authId: string): Promise<User> {
+  try {
+    const res = await request.get(rootURL + `/users/authId/${authId}`)
+    return res.body as User
+  } catch (error) {
+    console.error('Failed to fetch that user', error)
+    throw new Error('Unable to fetch that user')
+  }
+}
+
 export async function addUser(newUser: User) {
   return await request.post(rootURL).send(newUser)
 }
+
+export async function deleteUserById(id: number, token: string) {
+  return await request
+    .del(rootURL + `/users/${id}`)
+    .set('Authorization', `Bearer ${token}`)
+}
+
+// ╔═══════════════════╗
+// ║     Post Routes   ║
+// ╚═══════════════════╝
 
 export async function getAllPosts() {
   const res = await request.get(rootURL + '/posts/')
