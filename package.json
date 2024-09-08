@@ -8,7 +8,6 @@
     "fullstack"
   ],
   "scripts": {
-    "knex:migrate": "knex:migrate latest",
     "test": "vitest",
     "start": "node dist/server.js",
     "dev": "run-p dev:client dev:server",
