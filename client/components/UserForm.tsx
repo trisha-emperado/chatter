@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useAddUser, useEditUser } from '../hooks/useUsers'
 import { User } from '../../models/users'
 import { useAuth0 } from '@auth0/auth0-react'
+import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 
 interface UserFormProps {
@@ -10,6 +11,7 @@ interface UserFormProps {
 }
 
 function UserForm({ userID, isEditing }: UserFormProps) {
+  const navigate = useNavigate()
   const { getAccessTokenSilently, user } = useAuth0()
   const { mutate: addUser, isPending, isSuccess, isError } = useAddUser()
   const { mutate: editUser } = useEditUser()
@@ -65,6 +67,11 @@ function UserForm({ userID, isEditing }: UserFormProps) {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    const token = await getAccessTokenSilently()
+    if (isEditing) {
+      editUser({ user: { ...newUser, auth_id: user?.sub }, userID, token })
+    } else {
+      addUser({ user: { ...newUser, auth_id: user?.sub }, token })
     try {
       const token = await getAccessTokenSilently()
       if (isEditing) {
@@ -75,6 +82,7 @@ function UserForm({ userID, isEditing }: UserFormProps) {
     } catch (error) {
       console.error('Error getting token or submitting form:', error)
     }
+    navigate('/feed')
   }
 
   if (loading) {

@@ -6,6 +6,7 @@ import Feed from './components/Feed.tsx'
 import Home from './components/Home.tsx'
 import PostDetails from './components/PostDetail.tsx'
 import PostForm from './components/PostForm.tsx'
+import SignInFirst from './components/SignInFirst.tsx'
 
 const routes = createRoutesFromElements(
   <Route path="/" element={<App />}>
@@ -18,6 +19,7 @@ const routes = createRoutesFromElements(
     <Route path="/feed" element={<Feed />} />
     <Route path="/posts/:id" element={<PostDetails />} />
     <Route path="/postForm" element={<PostForm />} />
+    <Route path="/signinfirst" element={<SignInFirst />} />
   </Route>,
 )
 
