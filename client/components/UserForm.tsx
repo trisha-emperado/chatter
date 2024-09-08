@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useAddUser, useEditUser } from '../hooks/useUsers'
 import { User } from '../../models/users'
 import { useAuth0 } from '@auth0/auth0-react'
+import { useNavigate } from 'react-router-dom'
 
 interface UserFormProps {
   userID?: number
@@ -9,6 +10,7 @@ interface UserFormProps {
 }
 
 function UserForm({ userID, isEditing }: UserFormProps) {
+  const navigate = useNavigate()
   const { getAccessTokenSilently, user } = useAuth0()
   const { mutate: addUser, isPending, isSuccess, isError } = useAddUser()
   const { mutate: editUser } = useEditUser()
@@ -38,13 +40,13 @@ function UserForm({ userID, isEditing }: UserFormProps) {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    const token = await getAccessTokenSilently()
     if (isEditing) {
-      const token = await getAccessTokenSilently()
       editUser({ user: { ...newUser, auth_id: user?.sub }, userID, token })
     } else {
-      const token = await getAccessTokenSilently()
       addUser({ user: { ...newUser, auth_id: user?.sub }, token })
     }
+    navigate('/feed')
   }
 
   return (
