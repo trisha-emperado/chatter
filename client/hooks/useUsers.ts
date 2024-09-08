@@ -8,6 +8,11 @@ interface MutationData {
   token: string
 }
 
+interface DeleteUserMutation {
+  id: number
+  token: string
+}
+
 export function useUsers() {
   return useQuery({ queryKey: ['users'], queryFn: api.getAllUsers })
 }
@@ -41,6 +46,17 @@ export function useEditUser() {
   return useMutation({
     mutationFn: (data: MutationData) =>
       api.editUser(data.user, data.userID, data.token),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['users'] })
+    },
+  })
+}
+
+export function useDeleteUser() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (data: DeleteUserMutation) =>
+      api.deleteUserById(data.id, data.token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] })
     },

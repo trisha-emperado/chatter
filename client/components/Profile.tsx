@@ -1,16 +1,45 @@
 import { useParams } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import UserForm from './UserForm'
 import { useUsersByID } from '../hooks/useUsers'
 import { useAuth0 } from '@auth0/auth0-react'
+import { useDeleteUser } from '../hooks/useUsers'
+import { useNavigate } from 'react-router-dom'
 
 function Profile() {
   const { id } = useParams()
   const userID = Number(id)
-
+  const navigate = useNavigate()
   const { data: user, isPending, isError } = useUsersByID(userID)
   const [editUser, setEditUser] = useState(false)
-  const { user: authUser } = useAuth0()
+  const {
+    user: authUser,
+    getAccessTokenSilently,
+    logout,
+    isAuthenticated,
+  } = useAuth0()
+
+  const deleteMutation = useDeleteUser()
+
+  const [isFollowing, setIsFollowing] = useState(false)
+
+  //Check if logged-in user is following this profile
+  useEffect(() => {
+    const checkFollowingStatus = async () => {
+      if (authUser && user) {
+        try {
+          const response = await fetch(
+            `/api/v1/followers/isFollowing?follower_id=${authUser.sub}&following_id=${user.auth_id}`,
+          )
+          const data = await response.json()
+          setIsFollowing(data.isFollowing)
+        } catch (err) {
+          console.error('Error checking following status', err)
+        }
+      }
+    }
+    checkFollowingStatus()
+  }, [authUser, user])
 
   if (isPending) {
     return <div>Loading...</div>
@@ -24,12 +53,65 @@ function Profile() {
     return <div>That user ID does not exist.</div>
   }
 
+  // HANDLE FOLLOW
+  const handleFollow = async () => {
+    try {
+      await fetch('/api/v1/followers/follow', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          follower_id: authUser?.sub,
+          following_id: user.auth_id,
+        }),
+      })
+      setIsFollowing(true)
+    } catch (err) {
+      console.error('Error following user', err)
+    }
+  }
+
+  // HANDLE UNFOLLOW
+  const handleUnfollow = async () => {
+    try {
+      await fetch('/api/v1/followers/unfollow', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          follower_id: authUser?.sub,
+          following_id: user.auth_id,
+        }),
+      })
+      setIsFollowing(false)
+    } catch (err) {
+      console.error('Error unfollowing user', err)
+    }
+  }
+
+  //HANDLE EDIT PROFILE
   const handleEditProfile = () => {
     setEditUser(true)
   }
 
+  const handleDeleteAccount = async () => {
+    try {
+      const token = await getAccessTokenSilently()
+      deleteMutation.mutate({ id: userID, token })
+      logout()
+    } catch (error) {
+      console.error('Error deleting account:', error)
+    }
+  }
+
   if (editUser) {
     return <UserForm userID={id} isEditing={true} />
+  }
+
+  if (!isAuthenticated) {
+    navigate('/signinfirst')
   }
 
   return (
@@ -67,9 +149,20 @@ function Profile() {
               </div>
               <div>
                 {authUser && authUser.sub === user.auth_id ? (
-                  <button onClick={handleEditProfile}>Edit</button>
+                  <>
+                    <button onClick={handleEditProfile}>Edit</button>
+                    <br></br>
+                    <button
+                      className="deleteUserButton"
+                      onClick={handleDeleteAccount}
+                    >
+                      Delete Account
+                    </button>
+                  </>
+                ) : isFollowing ? (
+                  <button onClick={handleUnfollow}>Unfollow</button>
                 ) : (
-                  <button>Follow</button>
+                  <button onClick={handleFollow}>Follow</button>
                 )}
               </div>
             </div>

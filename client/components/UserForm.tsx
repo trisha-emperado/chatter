@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useAddUser, useEditUser } from '../hooks/useUsers'
 import { User } from '../../models/users'
 import { useAuth0 } from '@auth0/auth0-react'
+import { useNavigate } from 'react-router-dom'
 
 interface UserFormProps {
   userID?: number
@@ -9,6 +10,7 @@ interface UserFormProps {
 }
 
 function UserForm({ userID, isEditing }: UserFormProps) {
+  const navigate = useNavigate()
   const { getAccessTokenSilently, user } = useAuth0()
   const { mutate: addUser, isPending, isSuccess, isError } = useAddUser()
   const { mutate: editUser } = useEditUser()
@@ -33,16 +35,18 @@ function UserForm({ userID, isEditing }: UserFormProps) {
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target
-    setNewUser((prev) => ({ ...prev, [name]: value }))
+    setNewUser((prev) => ({ ...prev, [name]: value === 'yes' ? true : false }))
   }
 
-  console.log(newUser)
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    const token = await getAccessTokenSilently()
     e.preventDefault()
-    addUser({ user: newUser, token })
-    setNewUser(userDetails)
+    const token = await getAccessTokenSilently()
+    if (isEditing) {
+      editUser({ user: { ...newUser, auth_id: user?.sub }, userID, token })
+    } else {
+      addUser({ user: { ...newUser, auth_id: user?.sub }, token })
+    }
+    navigate('/feed')
   }
 
   return (
@@ -129,21 +133,6 @@ function UserForm({ userID, isEditing }: UserFormProps) {
               className="textInput"
               onChange={handleChange}
             />
-          </div>
-          <br></br>
-          <div className="userFormInput">
-            <label htmlFor="facilitator">Facilitator:</label>
-            <select
-              required
-              id="facilitator"
-              name="facilitator"
-              value={newUser.facilitator === false ? 'no' : 'yes'}
-              className="dropDownInput"
-              onChange={handleSelectChange}
-            >
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </select>
           </div>
           <br></br>
           <div className="userFormInput">
