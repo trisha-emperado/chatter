@@ -28,25 +28,27 @@ router.get('/', async (req, res) => {
 
 // This is how you would create a new comment ✦
 
-router.post('/', checkJwt, async (req: JwtRequest, res) => {
+router.post('/', async (req: JwtRequest, res) => {
+  const { postId } = req.params
   const { content } = req.body
-  const user_id = req.auth?.sub
+  const userId = req.auth?.sub
 
-  if (user_id === undefined) {
-    return res.status(400).json({ message: 'User ID is required' })
+  if (!userId || !content) {
+    return res
+      .status(400)
+      .json({ message: 'Missing content or user not authenticated' })
   }
 
   try {
-    const newCommentData: Partial<Comment> = {
-      content: content,
-      created_at: new Date(),
-    }
-
-    const newPost = await db.addNewComment(newCommentData)
-    res.json(newPost)
+    await db.addComment({
+      user_id: Number(userId),
+      post_id: Number(postId),
+      content,
+    })
+    return res.status(201).json({ message: 'Comment added successfully' })
   } catch (error) {
     console.error(error)
-    res.status(500).json({ message: 'Something went wrong' })
+    return res.status(500).json({ message: 'Failed to add comment' })
   }
 })
 

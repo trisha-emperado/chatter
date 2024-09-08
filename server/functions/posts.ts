@@ -1,5 +1,5 @@
 import connection from '../db/connection.ts'
-import { Post } from '../../models/posts.ts'
+import { Post, PostData } from '../../models/posts.ts'
 
 // ╔═══════════════════╗
 // ║   Get Functions   ║
@@ -65,7 +65,7 @@ export async function hasLikedPost(
 // ╚════════════════════╝
 
 export async function addNewPost(
-  newPost: Partial<Post>,
+  newPost: PostData,
   db = connection,
 ): Promise<Post> {
   const [newPostId] = await db('posts').insert(newPost, ['*'])

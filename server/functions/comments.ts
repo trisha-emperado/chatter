@@ -13,12 +13,11 @@ export async function getAllComments(db = connection): Promise<Comment[]> {
 // ║   Post Functions   ║
 // ╚════════════════════╝
 
-export async function addNewComment(
-  newComment: Partial<Comment>,
+export async function addComment(
+  comment: Omit<Comment, 'id' | 'created_at'>,
   db = connection,
-): Promise<Comment[]> {
-  const [newCommentId] = await db('comments').insert(newComment, ['*'])
-  return newCommentId
+): Promise<void> {
+  await db('comments').insert(comment)
 }
 
 // ╔═════════════════════╗

@@ -11,7 +11,7 @@ server.use(express.json())
 
 server.use('/api/v1/users', userRoutes)
 server.use('/api/v1/posts', postRoutes)
-server.use('/api/v1/comments', commentRoutes)
+server.use('/api/v1/posts', commentRoutes)
 
 if (process.env.NODE_ENV === 'production') {
   server.use(express.static(Path.resolve('public')))

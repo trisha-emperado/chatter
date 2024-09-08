@@ -3,15 +3,19 @@ import { useState } from "react";
 import { usePostDetails } from "../hooks/usePosts";
 import { useToggleLike } from "../hooks/usePosts";
 import { useDeletePost } from "../hooks/usePosts";
+import { useAddComment } from "../hooks/useComments";
 import { useAuth0 } from "@auth0/auth0-react";
 
 export default function PostDetails() {
   const { id } = useParams<{ id: string }>();
   const { data: post, isPending, isError } = usePostDetails(Number(id));
   const [isCommentFormVisible, setIsCommentFormVisible] = useState(false);
+  const [commentContent, setCommentContent] = useState('');
   const [hasLiked, setHasLiked] = useState(false);
   const { likePost, unlikePost, isLiking, isUnliking } = useToggleLike(Number(id));
   const { mutate: deletePost, isPending: isDeleting } = useDeletePost();
+  const { mutate: addComment, isPending: isCommenting } = useAddComment(Number(id));
+
   const currentUser = useAuth0().user?.sub;
 
   const handleLikeToggle = () => {
@@ -22,6 +26,16 @@ export default function PostDetails() {
       likePost();
       setHasLiked(true);
     }
+  };
+
+  const handleCommentSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    addComment(commentContent, {
+      onSuccess: () => {
+        setCommentContent('');
+        setIsCommentFormVisible(false);
+      },
+    });
   };
 
   const handleDelete = () => {
@@ -78,11 +92,15 @@ export default function PostDetails() {
 
       {isCommentFormVisible && (
         <div>
-          <form>
+          <form onSubmit={handleCommentSubmit}>
             <textarea
+              value={commentContent}
+              onChange={(e) => setCommentContent(e.target.value)}
               placeholder="Write a comment..."
             />
-            <button type="submit">Comment</button>
+            <button type="submit" disabled={isCommenting}>
+              {isCommenting ? 'Commenting...' : 'Comment'}
+            </button>
           </form>
         </div>
       )}

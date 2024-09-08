@@ -1,6 +1,6 @@
 import request from 'superagent'
 import { User } from '../../models/users'
-import { Post } from '../../models/posts'
+import { Post, PostData } from '../../models/posts'
 
 const rootURL = '/api/v1'
 
@@ -64,8 +64,11 @@ export async function getPost(
   return res.body
 }
 
-export async function addNewPost(newPost: Post) {
-  const res = await request.post(rootURL + '/posts/').send(newPost)
+export async function addNewPost(newPost: PostData, token: string) {
+  const res = await request
+    .post(rootURL + '/posts/')
+    .set('Authorization', `Bearer ${token}`)
+    .send(newPost)
   return res.body
 }
 
@@ -77,8 +80,15 @@ export async function unlikePost(postId: number): Promise<void> {
   await request.post(`${rootURL}/posts/${postId}/unlike`)
 }
 
-export async function deletePost(id: number): Promise<void> {
+export async function deletePost(id: number, token: string): Promise<void> {
   await request
     .delete(`${rootURL}/posts/${id}`)
     .set('Authorization', `Bearer ${token}`)
+}
+
+export async function addComment(
+  postId: number,
+  content: string,
+): Promise<void> {
+  await request.post(`${rootURL}/posts/${postId}/comments`).send({ content })
 }

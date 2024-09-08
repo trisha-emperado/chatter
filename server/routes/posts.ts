@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { Post } from '../../models/posts.ts'
+import { Post, PostData } from '../../models/posts.ts'
 import checkJwt, { JwtRequest } from '../auth0.ts'
 
 import * as db from '../functions/posts.ts'
@@ -64,13 +64,10 @@ router.post('/', checkJwt, async (req: JwtRequest, res) => {
   }
 
   try {
-    const newPostData: Partial<Post> = {
-      user_id: parseInt(user_id),
+    const newPostData: PostData = {
       content: content,
       image_url: image_url || null,
       file_url: file_url || null,
-      likes: 0,
-      created_at: new Date(),
     }
 
     const newPost = await db.addNewPost(newPostData)
@@ -81,7 +78,7 @@ router.post('/', checkJwt, async (req: JwtRequest, res) => {
   }
 })
 
-router.post('/:postId/like', checkJwt, async (req, res) => {
+router.post('/:id/like', checkJwt, async (req, res) => {
   const userId = req.auth?.sub
   const postId = parseInt(req.params.postId)
 
@@ -101,7 +98,7 @@ router.post('/:postId/like', checkJwt, async (req, res) => {
   }
 })
 
-router.post('/:postId/unlike', checkJwt, async (req, res) => {
+router.post('/:id/unlike', checkJwt, async (req, res) => {
   const userId = req.auth?.sub
   const postId = parseInt(req.params.postId)
 
