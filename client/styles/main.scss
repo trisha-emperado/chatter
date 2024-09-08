@@ -1,0 +1,642 @@
+html,
+body,
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-family: regularFont;
+}
+
+@font-face {
+  font-family: bold;
+  src: url(/public/fonts/LEMONMILK-Bold.otf);
+}
+
+@font-face {
+  font-family: regularFont;
+  src: url(/public/fonts/LEMONMILK-Regular.otf);
+}
+
+@font-face {
+  font-family: medium;
+  src: url(/public/fonts/LEMONMILK-Medium.otf);
+}
+
+@font-face {
+  font-family: light;
+  src: url(/public/fonts/LEMONMILK-Light.otf);
+}
+
+button {
+  border: none;
+  background-color: transparent;
+  font-family: medium;
+}
+
+@mixin flexBox($direction: row) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: center;
+  align-items: center;
+}
+
+$backgroundColor:  rgba(255, 255, 255, 0.683); 
+
+
+// ╔══════════╗
+// ║   Home   ║
+// ╚══════════╝
+
+.Home {
+  width: 100%;
+  height: 100vh;
+  @include flexBox();
+  background-image: url(/public/images/wallhpuuuurpaven-g7vxoe.jpg);
+  background-size: cover;
+  background-position: center;
+}
+
+.homeContainer {
+  width: 90%;
+  height: 85%;
+  @include flexBox();
+  overflow: hidden;
+  box-shadow: 
+  rgba(50, 50, 93, 0.25) 0px calc(20px + 1vh) calc(40px + 2vh) calc(-8px - 0.5vh), 
+  rgba(0, 0, 0, 0.3) 0px calc(12px + 1vh) calc(24px + 1.5vh) calc(-12px - 1vh);
+  border-radius: calc(2vh + 2vw);
+  backdrop-filter: blur(calc(0.3vh + 0.3vw));
+  background-color: $backgroundColor;
+}
+
+.navBar01 {
+  
+  height: 100%;
+  width: 25%;
+}
+
+.feed02 {
+  height: 100%;
+  width: 50%;
+}
+
+.sideBar03 {
+  height: 100%;
+  width: 25%;
+}
+
+// ╔══════════╗
+// ║   Feed   ║
+// ╚══════════╝
+
+.feedBox {
+  display: flex;
+  flex-direction: column;
+  height: 100%; 
+}
+
+.feedNavBox {
+  @include flexBox();
+  justify-content: space-between;
+  font-size: calc(0.8vh + 0.8vw);
+  margin-top: calc(0.5vh + 0.5vw);
+
+}
+
+.feedFilters {
+  @include flexBox();
+  justify-content: space-evenly;
+  height: 100%;
+}
+
+.allPosts, .friendsPosts, .feedTitle {
+  margin: 0 calc(0.5vh + 0.5vw);
+  padding: calc(0.3vh + 0.3vw) calc(0.5vh + 0.5vw);
+  border-radius: calc(0.5vh + 0.5vw);
+  background-color: black;
+  color: white;
+  font-size: calc(0.5vh + 0.5vw);
+}
+
+.postsAndForm {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.postsBox {
+  @include flexBox(column);
+  flex-grow: 9; 
+  width: 100%;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+.postsBox::-webkit-scrollbar {
+  display: none;
+}
+
+.feedFormBox {
+  @include flexBox();
+  align-items: flex-end;
+  margin-bottom: calc(3.5vh + 3.5vw);
+  max-height: 80vh; 
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0; 
+}
+
+.theForm {
+  width: calc(28vh + 28vw);
+  height: calc(4vh + 4vw);
+}
+
+// ╔═══════════╗
+// ║   Posts   ║
+// ╚═══════════╝
+
+.postsComp {
+  width: 100%;
+  height: min-content;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+.postsComp::-webkit-scrollbar {
+  display: none;
+}
+
+.postsContainer {
+  width: 100%;
+  overflow-y: scroll;
+  @include flexBox(column);
+  justify-content: flex-start;
+  scrollbar-width: none;
+}
+
+.postsContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.postsCard {
+  display: flex;
+  flex-direction: column;
+  padding: calc(1vh + 1vw);
+  margin: calc(1vh + 1vw);
+  font-size: calc(0.7vh + 0.7vw);
+  width: 80%;
+  height: max-content;
+  border-radius: calc(1vh + 1vw);
+  box-shadow: 
+  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
+  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
+  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+  background: linear-gradient(135deg, rgba(204, 212, 255, 0.559), rgba(255, 255, 255, 0));
+    backdrop-filter: blur(calc(1vh + 1vw));
+}
+
+.postDetailsBox {
+  display: flex;
+}
+
+.postDetail {
+  padding-right: calc(1vh + 1vw);
+}
+
+.postNav {
+  display: flex;
+  align-items: center; 
+}
+
+.postUsername {
+  padding-left: calc(1vh + 1vw);
+}
+
+.postUserImg {
+  width: calc(3vh + 3vw);
+  border-radius: 50%;
+  height: auto;
+}
+
+.postContentBox {
+  padding: calc(1vh + 1vw) 0;
+}
+
+.sideBarBox {
+  @include flexBox();
+  height: 100%;
+  width: 100%;
+}
+
+
+// ╔══════════════╗
+// ║   AllPosts   ║
+// ╚══════════════╝
+
+.postForm, .feedFormPage {
+  height: 100%;
+}
+
+.postForm {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.formTop {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: calc(1vh + 1vw);
+  box-shadow: 
+  rgba(0, 0, 0, 0.2) 0px calc(-2px - 0.5vh) calc(2px + 0.5vw) 0px, 
+  rgba(0, 0, 0, 0.1) 0px calc(-1px - 0.25vh) calc(1px + 0.25vw) 0px, 
+  rgba(255, 255, 255, 0.05) 0px calc(-0px - 0.1vh) calc(0.1px + 0.1vw) inset;
+  border-radius: calc(1vh + 1vw) calc(1vh + 1vw) 0 0;
+  background-color: $backgroundColor;
+  backdrop-filter: blur(calc(1vh + 1vw));
+  height: 80%;
+}
+
+.formBottom {
+  height: 20%;
+  padding: calc(0.5vh + 0.5vw);
+  display: flex;
+  justify-content: space-evenly;
+  border-radius: 0 0 calc(1vh + 1vw) calc(1vh + 1vw);
+  box-shadow: 
+  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
+  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
+  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+  background-color: $backgroundColor;
+  backdrop-filter: blur(calc(1vh + 1vw));
+  backdrop-filter: blur(calc(0.5vh + 0.5vw));
+  align-items: center;
+}
+
+.usersPic {
+  width: calc(3vh + 3vw);
+  border-radius: 50%;
+}
+
+.formTopImg {
+  width: 10%;
+}
+
+.formTopInput {
+  width: 90%;
+  @include flexBox()
+}
+
+.postInput {
+  padding: calc(1vh + 1vw);
+  border-radius:  calc(1vh + 1vw);
+  background-color: rgba(255, 255, 255, 0.491);
+  border: none;
+  height: 90%;
+  width: 80%;
+}
+
+.fileIcon, .imgIcon {
+  width: calc(1vh + 1vw);
+  height: auto;
+}
+
+.files, .images {
+  display: flex;
+  padding-right: calc(1vh + 1vw);
+}
+
+input[type="file"] {
+  opacity: 0;
+  position: absolute;
+  z-index: -1;
+}
+
+.file-label {
+  cursor: pointer;
+  width: max-content;
+  padding: calc(0.1vh + 0.1vw) calc(0.3vh + 0.3vw);
+  font-size: calc(0.5vh + 0.5vw);
+  border-radius: calc(0.5vh + 0.5vw);
+  font-family: medium;
+}
+
+.filesContain, .imagesContain {
+  display: flex;
+}
+
+.formBottom button {
+  margin: 0 calc(0.5vh + 0.5vw);
+  padding: calc(0.3vh + 0.3vw) calc(0.5vh + 0.5vw);
+  border-radius: calc(0.5vh + 0.5vw);
+  background-color: black;
+  color: white;
+  font-size: calc(0.5vh + 0.5vw);
+}
+
+
+// ╔═════════╗
+// ║   Nav   ║
+// ╚═════════╝
+
+.mainNavBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%
+}
+
+.navImageBox {
+  @include flexBox(column);
+  justify-content: space-evenly;
+  
+}
+
+.navImage {
+  border-radius: 50%;
+  height: calc(4vh + 4vw);
+  padding: calc(1vh + 1vw);
+  margin-left:  calc(3vh + 3vw);
+}
+
+.navImages {
+  background-image: url(/public/images/devLogo.png);
+  background-size: 50%;
+  background-position: 30% center;
+  background-repeat: no-repeat;
+  height: calc(6vh + 6vw);
+  margin-top: calc(0.5vh + 0.5vw);
+  margin-right: calc(3vh + 3vw);
+}
+
+.navText {
+  font-size: calc(0.8vh + 0.8vw);
+
+}
+
+.navTextEmail {
+  font-size: calc(0.5vh + 0.5vw);
+}
+
+.navButtonsBox {
+  @include flexBox(column);
+  padding-top: calc(1vh + 1vw);
+}
+
+.feed-btn {
+  padding: calc(0.5vh + 0.5vw) calc(1vh + 1vw);
+  margin: calc(0.5vh + 0.5vw);
+  width: calc(12vh + 12vw);
+  border-radius: calc(0.5vh + 0.5vw);
+  box-shadow: 
+  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
+  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
+  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+  background-color: black;
+  color: white;
+}
+
+.my-profile-btn, .friends-btn {
+  padding: calc(0.5vh + 0.5vw) calc(1vh + 1vw);
+  margin: calc(0.5vh + 0.5vw);
+  width: calc(12vh + 12vw);
+  border-radius: calc(0.5vh + 0.5vw);
+  background-color: rgba(255, 255, 255, 0.47);
+
+  box-shadow: 
+  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
+  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
+  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+
+
+
+
+  color: rgb(0, 0, 0);
+}
+
+.signoutBox {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.sign-out {
+  margin-bottom: calc(2vh + 2vw);
+  background-color: rgb(0, 0, 0);
+  color: white;
+  width: max-content;
+  padding: calc(0.5vh + 0.5vw) calc(1vh + 1vw);
+  border-radius: calc(0.5vh + 0.5vw);
+  box-shadow: 
+  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
+  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
+  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+
+}
+
+.userEmail {
+  font-size: calc(0.5vh + 0.5vw) !important; 
+}
+
+// ╔══════════════╗
+// ║   UserForm   ║
+// ╚══════════════╝
+
+.userForm {
+  width: 100%;
+  height: 100vh;
+  @include flexBox();
+  background-image: url(/public/images/wallhaven-833p72.png);
+  background-size: cover;
+  background-color: rgba(255, 255, 255, 0.443); 
+  background-blend-mode: overlay;
+}
+
+
+.userFormContainer {
+  @include flexBox();
+  justify-content: space-evenly;
+  background-color: white;
+  width: 70%;
+  height: 80%;
+  box-shadow: 
+  rgba(50, 50, 93, 0.25) 0px calc(20px + 1vh) calc(40px + 2vh) calc(-8px - 0.5vh), 
+  rgba(0, 0, 0, 0.3) 0px calc(12px + 1vh) calc(24px + 1.5vh) calc(-12px - 1vh);
+
+
+  border-radius: calc(1vh + 1vw);
+
+}
+
+.userFormImageBox {
+  background-image: url(/public/images/wallhaven-833p72.png);
+  background-size: cover;
+  @include flexBox();
+  align-items: flex-start;
+  text-align: left;
+  color: white;
+  width: 40%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: calc(1vh + 1vw) 0 0  calc(1vh + 1vw);;
+
+}
+
+.welcome {
+  padding-top: calc(5vh + 5vw);
+  font-size: calc(1.8vh + 1.8vw);
+  font-family: bold
+}
+
+.userFormBox {
+  @include flexBox();
+  height: 100%;
+  width: 60%;
+}
+
+.userFormInputBox {
+  @include flexBox(column);
+  justify-content: space-between;
+  height: 80%;
+  width: 70%;
+}
+
+.userFormInputs {
+  overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  scrollbar-width: none;
+  font-size: calc(0.8vh + 0.8vw);
+  width: 100%;
+  height: 100%;
+}
+
+.userFormInputs::-webkit-scrollbar {
+  display: none;
+}
+
+.dropDownInput {
+  background-color: transparent;
+  border: calc(0.1vh + 0.1vw) solid rgb(0, 102, 255);
+  border-radius: calc(1vh + 1vw);
+  padding: calc(0.5vh + 0.5vw) calc(1vh + 1vw);
+  width: calc(8vh + 8vw);
+
+}
+
+.textBox {
+  width: 100%;
+  font-size: calc(0.8vh + 0.8vw);
+  padding:  calc(1vh + 1vw) 0;
+  color: rgb(0, 102, 255);
+}
+
+.editH1 {
+  font-family: bold;
+
+}
+
+.submitButton {
+  background-color: rgb(0, 102, 255);
+  color: white;
+  width: 100%;
+  border-radius: calc(1vh + 1vw);
+  padding: calc(0.5vh + 0.5vw) calc(1vh + 1vw);
+  margin: calc(0.5vh + 0.5vw);
+  font-family: bold;
+}
+
+.userFormInput {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: calc(0.5vh + 0.5vw) 0;
+}
+
+.userFormInput input {
+  border: calc(0.1vh + 0.1vw) solid rgb(0, 102, 255);
+  border-radius: calc(1vh + 1vw);
+  padding: calc(0.5vh + 0.5vw) calc(1vh + 1vw);
+  width: calc(8vh + 8vw);
+  
+}
+
+.backButton {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgb(0, 102, 255);
+  color: white;
+  border-radius: calc(1vh + 1vw);
+  padding: calc(0.8vh + 0.8vw) calc(1.5vh + 1.5vw);
+  font-family: bold;
+  margin: calc(1vh + 1vw);
+  box-shadow: 
+  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
+  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
+  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+
+
+}
+
+.userFormInput label {
+  color: rgb(255, 149, 0);
+  text-shadow: 0 0 calc(0.5vh + 1vw)  rgb(255, 149, 0);
+}
+
+.userName {
+  margin-top: calc(10vh + 10vw);
+}
+
+// ╔════════════════╗
+// ║   SignInPage   ║
+// ╚════════════════╝
+
+.officalBox { height: 100vh;
+  width: 100%;}
+
+.app {
+  height: 100%;
+  width: 100%;
+}
+
+.signInPageContainer {
+  width: 100%;
+  height: 100%;
+}
+
+.signInPageBox {
+  @include flexBox();
+  justify-content: space-evenly;
+  width: 100%;
+  height: 100%;
+  background-color: red;
+  font-family: bold;
+}
+
+.signButtonn {
+  font-family: bold;
+  margin-top: calc(2vh + 2vw);
+  padding: calc(0.5vh + 0.5vw) calc(1vh + 1vw);
+  width: calc(12vh + 12vw);
+  border-radius: calc(0.5vh + 0.5vw);
+  font-size: calc(2vh + 2vw);
+  box-shadow: 
+  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
+  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
+  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+  background-color: black;
+  color: white;
+}
+
+.signnBox {
+  font-family: bold;
+}

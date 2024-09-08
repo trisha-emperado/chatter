@@ -1,20 +1,18 @@
+import { IfAuthenticated, IfNotAuthenticated } from './Authenticated.tsx'
+import SignInPage from './SignInPage.tsx'
 import { Outlet } from 'react-router-dom'
-import Navbar from './NavBar'
 
-export default function Layout() {
+function NavBar() {
   return (
-    <>
-      <div className="chatterIconPicture">
-        <img
-          src="../../images/chatterIcon.png"
-          alt="Chatter Icon"
-          className="chatterIcon"
-        />
-      </div>
-      <Navbar />
-      <div className="content">
+    <div className="officalBox">
+      <IfAuthenticated>
         <Outlet />
-      </div>
-    </>
+      </IfAuthenticated>
+      <IfNotAuthenticated>
+        <SignInPage />
+      </IfNotAuthenticated>
+    </div>
   )
 }
+
+export default NavBar
