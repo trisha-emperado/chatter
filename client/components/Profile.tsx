@@ -17,6 +17,7 @@ function Profile() {
     getAccessTokenSilently,
     logout,
     isAuthenticated,
+    isLoading: isAuthLoading,
   } = useAuth0()
 
   const deleteMutation = useDeleteUser()
@@ -40,6 +41,10 @@ function Profile() {
     }
     checkFollowingStatus()
   }, [authUser, user])
+
+  if (isAuthLoading) {
+    return <div>Loading authentication...</div>
+  }
 
   if (isPending) {
     return <div>Loading...</div>
@@ -112,6 +117,7 @@ function Profile() {
 
   if (!isAuthenticated) {
     navigate('/signinfirst')
+    return null
   }
 
   return (
