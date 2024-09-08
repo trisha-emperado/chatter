@@ -1,6 +1,7 @@
 import request from 'superagent'
 import { User } from '../../models/users'
 import { Post } from '../../models/posts'
+import { Like } from '../../models/likes'
 
 const rootURL = '/api/v1'
 
@@ -80,5 +81,29 @@ export async function getPost(
 
 export async function addNewPost(newPost: Post) {
   const res = await request.post(rootURL + '/posts/').send(newPost)
+  return res.body
+}
+
+// ╔═══════════════════╗
+// ║    User Routes    ║
+// ╚═══════════════════╝
+
+export async function getLikeByPostId(postId: number): Promise<Like> {
+  try {
+    const res = await request.get(rootURL + `/likes/${postId}`)
+    return res.body as Like
+  } catch (error) {
+    console.error('Failed to fetch like of that post', error)
+    throw new Error('Unable to fetch that like from the post')
+  }
+}
+
+export async function likePost(likeData: Like) {
+  const res = await request.post(rootURL + '/users/like').send(likeData)
+  return res.body
+}
+
+export async function unlikePost(likeData: Like) {
+  const res = await request.post(rootURL + '/users/unlike').send(likeData)
   return res.body
 }
