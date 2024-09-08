@@ -91,7 +91,14 @@ export async function editPostById(
 
 export async function deletePostById(
   id: number,
+  userId: number,
   db = connection,
 ): Promise<void> {
-  await db('posts').where('id', id).del()
+  const post = await db('posts').where('id', id).first()
+
+  if (post.user_id !== userId) {
+    throw new Error('Unauthorized: You are not the owner of this post')
+  }
+
+  await db('posts').where('id', id).andWhere('user_id', userId).del()
 }

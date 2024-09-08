@@ -159,11 +159,22 @@ router.patch('/:id', checkJwt, async (req: JwtRequest, res) => {
 
 router.delete('/:id', checkJwt, async (req: JwtRequest, res) => {
   const id = parseInt(req.params.id)
+  const userId = Number(req.auth?.sub)
+
+  if (!userId) {
+    return res.status(401).json({ message: 'Unauthorized' })
+  }
+
   try {
-    await db.deletePostById(id)
+    await db.deletePostById(id, userId)
+    res.status(204).send()
   } catch (error) {
-    console.error(error)
-    res.status(500).json({ message: 'Something went wrong' })
+    if (error === 'Unauthorized: You are not the owner of this post') {
+      res.status(403).json({ message: error })
+    } else {
+      console.error(error)
+      res.status(500).json({ message: 'Something went wrong' })
+    }
   }
 })
 

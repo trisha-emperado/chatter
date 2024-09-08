@@ -49,3 +49,14 @@ export function useToggleLike(postId: number) {
     isUnliking: unlikeMutation.isPending,
   }
 }
+
+export function useDeletePost() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (id: number) => api.deletePost(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts'] })
+    },
+  })
+}
