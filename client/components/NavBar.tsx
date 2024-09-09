@@ -34,6 +34,10 @@ function NavBar() {
             <Link to="/feed">
               <button className="feed-btn">Feed</button>
             </Link>
+
+            <Link to="/following">
+              <button className="following-btn">Following</button>
+            </Link>
           </div>
         )}
       </IfAuthenticated>

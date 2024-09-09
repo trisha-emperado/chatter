@@ -42,6 +42,7 @@ function Profile() {
     checkFollowingStatus()
   }, [authUser, user])
 
+ 
   if (isAuthLoading) {
     return <div>Loading authentication...</div>
   }
@@ -57,6 +58,16 @@ function Profile() {
   if (!userID) {
     return <UserForm />
   }
+
+  if (editUser) {
+    return <UserForm userID={id} isEditing={true} />
+  }
+
+  if (!isAuthenticated) {
+    navigate('/signinfirst')
+    return null
+  }
+
 
   // HANDLE FOLLOW
   const handleFollow = async () => {
@@ -111,14 +122,7 @@ function Profile() {
     }
   }
 
-  if (editUser) {
-    return <UserForm userID={id} isEditing={true} />
-  }
-
-  if (!isAuthenticated) {
-    navigate('/signinfirst')
-    return null
-  }
+ 
 
   return (
     <>
