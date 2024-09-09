@@ -105,18 +105,15 @@ router.post('/like', checkJwt, async (req, res) => {
   }
 })
 
-router.post('/:id/unlike', checkJwt, async (req, res) => {
-  const userId = req.auth?.sub
-  const postId = parseInt(req.params.postId)
+router.delete('/unlike', checkJwt, async (req, res) => {
+  const { postId, userId } = req.body
 
   try {
     const hasLiked = await db.hasLikedPost(userId, postId)
     if (!hasLiked) {
       return res.status(400).json({ message: 'User has not liked this post' })
     }
-
     await db.unlikePost(userId, postId)
-    res.status(200).json({ message: 'Post unliked' })
   } catch (error) {
     console.error('Error unliking post:', error)
     res.status(500).json({ message: 'Something went wrong' })

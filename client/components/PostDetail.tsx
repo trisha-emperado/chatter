@@ -5,11 +5,9 @@ import { useToggleLike } from "../hooks/usePosts";
 import { useDeletePost } from "../hooks/usePosts";
 import { useAuth0 } from "@auth0/auth0-react";
 import CommentForm from "./CommentForm";
-import CommentsList from "./CommentsByPost"
 import { useLikesByPostId } from '../hooks/useLikes'
 import { useUserByAuthId } from '../hooks/useUsers'
 import { useNavigate } from "react-router-dom";
-
 
 export default function PostDetails() {
   const { id } = useParams<{ id: string }>()
@@ -21,17 +19,16 @@ export default function PostDetails() {
   const deleteMutation = useDeletePost();
   const navigate = useNavigate()
   const { user: authUser, getAccessTokenSilently, isAuthenticated } = useAuth0()
-
   const { data: likes } = useLikesByPostId(postID)
   const { data: userData } = useUserByAuthId(authUser?.sub || '')
 
   const handleLikeToggle = async () => {
     const token = await getAccessTokenSilently()
     if (hasLiked) {
-      unlikePost()
+      unlikePost({ postId: postID, userId: userData?.id ?? 0, token })
       setHasLiked(false)
     } else {
-      likePost({ postId: postID, userId: userData?.id, token })
+      likePost({ postId: postID, userId: userData?.id ?? 0, token })
       setHasLiked(true)
     }
   }
@@ -91,8 +88,6 @@ export default function PostDetails() {
           <button onClick={handleDeletePost}>Delete</button>
         )}
       </div>
-
-      <CommentsList postId={postID} />
 
       {isCommentFormVisible && (
         <CommentForm
