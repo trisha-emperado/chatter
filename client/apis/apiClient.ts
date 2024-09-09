@@ -3,6 +3,7 @@ import { User } from '../../models/users'
 import { Post, PostData } from '../../models/posts'
 import { CommentData } from '../../models/comments'
 import { Like } from '../../models/likes'
+import { CommentData } from '../../models/comments'
 
 const rootURL = '/api/v1'
 
