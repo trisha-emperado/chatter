@@ -41,6 +41,6 @@ export async function isFollowing(
 export async function getFollowedUsers(follower_id: string, db = connection) {
   return db('followers')
     .join('users', 'followers.following_id', 'users.auth_id')
-    .select('users.id', 'users.username', 'users.profile_picture_url')
+    .select('users.id', 'users.username', 'users.name','users.profile_picture_url')
     .where('followers.follower_id', follower_id)
 }
