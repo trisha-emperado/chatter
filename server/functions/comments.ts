@@ -1,5 +1,7 @@
 import connection from '../db/connection.ts'
-import { Comment } from '../../models/comments.ts'
+import { Comment, CommentData, DetailedComment } from '../../models/comments.ts'
+
+// type CommentWithUser = Comment & { username: string }
 
 // ╔═══════════════════╗
 // ║   Get Functions   ║
@@ -9,15 +11,42 @@ export async function getAllComments(db = connection): Promise<Comment[]> {
   return db('comments').select('*').orderBy('id', 'desc')
 }
 
+export async function getCommentsByPostId(
+  postId: number,
+  db = connection,
+): Promise<DetailedComment[]> {
+  return db('comments')
+    .join('users', 'comments.user_id', 'users.id')
+    .join('posts', 'comments.post_id', 'posts.id')
+    .where('comments.post_id', postId)
+    .select(
+      'comments.*',
+      'users.username',
+      'users.profile_picture_url',
+      'users.auth_id',
+    )
+}
+
+// export async function getCommentsByPostId(
+//   post_id: number,
+//   db = connection,
+// ): Promise<CommentWithUser[]> {
+//   return db('comments')
+//     .select('comments.*', 'users.username')
+//     .where('comments.post_id', post_id)
+//     .orderBy('created_at', 'desc')
+// }
+
 // ╔════════════════════╗
 // ║   Post Functions   ║
 // ╚════════════════════╝
 
 export async function addComment(
-  comment: Omit<Comment, 'id' | 'created_at'>,
+  comment: CommentData,
   db = connection,
-): Promise<void> {
-  await db('comments').insert(comment)
+): Promise<Comment> {
+  const [newComment] = await db('comments').insert(comment, ['*'])
+  return newComment
 }
 
 // ╔═════════════════════╗

@@ -22,15 +22,34 @@ router.get('/', async (req, res) => {
   }
 })
 
+router.get('/post/:postId/', async (req, res) => {
+  try {
+    const postId = parseInt(req.params.postId)
+    const comments = await db.getCommentsByPostId(postId)
+    return res.json(comments)
+  } catch (error) {
+    res.status(500).json({ message: 'Something went wrong' })
+  }
+})
+
+router.get('/posts/:postId', async (req, res) => {
+  try {
+    const postId = parseInt(req.params.postId)
+    const commentsByPost = await db.getCommentsByPostId(postId)
+    return res.json(commentsByPost)
+  } catch (error) {
+    res.status(500).json({ message: 'Something went wrong' })
+  }
+})
+
 // ╔═════════════════╗
 // ║   Post Routes   ║
 // ╚═════════════════╝
 
 // This is how you would create a new comment ✦
 
-router.post('/:postId', async (req: JwtRequest, res) => {
-  const { postId } = req.params
-  const { content } = req.body
+router.post('/', checkJwt, async (req: JwtRequest, res) => {
+  const { content, post_id } = req.body
   const authId = req.auth?.sub
 
   if (!authId || !content) {
@@ -48,7 +67,7 @@ router.post('/:postId', async (req: JwtRequest, res) => {
 
     await db.addComment({
       user_id: Number(user.id),
-      post_id: Number(postId),
+      post_id: Number(post_id),
       content,
     })
     return res.status(201).json({ message: 'Comment added successfully' })

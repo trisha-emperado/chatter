@@ -1,18 +1,26 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { addComment } from '../apis/apiClient'
+import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query'
 import { useAuth0 } from '@auth0/auth0-react'
+import { CommentData } from '../../models/comments'
+import * as api from '../apis/apiClient'
 
-export function useAddComment(postId: number) {
+export function useAddComment() {
   const queryClient = useQueryClient()
   const { getAccessTokenSilently } = useAuth0()
 
   return useMutation({
-    mutationFn: async (content: string) => {
+    mutationFn: async (newComment: CommentData) => {
       const token = await getAccessTokenSilently()
-      return addComment(postId, content, token)
+      return api.addComment(newComment, token)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['comments', postId] })
+      queryClient.invalidateQueries({ queryKey: ['comments'] })
     },
+  })
+}
+
+export function useCommentsByPostId(postId: number) {
+  return useQuery({
+    queryKey: ['comments', postId],
+    queryFn: () => api.getCommentsByPostId(postId),
   })
 }

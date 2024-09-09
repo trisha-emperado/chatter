@@ -44,7 +44,6 @@ export function useNewPost() {
 
 export function useToggleLike(postId: number) {
   const queryClient = useQueryClient()
-
   const likeMutation = useMutation({
     mutationFn: (data: LikeMutation) =>
       api.likePost(data.postId, data.userId, data.token),

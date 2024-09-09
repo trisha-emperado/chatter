@@ -21,7 +21,7 @@ const routes = createRoutesFromElements(
     <Route path="/posts/:id" element={<PostDetails />} />
     <Route path="/postForm" element={<PostForm />} />
     <Route path="/signinfirst" element={<SignInFirst />} />
-    <Route path="/following" element={<Following/>} />
+    <Route path="/following" element={<Following />} />
   </Route>,
 )
 

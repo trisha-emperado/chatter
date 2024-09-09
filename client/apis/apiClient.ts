@@ -1,6 +1,7 @@
 import request from 'superagent'
 import { User } from '../../models/users'
 import { Post, PostData } from '../../models/posts'
+import { CommentData, DetailedComment } from '../../models/comments'
 import { Like } from '../../models/likes'
 
 const rootURL = '/api/v1'
@@ -117,15 +118,12 @@ export async function deletePost(id: number, token: string) {
     .set('Authorization', `Bearer ${token}`)
 }
 
-export async function addComment(
-  postId: number,
-  content: string,
-  token: string,
-): Promise<void> {
-  await request
-    .post(`${rootURL}/comments/${postId}`)
+export async function addComment(newComment: CommentData, token: string) {
+  const res = await request
+    .post(rootURL + '/comments/')
     .set('Authorization', `Bearer ${token}`)
-    .send({ content, postId })
+    .send(newComment)
+  return res.body
 }
 
 // ╔════════════════════════╗
@@ -145,7 +143,7 @@ export async function getFollowedUsers(followerId: string) {
 }
 
 // ╔═══════════════════╗
-// ║    User Routes    ║
+// ║    Likes Routes   ║
 // ╚═══════════════════╝
 
 export async function getLikesByPostId(postId: number): Promise<Like[]> {
@@ -157,3 +155,15 @@ export async function getLikesByPostId(postId: number): Promise<Like[]> {
     throw new Error('Unable to fetch the likes for that post')
   }
 }
+
+// ╔═══════════════════╗
+// ║ Comments Routes   ║
+// ╚═══════════════════╝
+
+export async function getCommentsByPostId(
+  postId: number,
+): Promise<DetailedComment[]> {
+  const res = await request.get(`${rootURL}/post/${postId}`)
+  return res.body as DetailedComment[]
+}
+
