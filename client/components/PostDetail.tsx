@@ -5,6 +5,7 @@ import { useToggleLike } from "../hooks/usePosts";
 import { useDeletePost } from "../hooks/usePosts";
 import { useAuth0 } from "@auth0/auth0-react";
 import CommentForm from "./CommentForm";
+import { useNavigate } from "react-router-dom";
 
 export default function PostDetails() {
   const { id } = useParams<{ id: string }>();
@@ -14,6 +15,7 @@ export default function PostDetails() {
   const [hasLiked, setHasLiked] = useState(false);
   const { likePost, unlikePost, isLiking, isUnliking } = useToggleLike(Number(id));
   const deleteMutation = useDeletePost();
+  const navigate = useNavigate()
   const {
     user: authUser,
     getAccessTokenSilently,
@@ -37,13 +39,11 @@ export default function PostDetails() {
     } catch (error) {
       console.error('Error deleting post:', error)
     }
+    navigate('/feed')
   }
 
   if (isPending) return <p>Loading...</p>;
   if (isError) return <p>Error loading post</p>;
-
-  console.log("authUser.sub:", authUser?.sub);
-  console.log("post.user_id:", post.user_id);
 
   const commentForm = () => {
     setIsCommentFormVisible(!isCommentFormVisible);
@@ -76,7 +76,7 @@ export default function PostDetails() {
           </button>
         )}
 
-        {authUser && authUser.sub === post.user_id && (
+        {authUser && authUser.sub === post.auth_id && (
           <button onClick={handleDeletePost}>Delete</button>
         )}
       </div>

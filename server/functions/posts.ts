@@ -21,7 +21,8 @@ export async function getPostById(
     .select(
       'posts.*',
       'users.username',
-      'users.profile_picture_url, users.auth_id',
+      'users.profile_picture_url',
+      'users.auth_id',
     )
     .first()
 }
