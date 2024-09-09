@@ -34,3 +34,13 @@ export async function isFollowing(
 ) {
   return db('followers').where({ follower_id, following_id }).first()
 }
+
+// ╔═════════════════════════════════════════════════════════╗
+// ║ Get a list of users that a specific user is following   ║
+// ╚═════════════════════════════════════════════════════════╝
+export async function getFollowedUsers(follower_id: string, db = connection) {
+  return db('followers')
+    .join('users', 'followers.following_id', 'users.auth_id')
+    .select('users.id', 'users.username', 'users.profile_picture_url')
+    .where('followers.follower_id', follower_id)
+}
