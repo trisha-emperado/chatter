@@ -8,6 +8,7 @@ import CommentForm from "./CommentForm";
 import { useNavigate } from "react-router-dom";
 import { useLikesByPostId } from '../hooks/useLikes'
 import { useUserByAuthId } from '../hooks/useUsers'
+import { useNavigate } from "react-router-dom";
 
 export default function PostDetails() {
   const { id } = useParams<{ id: string }>()
@@ -19,6 +20,7 @@ export default function PostDetails() {
   const deleteMutation = useDeletePost();
   const navigate = useNavigate()
   const { user: authUser, getAccessTokenSilently, isAuthenticated } = useAuth0()
+
   const { data: likes } = useLikesByPostId(postID)
   const { data: userData } = useUserByAuthId(authUser?.sub || '')
 
