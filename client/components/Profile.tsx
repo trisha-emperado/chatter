@@ -17,6 +17,7 @@ function Profile() {
     getAccessTokenSilently,
     logout,
     isAuthenticated,
+    isLoading: isAuthLoading,
   } = useAuth0()
 
   const deleteMutation = useDeleteUser()
@@ -41,6 +42,11 @@ function Profile() {
     checkFollowingStatus()
   }, [authUser, user])
 
+ 
+  if (isAuthLoading) {
+    return <div>Loading authentication...</div>
+  }
+
   if (isPending) {
     return <div>Loading...</div>
   }
@@ -49,9 +55,19 @@ function Profile() {
     return <div>Error fetching your feed...</div>
   }
 
-  if (isNaN(userID)) {
-    return <div>That user ID does not exist.</div>
+  if (!userID) {
+    return <UserForm />
   }
+
+  if (editUser) {
+    return <UserForm userID={id} isEditing={true} />
+  }
+
+  if (!isAuthenticated) {
+    navigate('/signinfirst')
+    return null
+  }
+
 
   // HANDLE FOLLOW
   const handleFollow = async () => {
@@ -106,13 +122,7 @@ function Profile() {
     }
   }
 
-  if (editUser) {
-    return <UserForm userID={id} isEditing={true} />
-  }
-
-  if (!isAuthenticated) {
-    navigate('/signinfirst')
-  }
+ 
 
   return (
     <>

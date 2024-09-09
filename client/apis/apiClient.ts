@@ -112,3 +112,19 @@ export async function addComment(
     .set('Authorization', `Bearer ${token}`)
     .send({ content, postId })
 }
+
+
+
+// ╔════════════════════════╗
+// ║     Following Routes   ║
+// ╚════════════════════════╝
+
+export async function getFollowedUsers(followerId: string) {
+  try {
+    const res = await request.get(rootURL +`/followers/following/${followerId}`)
+    return res.body 
+  } catch (error) {
+    console.error('Failed to fetch followed users', error)
+    throw new Error('Unable to fetch followed users')
+  }
+}

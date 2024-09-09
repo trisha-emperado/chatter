@@ -42,4 +42,16 @@ router.get('/isFollowing', async (req, res) => {
   }
 })
 
+//Get a list of users that is followed by a specific user
+router.get('/following/:follower_id', async (req, res) => {
+  const { follower_id } = req.params
+  try {
+    const followedUsers = await db.getFollowedUsers(follower_id)
+    res.status(200).json(followedUsers)
+  } catch (err) {
+    console.error('Error fetching followed users:', err)
+    res.status(500).json({ error: 'Failed to fetch followed users' })
+  }
+})
+
 export default router
