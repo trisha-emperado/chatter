@@ -86,17 +86,16 @@ router.post('/', checkJwt, async (req: JwtRequest, res) => {
   }
 })
 
-router.post('/:id/like', checkJwt, async (req, res) => {
-  const userId = req.auth?.sub
-  const postId = parseInt(req.params.postId)
+router.post('/like', checkJwt, async (req, res) => {
+  const { postId, userId } = req.body
 
   try {
-    const hasLiked = await db.hasLikedPost(userId, postId)
-    if (hasLiked) {
-      return res
-        .status(400)
-        .json({ message: 'User has already liked this post' })
-    }
+    // const hasLiked = await db.hasLikedPost(userId, postId)
+    // if (hasLiked) {
+    //   return res
+    //     .status(400)
+    //     .json({ message: 'User has already liked this post' })
+    // }
 
     await db.likePost(userId, postId)
     res.status(200).json({ message: 'Post liked' })

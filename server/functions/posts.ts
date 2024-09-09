@@ -44,7 +44,7 @@ export async function likePost(
   db = connection,
 ): Promise<void> {
   await db('likes').insert({ user_id: userId, post_id: postId })
-  await db('posts').where('id', postId).increment('likes', 1)
+  // await db('posts').where('id', postId).increment('likes', 1)
 }
 
 export async function unlikePost(
@@ -89,7 +89,7 @@ export async function editPostById(
   db = connection,
 ): Promise<Post[]> {
   await db('posts').where('id', id).update(editedPost, ['*'])
-  return db('posts').where('id', id).select()
+  return db('posts').where('id', id).select('*')
 }
 
 // ╔══════════════════════╗

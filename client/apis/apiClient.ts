@@ -2,6 +2,7 @@ import request from 'superagent'
 import { User } from '../../models/users'
 import { Post, PostData } from '../../models/posts'
 import { CommentData } from '../../models/comments'
+import { Like } from '../../models/likes'
 
 const rootURL = '/api/v1'
 
@@ -89,8 +90,15 @@ export async function addNewPost(newPost: PostData, token: string) {
   return res.body
 }
 
-export async function likePost(postId: number): Promise<void> {
-  await request.post(`${rootURL}/posts/${postId}/like`)
+export async function likePost(
+  postId: number,
+  userId: number,
+  token: string,
+): Promise<void> {
+  await request
+    .post(`${rootURL}/posts/like`)
+    .set('Authorization', `Bearer ${token}`)
+    .send({ postId, userId, token })
 }
 
 export async function unlikePost(postId: number): Promise<void> {
@@ -124,5 +132,19 @@ export async function getFollowedUsers(followerId: string) {
   } catch (error) {
     console.error('Failed to fetch followed users', error)
     throw new Error('Unable to fetch followed users')
+  }
+}
+
+// ╔═══════════════════╗
+// ║    User Routes    ║
+// ╚═══════════════════╝
+
+export async function getLikesByPostId(postId: number): Promise<Like[]> {
+  try {
+    const res = await request.get(rootURL + `/likes/${postId}`)
+    return res.body as Like[]
+  } catch (error) {
+    console.error('Failed to fetch the likes for that post', error)
+    throw new Error('Unable to fetch the likes for that post')
   }
 }
