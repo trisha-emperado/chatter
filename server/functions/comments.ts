@@ -1,5 +1,5 @@
 import connection from '../db/connection.ts'
-import { Comment } from '../../models/comments.ts'
+import { Comment, CommentData } from '../../models/comments.ts'
 
 // ╔═══════════════════╗
 // ║   Get Functions   ║
@@ -14,10 +14,11 @@ export async function getAllComments(db = connection): Promise<Comment[]> {
 // ╚════════════════════╝
 
 export async function addComment(
-  comment: Omit<Comment, 'id' | 'created_at'>,
+  comment: CommentData,
   db = connection,
-): Promise<void> {
-  await db('comments').insert(comment)
+): Promise<Comment> {
+  const [newComment] = await db('comments').insert(comment, ['*'])
+  return newComment
 }
 
 // ╔═════════════════════╗

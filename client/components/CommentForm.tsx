@@ -1,39 +1,60 @@
 import { useState } from 'react';
 import { useAddComment } from '../hooks/useComments';
+import { CommentData } from '../../models/comments';
 
-interface CommentFormProps {
-  postId: number;
-  onSuccess: () => void;
-  onError: () => void;
+const emptyCommentData: Omit<CommentData, 'user_id' | 'post_id'> = {
+  content: '',
 }
 
-export default function CommentForm({ postId, onSuccess, onError }: CommentFormProps) {
-  const [commentContent, setCommentContent] = useState('');
-  const { mutate: addComment, isPending: isCommenting } = useAddComment(postId);
+interface CommentFormProps {
+  userId: number;
+  postId: number;
+}
 
-  const handleCommentSubmit = (e: React.FormEvent) => {
+export default function CommentForm({ userId, postId }: CommentFormProps) {
+  const [newComment, setNewComment] = useState(emptyCommentData);
+  const { content } = newComment;
+  const { mutate: addComment, isPending, isError } = useAddComment();
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { value } = e.target;
+    setNewComment({
+      ...newComment,
+      content: value,
+    });
+  };
+
+  const handleCommentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (commentContent.trim()) {
-      addComment(commentContent, {
-        onSuccess: () => {
-          setCommentContent('');
-          onSuccess();
-        },
-        onError,
+
+    try {
+      await addComment({
+        ...newComment,
+        user_id: userId,
+        post_id: postId,
       });
+      console.log('New comment submitted:', newComment);
+      setNewComment(emptyCommentData);
+    } catch (error) {
+      console.error('Error creating comment:', error);
     }
   };
 
   return (
-    <form onSubmit={handleCommentSubmit}>
-      <textarea
-        value={commentContent}
-        onChange={(e) => setCommentContent(e.target.value)}
-        placeholder="Write a comment..."
-      />
-      <button type="submit" disabled={isCommenting}>
-        {isCommenting ? 'Commenting...' : 'Comment'}
-      </button>
-    </form>
+    <div>
+      <form onSubmit={handleCommentSubmit}>
+        <textarea
+          value={content}
+          onChange={handleChange}
+          placeholder="Write a comment..."
+          name="content"
+        />
+        <button type="submit" disabled={isPending}>
+          {isPending ? 'Commenting...' : 'Comment'}
+        </button>
+
+        {isError && <p>Error creating comment</p>}
+      </form>
+    </div>
   );
 }

@@ -5,3 +5,9 @@ export interface Comment {
   content: string
   created_at?: Date
 }
+
+export interface CommentData {
+  user_id: number
+  post_id: number
+  content: string
+}

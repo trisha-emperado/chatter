@@ -1,6 +1,7 @@
 import request from 'superagent'
 import { User } from '../../models/users'
 import { Post, PostData } from '../../models/posts'
+import { CommentData } from '../../models/comments'
 
 const rootURL = '/api/v1'
 
@@ -102,18 +103,13 @@ export async function deletePost(id: number, token: string) {
     .set('Authorization', `Bearer ${token}`)
 }
 
-export async function addComment(
-  postId: number,
-  content: string,
-  token: string,
-): Promise<void> {
-  await request
-    .post(`${rootURL}/comments/${postId}`)
+export async function addComment(newComment: CommentData, token: string) {
+  const res = await request
+    .post(rootURL + '/comments/')
     .set('Authorization', `Bearer ${token}`)
-    .send({ content, postId })
+    .send(newComment)
+  return res.body
 }
-
-
 
 // ╔════════════════════════╗
 // ║     Following Routes   ║
@@ -121,8 +117,10 @@ export async function addComment(
 
 export async function getFollowedUsers(followerId: string) {
   try {
-    const res = await request.get(rootURL +`/followers/following/${followerId}`)
-    return res.body 
+    const res = await request.get(
+      rootURL + `/followers/following/${followerId}`,
+    )
+    return res.body
   } catch (error) {
     console.error('Failed to fetch followed users', error)
     throw new Error('Unable to fetch followed users')
