@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { Comment } from '../../models/comments.ts'
 import checkJwt, { JwtRequest } from '../auth0.ts'
-
+import { getUserByAuthId } from '../functions/users.ts'
 import * as db from '../functions/comments.ts'
 
 const router = Router()
@@ -28,20 +28,26 @@ router.get('/', async (req, res) => {
 
 // This is how you would create a new comment ✦
 
-router.post('/', async (req: JwtRequest, res) => {
+router.post('/:postId', async (req: JwtRequest, res) => {
   const { postId } = req.params
   const { content } = req.body
-  const userId = req.auth?.sub
+  const authId = req.auth?.sub
 
-  if (!userId || !content) {
+  if (!authId || !content) {
     return res
       .status(400)
       .json({ message: 'Missing content or user not authenticated' })
   }
 
   try {
+    const user = await getUserByAuthId(authId)
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' })
+    }
+    console.log('User:', user)
+
     await db.addComment({
-      user_id: Number(userId),
+      user_id: Number(user.id),
       post_id: Number(postId),
       content,
     })

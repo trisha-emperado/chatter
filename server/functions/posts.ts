@@ -12,11 +12,17 @@ export async function getAllPosts(db = connection): Promise<Post[]> {
 export async function getPostById(
   id: number,
   db = connection,
-): Promise<Post & { username: string; profile_picture_url: string }> {
+): Promise<
+  Post & { username: string; profile_picture_url: string; auth_id: string }
+> {
   return db('posts')
     .join('users', 'posts.user_id', 'users.id')
     .where('posts.id', id)
-    .select('posts.*', 'users.username', 'users.profile_picture_url')
+    .select(
+      'posts.*',
+      'users.username',
+      'users.profile_picture_url, users.auth_id',
+    )
     .first()
 }
 
@@ -91,14 +97,7 @@ export async function editPostById(
 
 export async function deletePostById(
   id: number,
-  userId: number,
   db = connection,
 ): Promise<void> {
-  const post = await db('posts').where('id', id).first()
-
-  if (post.user_id !== userId) {
-    throw new Error('Unauthorized: You are not the owner of this post')
-  }
-
-  await db('posts').where('id', id).andWhere('user_id', userId).del()
+  await db('posts').where('id', id).del()
 }

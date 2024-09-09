@@ -1,8 +1,8 @@
 import { Router } from 'express'
 import { Post, PostData } from '../../models/posts.ts'
 import checkJwt, { JwtRequest } from '../auth0.ts'
-
 import * as db from '../functions/posts.ts'
+import connection from '../db/connection.ts'
 
 const router = Router()
 
@@ -56,24 +56,31 @@ router.get('/:userId/:id', async (req, res) => {
 // This is how you would create a new post ✦
 
 router.post('/', checkJwt, async (req: JwtRequest, res) => {
-  const { content, image_url, file_url } = req.body
-  const user_id = req.auth?.sub
+  const { content, image_url, file_url, likes } = req.body
+  const authId = req.auth?.sub
 
-  if (user_id === undefined) {
+  if (!authId) {
     return res.status(400).json({ message: 'User ID is required' })
   }
 
   try {
+    const user = await connection('users').where({ auth_id: authId }).first()
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' })
+    }
+
     const newPostData: PostData = {
+      user_id: user.id,
       content: content,
       image_url: image_url || null,
       file_url: file_url || null,
+      likes: likes || 0,
     }
 
     const newPost = await db.addNewPost(newPostData)
     res.json(newPost)
   } catch (error) {
-    console.error(error)
     res.status(500).json({ message: 'Something went wrong' })
   }
 })
@@ -156,22 +163,12 @@ router.patch('/:id', checkJwt, async (req: JwtRequest, res) => {
 
 router.delete('/:id', checkJwt, async (req: JwtRequest, res) => {
   const id = parseInt(req.params.id)
-  const userId = Number(req.auth?.sub)
-
-  if (!userId) {
-    return res.status(401).json({ message: 'Unauthorized' })
-  }
-
   try {
-    await db.deletePostById(id, userId)
+    await db.deletePostById(id)
     res.status(204).send()
   } catch (error) {
-    if (error === 'Unauthorized: You are not the owner of this post') {
-      res.status(403).json({ message: error })
-    } else {
-      console.error(error)
-      res.status(500).json({ message: 'Something went wrong' })
-    }
+    console.error(error)
+    res.status(500).json({ message: 'Something went wrong' })
   }
 })
 
