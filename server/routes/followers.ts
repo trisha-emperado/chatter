@@ -32,10 +32,25 @@ router.post('/unfollow', async (req, res) => {
 router.get('/isFollowing', async (req, res) => {
   const { follower_id, following_id } = req.query
   try {
-    const result = await isFollowing(follower_id as string, following_id as string)
+    const result = await isFollowing(
+      follower_id as string,
+      following_id as string,
+    )
     res.status(200).json({ isFollowing: !!result })
   } catch (err) {
     res.status(500).json({ error: 'Failed to check follow status' })
+  }
+})
+
+//Get a list of users that is followed by a specific user
+router.get('/following/:follower_id', async (req, res) => {
+  const { follower_id } = req.params
+  try {
+    const followedUsers = await db.getFollowedUsers(follower_id)
+    res.status(200).json(followedUsers)
+  } catch (err) {
+    console.error('Error fetching followed users:', err)
+    res.status(500).json({ error: 'Failed to fetch followed users' })
   }
 })
 

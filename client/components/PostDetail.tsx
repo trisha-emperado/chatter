@@ -3,20 +3,22 @@ import { useState } from "react";
 import { usePostDetails } from "../hooks/usePosts";
 import { useToggleLike } from "../hooks/usePosts";
 import { useDeletePost } from "../hooks/usePosts";
-import { useAddComment } from "../hooks/useComments";
 import { useAuth0 } from "@auth0/auth0-react";
+import CommentForm from "./CommentForm";
 
 export default function PostDetails() {
   const { id } = useParams<{ id: string }>();
+  const postID = Number(id)
   const { data: post, isPending, isError } = usePostDetails(Number(id));
   const [isCommentFormVisible, setIsCommentFormVisible] = useState(false);
-  const [commentContent, setCommentContent] = useState('');
   const [hasLiked, setHasLiked] = useState(false);
   const { likePost, unlikePost, isLiking, isUnliking } = useToggleLike(Number(id));
-  const { mutate: deletePost, isPending: isDeleting } = useDeletePost();
-  const { mutate: addComment, isPending: isCommenting } = useAddComment(Number(id));
-
-  const currentUser = useAuth0().user?.sub;
+  const deleteMutation = useDeletePost();
+  const {
+    user: authUser,
+    getAccessTokenSilently,
+    isAuthenticated
+  } = useAuth0()
 
   const handleLikeToggle = () => {
     if (hasLiked) {
@@ -28,31 +30,20 @@ export default function PostDetails() {
     }
   };
 
-  const handleCommentSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    addComment(commentContent, {
-      onSuccess: () => {
-        setCommentContent('');
-        setIsCommentFormVisible(false);
-      },
-    });
-  };
-
-  const handleDelete = () => {
-    if (window.confirm('Are you sure you want to delete this post?')) {
-      deletePost(Number(id), {
-        onSuccess: () => {
-          alert('Post deleted');
-        },
-        onError: () => {
-          alert('Failed to delete the post.');
-        },
-      });
+  const handleDeletePost = async () => {
+    try {
+      const token = await getAccessTokenSilently()
+      deleteMutation.mutate({ id: postID, token })
+    } catch (error) {
+      console.error('Error deleting post:', error)
     }
-  };
+  }
 
   if (isPending) return <p>Loading...</p>;
   if (isError) return <p>Error loading post</p>;
+
+  console.log("authUser.sub:", authUser?.sub);
+  console.log("post.user_id:", post.user_id);
 
   const commentForm = () => {
     setIsCommentFormVisible(!isCommentFormVisible);
@@ -79,30 +70,23 @@ export default function PostDetails() {
         <button onClick={handleLikeToggle} disabled={isLiking || isUnliking}>
           {hasLiked ? 'Unlike' : 'Like'}
         </button>
-        <button onClick={commentForm}>
-          {isCommentFormVisible ? 'Cancel' : 'Comment'}
-        </button>
-
-        {currentUser === String(post.user_id) && (
-          <button onClick={handleDelete} disabled={isDeleting}>
-            {isDeleting ? 'Deleting...' : 'Delete Post'}
+        {isAuthenticated && (
+          <button onClick={commentForm}>
+            {isCommentFormVisible ? 'Cancel' : 'Comment'}
           </button>
+        )}
+
+        {authUser && authUser.sub === post.user_id && (
+          <button onClick={handleDeletePost}>Delete</button>
         )}
       </div>
 
       {isCommentFormVisible && (
-        <div>
-          <form onSubmit={handleCommentSubmit}>
-            <textarea
-              value={commentContent}
-              onChange={(e) => setCommentContent(e.target.value)}
-              placeholder="Write a comment..."
-            />
-            <button type="submit" disabled={isCommenting}>
-              {isCommenting ? 'Commenting...' : 'Comment'}
-            </button>
-          </form>
-        </div>
+        <CommentForm
+          postId={Number(id)}
+          onSuccess={() => setIsCommentFormVisible(false)}
+          onError={() => alert('Failed to add comment.')}
+        />
       )}
     </div>
   );

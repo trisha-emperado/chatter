@@ -72,113 +72,115 @@ function UserForm({ userID, isEditing }: UserFormProps) {
                 {isEditing ? 'Edit your details' : 'Add your details'}
               </h1>
             </div>
-            <div className="userFormInputs">
-              <div className="userFormInput userName">
-                <label htmlFor="username">Username:</label>
-                <input
-                  required
-                  id="username"
-                  type="text"
-                  name="username"
-                  value={newUser.username}
-                  className="textInput"
-                  onChange={handleChange}
-                />
-              </div>
+            <div className="inputContains">
+              <div className="userFormInputs">
+                <div className="userFormInput userName">
+                  <label htmlFor="username">Username:</label>
+                  <input
+                    required
+                    id="username"
+                    type="text"
+                    name="username"
+                    value={newUser.username}
+                    className="textInput"
+                    onChange={handleChange}
+                  />
+                </div>
 
-              <div className="userFormInput">
-                <label htmlFor="name">Name:</label>
-                <input
-                  required
-                  id="name"
-                  type="text"
-                  name="name"
-                  value={newUser.name}
-                  className="textInput"
-                  onChange={handleChange}
-                />
-              </div>
+                <div className="userFormInput">
+                  <label htmlFor="name">Name:</label>
+                  <input
+                    required
+                    id="name"
+                    type="text"
+                    name="name"
+                    value={newUser.name}
+                    className="textInput"
+                    onChange={handleChange}
+                  />
+                </div>
 
-              <div className="userFormInput">
-                <label htmlFor="current_role">Current Role:</label>
-                <input
-                  required
-                  id="current_role"
-                  type="text"
-                  name="current_role"
-                  value={newUser.current_role}
-                  className="textInput"
-                  onChange={handleChange}
-                />
-              </div>
+                <div className="userFormInput">
+                  <label htmlFor="current_role">Current Role:</label>
+                  <input
+                    required
+                    id="current_role"
+                    type="text"
+                    name="current_role"
+                    value={newUser.current_role}
+                    className="textInput"
+                    onChange={handleChange}
+                  />
+                </div>
 
-              <div className="userFormInput">
-                <label htmlFor="age">Age:</label>
-                <input
-                  required
-                  id="age"
-                  type="number"
-                  name="age"
-                  value={newUser.age}
-                  className="numberInput"
-                  onChange={handleChange}
-                />
-              </div>
+                <div className="userFormInput">
+                  <label htmlFor="age">Age:</label>
+                  <input
+                    required
+                    id="age"
+                    type="number"
+                    name="age"
+                    value={newUser.age}
+                    className="numberInput"
+                    onChange={handleChange}
+                  />
+                </div>
 
-              <div className="userFormInput">
-                <label htmlFor="profile_picture_url">
-                  Profile Picture URL:
-                </label>
-                <input
-                  required
-                  id="profile_picture_url"
-                  type="text"
-                  name="profile_picture_url"
-                  value={newUser.profile_picture_url}
-                  className="textInput"
-                  onChange={handleChange}
-                />
-              </div>
+                <div className="userFormInput">
+                  <label htmlFor="profile_picture_url">
+                    Profile Picture URL:
+                  </label>
+                  <input
+                    required
+                    id="profile_picture_url"
+                    type="text"
+                    name="profile_picture_url"
+                    value={newUser.profile_picture_url}
+                    className="textInput"
+                    onChange={handleChange}
+                  />
+                </div>
 
-              <div className="userFormInput">
-                <label htmlFor="cohort">Cohort:</label>
-                <input
-                  required
-                  id="cohort"
-                  type="text"
-                  name="cohort"
-                  value={newUser.cohort}
-                  className="textInput"
-                  onChange={handleChange}
-                />
-              </div>
+                <div className="userFormInput">
+                  <label htmlFor="cohort">Cohort:</label>
+                  <input
+                    required
+                    id="cohort"
+                    type="text"
+                    name="cohort"
+                    value={newUser.cohort}
+                    className="textInput"
+                    onChange={handleChange}
+                  />
+                </div>
 
-              <div className="userFormInput">
-                <label htmlFor="facilitator">Facilitator:</label>
-                <select
-                  required
-                  id="facilitator"
-                  name="facilitator"
-                  value={newUser.facilitator ? 'yes' : 'no'}
-                  className="dropDownInput"
-                  onChange={handleSelectChange}
-                >
-                  <option value="yes">Yes</option>
-                  <option value="no">No</option>
-                </select>
-              </div>
+                <div className="userFormInput">
+                  <label htmlFor="facilitator">Facilitator:</label>
+                  <select
+                    required
+                    id="facilitator"
+                    name="facilitator"
+                    value={newUser.facilitator ? 'yes' : 'no'}
+                    className="dropDownInput"
+                    onChange={handleSelectChange}
+                  >
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                  </select>
+                </div>
 
-              <div className="userFormInput">
-                <label htmlFor="github_url">GitHub:</label>
-                <input
-                  required
-                  id="github_url"
-                  type="text"
-                  name="github_url"
-                  value={newUser.github_url}
-                  className="textInput"
-                  onChange={handleChange}
-                />
+                <div className="userFormInput">
+                  <label htmlFor="github_url">GitHub:</label>
+                  <input
+                    required
+                    id="github_url"
+                    type="text"
+                    name="github_url"
+                    value={newUser.github_url}
+                    className="textInput"
+                    onChange={handleChange}
+                  />
+                </div>
               </div>
             </div>
             <button type="submit" className="submitButton">

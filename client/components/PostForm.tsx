@@ -1,14 +1,17 @@
 import { useState } from 'react'
 import { PostData } from '../../models/posts'
 import { useNewPost } from '../hooks/usePosts'
+import { useAuth0 } from '@auth0/auth0-react'
 
 const emptyPostData: PostData = {
+  user_id: 0,
   content: '',
   image_url: '',
   file_url: '',
 }
 
 export default function PostForm() {
+  const { user } = useAuth0()
   const [newPost, setNewPost] = useState(emptyPostData)
   const { content, image_url, file_url } = newPost
   const { mutate: addPost, isPending, isError } = useNewPost()
@@ -27,7 +30,11 @@ export default function PostForm() {
     event.preventDefault()
 
     try {
-      await addPost(newPost)
+      await addPost({
+        ...newPost,
+        image_url: image_url || '',
+        file_url: file_url || '',
+      })
       console.log('New post submitted:', newPost)
       setNewPost(emptyPostData)
     } catch (error) {
@@ -36,41 +43,70 @@ export default function PostForm() {
   }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="content">Post:</label>
-        <textarea
-          name="content"
-          id="content"
-          value={content}
-          onChange={handleChange}
-          placeholder="What's on your mind?"
-          required
-        />
+    <div className="postFormContainer">
+      <form className="theForm" onSubmit={handleSubmit}>
+        <div className="formTop">
+          <div className="formTopImg">
+            <img src={user?.picture} alt="profile pic" className="usersPic" />
+          </div>
+          <div className="formTopInput">
+            <textarea
+              className="postInput"
+              name="content"
+              id="content"
+              value={content}
+              onChange={handleChange}
+              placeholder="What's on your mind?"
+              required
+            />
+          </div>
+        </div>
 
-        <label htmlFor="image">Image URL:</label>
-        <input
-          type="text"
-          name="image_url"
-          id="image"
-          value={image_url}
-          onChange={handleChange}
-          placeholder="Image URL"
-        />
+        <div className="formBottom">
+          <div className="filesContain">
+            <div className="files">
+              <img
+                src="https://icons.veryicon.com/png/o/system/dan_system/file-60.png"
+                alt="file icon"
+                className="fileIcon"
+              />
+            </div>
+            <label className="file-label">
+              <input
+                type="file"
+                name="file_url"
+                id="file"
+                onChange={handleChange}
+                placeholder="File URL"
+              />
+              Add File
+            </label>
+          </div>
 
-        <label htmlFor="file">File URL:</label>
-        <input
-          type="text"
-          name="file_url"
-          id="file"
-          value={file_url}
-          onChange={handleChange}
-          placeholder="File URL"
-        />
+          <div className="imagesContain">
+            <div className="images">
+              <img
+                src="https://pixsector.com/cache/517d8be6/av5c8336583e291842624.png"
+                alt="image icon"
+                className="imgIcon"
+              />
+            </div>
+            <label className="file-label">
+              <input
+                type="file"
+                name="image_url"
+                id="image"
+                onChange={handleChange}
+                placeholder="Image URL"
+              />
+              Add Image
+            </label>
+          </div>
 
-        <button type="submit" disabled={content === '' || isPending}>
-          {isPending ? 'Posting...' : 'Make Post'}
-        </button>
+          <button type="submit" disabled={content === '' || isPending}>
+            {isPending ? 'Posting...' : 'Make Post'}
+          </button>
+        </div>
 
         {isError && <p>Error creating post</p>}
       </form>

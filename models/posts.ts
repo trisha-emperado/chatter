@@ -16,9 +16,10 @@ export interface PostAndUser {
   file_url: string
   likes: number
   created_at: Date
-  username: string
+  auth_id: string
   profile_picture_url: string
   comments: Comment[]
+  username: string
 }
 
 export interface Comment {
@@ -31,7 +32,9 @@ export interface Comment {
   profile_picture_url: string
 }
 export interface PostData {
+  user_id: number
   content: string
   image_url?: string
   file_url?: string
+  likes?: number
 }

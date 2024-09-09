@@ -1,5 +1,5 @@
 import connection from '../db/connection.ts'
-import { Post, PostData } from '../../models/posts.ts'
+import { Post, PostAndUser, PostData } from '../../models/posts.ts'
 
 // ╔═══════════════════╗
 // ║   Get Functions   ║
@@ -24,10 +24,17 @@ export async function getAllPosts(
 export async function getPostById(
   id: number,
   db = connection,
-): Promise<Post & { username: string; profile_picture_url: string }> {
+): Promise<
+  Post & { username: string; profile_picture_url: string; auth_id: string }
+> {
   return db('posts')
     .join('users', 'posts.user_id', 'users.id')
     .where('posts.id', id)
+    .select(
+      'posts.*',
+      'users.username',
+      'users.profile_picture_url, users.auth_id',
+    )
     .select(
       'posts.id',
       'posts.content',
@@ -40,16 +47,25 @@ export async function getPostById(
     )
     .first()
 }
-
 export async function getPostsByUserId(
   userId: number,
   id: number,
   db = connection,
 ): Promise<Post[]> {
   return db('posts')
-    .where({ userId, id })
-    .select('id', id)
+    .where({ user_id: userId, id })
+    .select('id', 'content', 'image_url', 'file_url', 'likes', 'created_at')
     .orderBy('id', 'desc')
+}
+
+export async function getPostsFromUserId(
+  userId: number,
+  db = connection,
+): Promise<PostAndUser[]> {
+  return db('posts')
+    .where({ user_id: userId })
+    .select('id', 'content', 'image_url', 'file_url', 'likes', 'created_at')
+    .orderBy('created_at', 'desc')
 }
 
 export async function likePost(
@@ -195,14 +211,7 @@ export async function editPostById(
 
 export async function deletePostById(
   id: number,
-  userId: number,
   db = connection,
 ): Promise<void> {
-  const post = await db('posts').where('id', id).first()
-
-  if (post.user_id !== userId) {
-    throw new Error('Unauthorized: You are not the owner of this post')
-  }
-
-  await db('posts').where('id', id).andWhere('user_id', userId).del()
+  await db('posts').where('id', id).del()
 }

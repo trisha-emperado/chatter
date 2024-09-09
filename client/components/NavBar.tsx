@@ -10,12 +10,10 @@ function NavBar() {
   const location = useLocation()
 
   const getHomeStyles = () => {
-    switch (location.pathname) {
-      case '/Home':
-        return { backgroundColor: 'black', color: 'white' }
-      default:
-        return { backgroundColor: 'defaultColor', color: 'black' }
+    if (location.pathname === '/' || location.pathname === '/Home') {
+      return { backgroundColor: 'black', color: 'white' }
     }
+    return { backgroundColor: 'defaultColor', color: 'black' }
   }
 
   const getProfileStyles = () => {
@@ -84,7 +82,6 @@ function NavBar() {
                   My details
                 </button>
               </Link>
-              <button className="friends-btn btn">Friends</button>
             </div>
             <div className="signoutBox">
               <button className="sign-out" onClick={handleSignOut}>

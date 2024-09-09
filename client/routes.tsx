@@ -8,6 +8,7 @@ import PostDetails from './components/PostDetail.tsx'
 import PostForm from './components/PostForm.tsx'
 import SignInPage from './components/SignInPage.tsx'
 import Home from './components/Home.tsx'
+import Following from './components/Following.tsx'
 
 const routes = createRoutesFromElements(
   <Route path="/" element={<Layout />}>
@@ -22,6 +23,7 @@ const routes = createRoutesFromElements(
     <Route path="/posts/:id" element={<PostDetails />} />
     <Route path="/postForm" element={<PostForm />} />
     <Route path="/signInPage" element={<SignInPage />} />
+    <Route path="/following" element={<Following />} />
   </Route>,
 )
 

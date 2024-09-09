@@ -73,7 +73,9 @@ export async function getAllPosts() {
 
 export async function getPost(
   id: number,
-): Promise<Post & { username: string; profile_picture_url: string }> {
+): Promise<
+  Post & { username: string; profile_picture_url: string; auth_id: string }
+> {
   const res = await request.get(`${rootURL}/posts/${id}`)
   return res.body
 }
@@ -94,7 +96,7 @@ export async function unlikePost(postId: number): Promise<void> {
   await request.post(`${rootURL}/posts/${postId}/unlike`)
 }
 
-export async function deletePost(id: number, token: string): Promise<void> {
+export async function deletePost(id: number, token: string) {
   await request
     .delete(`${rootURL}/posts/${id}`)
     .set('Authorization', `Bearer ${token}`)
@@ -103,6 +105,26 @@ export async function deletePost(id: number, token: string): Promise<void> {
 export async function addComment(
   postId: number,
   content: string,
+  token: string,
 ): Promise<void> {
-  await request.post(`${rootURL}/posts/${postId}/comments`).send({ content })
+  await request
+    .post(`${rootURL}/comments/${postId}`)
+    .set('Authorization', `Bearer ${token}`)
+    .send({ content, postId })
+}
+
+
+
+// ╔════════════════════════╗
+// ║     Following Routes   ║
+// ╚════════════════════════╝
+
+export async function getFollowedUsers(followerId: string) {
+  try {
+    const res = await request.get(rootURL +`/followers/following/${followerId}`)
+    return res.body 
+  } catch (error) {
+    console.error('Failed to fetch followed users', error)
+    throw new Error('Unable to fetch followed users')
+  }
 }

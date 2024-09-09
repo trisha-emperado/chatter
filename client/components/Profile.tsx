@@ -6,8 +6,10 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { useDeleteUser } from '../hooks/useUsers'
 import { useNavigate } from 'react-router-dom'
 import NavBar from './NavBar'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import request from 'superagent'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import request, { post } from 'superagent'
+import { PostAndUser } from '../../models/posts'
+import { Link } from 'react-router-dom'
 
 function Profile() {
   const { id } = useParams()
@@ -16,6 +18,8 @@ function Profile() {
   const { data: user, isPending, isError } = useUsersByID(userID)
   const [editUser, setEditUser] = useState(false)
   const [inputDisplay, setInputDisplay] = useState(false)
+  const [displayComments, setDisplayComments] = useState<Set<number>>(new Set())
+  const [activeSection, setActiveSection] = useState('aboutMe')
 
   const {
     user: authUser,
@@ -25,6 +29,18 @@ function Profile() {
     isLoading: isAuthLoading,
   } = useAuth0()
 
+  const toggleComments = (postId: number) => {
+    setDisplayComments((prev) => {
+      const newDisplayComments = new Set(prev)
+      if (newDisplayComments.has(postId)) {
+        newDisplayComments.delete(postId)
+      } else {
+        newDisplayComments.add(postId)
+      }
+      return newDisplayComments
+    })
+  }
+
   const deleteMutation = useDeleteUser()
   const queryClient = useQueryClient()
 
@@ -32,6 +48,26 @@ function Profile() {
   const [header, setHeader] = useState(
     '/public/images/wallhpuuuurpaven-g7vxoe.jpg',
   )
+
+  const handleAboutMeClick = () => {
+    setActiveSection('aboutMe')
+  }
+
+  const handleMyPostsClick = () => {
+    setActiveSection('myPosts')
+  }
+
+  const { data } = useQuery({
+    queryKey: ['posts', user?.auth_id],
+    queryFn: async () => {
+      if (user?.auth_id) {
+        return await request
+          .get(`/api/v1/posts/users/${user.id}/posts`)
+          .then((res) => res.body)
+      }
+      return []
+    },
+  })
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -84,8 +120,17 @@ function Profile() {
     return <div>Error fetching your feed...</div>
   }
 
-  if (isNaN(userID)) {
-    return <div>That user ID does not exist.</div>
+  if (!userID) {
+    return <UserForm />
+  }
+
+  if (editUser) {
+    return <UserForm userID={id} isEditing={true} />
+  }
+
+  if (!isAuthenticated) {
+    navigate('/signinfirst')
+    return null
   }
 
   // HANDLE FOLLOW
@@ -212,47 +257,139 @@ function Profile() {
                     </div>
                   </div>
                 </div>
-
-                <div className="profileInformation">
-                  <div className="profileInput">
-                    <h4>Name: </h4>
-                    <p>{user.name}</p>
-                  </div>
-                  <div className="profileInput">
-                    <h4>Age: </h4>
-                    <p>{user.age}</p>
-                  </div>
-                  <div className="profileInput">
-                    <h4>Current Role: </h4>
-                    <p>{user.current_role}</p>
-                  </div>
-                  <div className="profileInput">
-                    <h4>Cohort: </h4>
-                    <p>{user.cohort}</p>
-                  </div>
-                  <div className="profileInput">
-                    <h4>GitHub: </h4>
-                    <p>{user.github_url}</p>
-                  </div>
-                  <div>
-                    {authUser && authUser.sub === user.auth_id ? (
-                      <>
-                        <button onClick={handleEditProfile}>Edit</button>
-                        <br></br>
-                        <button
-                          className="deleteUserButton"
-                          onClick={handleDeleteAccount}
-                        >
-                          Delete Account
-                        </button>
-                      </>
-                    ) : isFollowing ? (
-                      <button onClick={handleUnfollow}>Unfollow</button>
-                    ) : (
-                      <button onClick={handleFollow}>Follow</button>
-                    )}
-                  </div>
+                <div className="profileNavs">
+                  <button
+                    className={`aboutMeButton PN ${activeSection === 'aboutMe' ? 'active' : ''}`}
+                    onClick={handleAboutMeClick}
+                  >
+                    About Me
+                  </button>
+                  <button
+                    className={`myPostsButton PN ${activeSection === 'myPosts' ? 'active' : ''}`}
+                    onClick={handleMyPostsClick}
+                  >
+                    My Posts
+                  </button>
+                  <a
+                    href={user.github_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      className="githubLogo"
+                      src="https://w7.pngwing.com/pngs/646/324/png-transparent-github-computer-icons-github-logo-monochrome-head-thumbnail.png"
+                      alt="github logo"
+                    />
+                  </a>
                 </div>
+
+                {/* Conditionally render the active section */}
+                {activeSection === 'myPosts' && (
+                  <div className="myPostsBox">
+                    {data?.map((post: PostAndUser) => (
+                      <div key={post.id} className="postsContainer">
+                        <div className="postsCard">
+                          <div className="postNav">
+                            <img
+                              src={user.profile_picture_url}
+                              alt="profile pic"
+                              className="postUserImg"
+                            />
+                            <Link to={`/user/${post.user_id}`}>
+                              <p className="postUsername">{user.name}</p>
+                            </Link>
+                          </div>
+                          <div className="postContentBox">
+                            <p>{post.content}</p>
+                          </div>
+                          <div className="postDetailsBox">
+                            <p className="postDetail">
+                              {new Date(post.created_at).toLocaleDateString()}
+                            </p>
+                            {post.image_url && (
+                              <img src={post.image_url} alt="Post" />
+                            )}
+                            <p className="postDetail">Likes: {post.likes}</p>
+                            <button
+                              className="showCommentButton"
+                              onClick={() => toggleComments(post.id)}
+                            >
+                              {displayComments.has(post.id)
+                                ? 'Hide Comments'
+                                : 'Show Comments'}
+                            </button>
+                          </div>
+                          {displayComments.has(post.id) &&
+                            post.comments.map((comment) => (
+                              <div key={comment.id} className="comment">
+                                <div className="commentNav">
+                                  <img
+                                    src={comment.profile_picture_url}
+                                    alt="commenter pic"
+                                    className="commentUserImg"
+                                  />
+                                </div>
+                                <div className="commentContentBox">
+                                  <p className="commentUsername">
+                                    {comment.username}
+                                  </p>
+                                  <p>{`${comment.content} ✦ ${new Date(comment.created_at).toLocaleDateString()}`}</p>
+                                </div>
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {activeSection === 'aboutMe' && (
+                  <div className="profileInformation">
+                    <div className="profileInput">
+                      <p className="titleNav">Name </p>
+                      <div className="informationBox">
+                        <p>{user.name}</p>
+                      </div>
+                    </div>
+                    <div className="profileInput">
+                      <p className="titleNav">Age </p>
+                      <div className="informationBox">
+                        <p>{user.age}</p>
+                      </div>
+                    </div>
+                    <div className="profileInput">
+                      <p className="titleNav">Role </p>
+                      <div className="informationBox">
+                        <p>{user.current_role}</p>
+                      </div>
+                    </div>
+                    <div className="profileInput">
+                      <p className="titleNav">Cohort </p>
+                      <div className="informationBox">
+                        <p>{user.cohort}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* <div>
+                  {authUser && authUser.sub === user.auth_id ? (
+                    <>
+                      <button onClick={handleEditProfile}>Edit</button>
+                      <br></br>
+                      <button
+                        className="deleteUserButton"
+                        onClick={handleDeleteAccount}
+                      >
+                        Delete Account
+                      </button>
+                    </>
+                  ) : isFollowing ? (
+                    <button onClick={handleUnfollow}>Unfollow</button>
+                  ) : (
+                    <button onClick={handleFollow}>Follow</button>
+                  )}
+                </div> */}
               </div>
             </div>
           </div>
