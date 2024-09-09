@@ -49,9 +49,15 @@ export async function editUserProfileById(
   id: number,
   editedUser: Partial<User>,
   db = connection,
-): Promise<User> {
-  await db('users').where('id', id).update(editedUser, ['*'])
-  return await db('users').where('id', id).select().first()
+): Promise<User | null> {
+  try {
+    await db('users').where('id', id).update(editedUser)
+    const updatedUser = await db('users').where('id', id).select().first()
+    return updatedUser || null
+  } catch (error) {
+    console.error('Error updating user profile:', error)
+    throw error
+  }
 }
 
 // ╔══════════════════════╗

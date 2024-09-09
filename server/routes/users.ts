@@ -136,19 +136,26 @@ router.patch('/:id', checkJwt, async (req: JwtRequest, res) => {
 })
 
 router.patch('/:id/profile/edit', checkJwt, async (req: JwtRequest, res) => {
-  const { header_image_url, status } = req.body
-  const id = parseInt(req.params.id)
+  const { header_image_url } = req.body
+  const id = parseInt(req.params.id, 10)
+
+  if (isNaN(id) || !header_image_url) {
+    return res.status(400).json({ message: 'Invalid data' })
+  }
 
   try {
     const editedUserData: Partial<User> = {
-      header_image_url: header_image_url,
-      status: status,
+      header_image_url,
     }
 
     const editedUser = await db.editUserProfileById(id, editedUserData)
-    res.json(editedUser)
+    if (editedUser) {
+      res.json(editedUser)
+    } else {
+      res.status(404).json({ message: 'User not found' })
+    }
   } catch (error) {
-    console.error(error)
+    console.error('Error updating user profile:', error)
     res.status(500).json({ message: 'Something went wrong' })
   }
 })

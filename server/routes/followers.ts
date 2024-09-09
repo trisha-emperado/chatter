@@ -32,11 +32,11 @@ router.post('/unfollow', async (req, res) => {
 router.get('/isFollowing', async (req, res) => {
   const { follower_id, following_id } = req.query
   try {
-    const result = await isFollowing(Number(follower_id), Number(following_id))
+    const result = await isFollowing(follower_id as string, following_id as string)
     res.status(200).json({ isFollowing: !!result })
   } catch (err) {
     res.status(500).json({ error: 'Failed to check follow status' })
   }
 })
 
-export default router 
+export default router

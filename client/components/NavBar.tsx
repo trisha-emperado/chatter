@@ -1,11 +1,40 @@
-import { IfAuthenticated, IfNotAuthenticated } from './Authenticated.tsx'
+import { useLocation } from 'react-router-dom'
 import { useAuth0 } from '@auth0/auth0-react'
 import { Link } from 'react-router-dom'
 import { useUserByAuthId } from '../hooks/useUsers'
+import { IfAuthenticated, IfNotAuthenticated } from './Authenticated'
 
 function NavBar() {
   const { loginWithRedirect, logout, user } = useAuth0()
   const { data: userData } = useUserByAuthId(user?.sub || '')
+  const location = useLocation()
+
+  const getHomeStyles = () => {
+    switch (location.pathname) {
+      case '/Home':
+        return { backgroundColor: 'black', color: 'white' }
+      default:
+        return { backgroundColor: 'defaultColor', color: 'black' }
+    }
+  }
+
+  const getProfileStyles = () => {
+    switch (location.pathname) {
+      case `/user/${userData?.id}`:
+        return { backgroundColor: 'black', color: 'white' }
+      default:
+        return { backgroundColor: 'defaultColor', color: 'black' }
+    }
+  }
+
+  const getUserFormStyles = () => {
+    switch (location.pathname) {
+      case '/userForm':
+        return { backgroundColor: 'black', color: 'white' }
+      default:
+        return { backgroundColor: 'defaultColor', color: 'black' }
+    }
+  }
 
   const handleSignOut = () => {
     logout()
@@ -28,7 +57,6 @@ function NavBar() {
                   className="navImage"
                 />
               </div>
-
               <p className="navText">
                 Signed in as: {user?.preferred_username}
               </p>
@@ -36,16 +64,26 @@ function NavBar() {
             </div>
             <div className="navButtonsBox">
               <Link to="/Home">
-                <button className="feed-btn btn">Feed</button>
+                <button style={getHomeStyles()} className="feed-btn btn">
+                  Feed
+                </button>
               </Link>
-
               <Link to={`/user/${userData?.id}`}>
-                <button className="my-profile-btn btn">My Profile</button>
+                <button
+                  style={getProfileStyles()}
+                  className="my-profile-btn btn"
+                >
+                  My Profile
+                </button>
               </Link>
               <Link to={`/userForm`}>
-                <button className="my-profile-btn btn">My details</button>
+                <button
+                  style={getUserFormStyles()}
+                  className="my-profile-btn btn"
+                >
+                  My details
+                </button>
               </Link>
-
               <button className="friends-btn btn">Friends</button>
             </div>
             <div className="signoutBox">

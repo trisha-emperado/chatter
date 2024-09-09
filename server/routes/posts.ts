@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { Post } from '../../models/posts.ts'
+import { Post, PostData } from '../../models/posts.ts'
 import checkJwt, { JwtRequest } from '../auth0.ts'
 
 import * as db from '../functions/posts.ts'
@@ -64,19 +64,54 @@ router.post('/', checkJwt, async (req: JwtRequest, res) => {
   }
 
   try {
-    const newPostData: Partial<Post> = {
-      user_id: parseInt(user_id),
+    const newPostData: PostData = {
       content: content,
       image_url: image_url || null,
       file_url: file_url || null,
-      likes: 0,
-      created_at: new Date(),
     }
 
     const newPost = await db.addNewPost(newPostData)
     res.json(newPost)
   } catch (error) {
     console.error(error)
+    res.status(500).json({ message: 'Something went wrong' })
+  }
+})
+
+router.post('/:id/like', checkJwt, async (req, res) => {
+  const userId = req.auth?.sub
+  const postId = parseInt(req.params.postId)
+
+  try {
+    const hasLiked = await db.hasLikedPost(userId, postId)
+    if (hasLiked) {
+      return res
+        .status(400)
+        .json({ message: 'User has already liked this post' })
+    }
+
+    await db.likePost(userId, postId)
+    res.status(200).json({ message: 'Post liked' })
+  } catch (error) {
+    console.error('Error liking post:', error)
+    res.status(500).json({ message: 'Something went wrong' })
+  }
+})
+
+router.post('/:id/unlike', checkJwt, async (req, res) => {
+  const userId = req.auth?.sub
+  const postId = parseInt(req.params.postId)
+
+  try {
+    const hasLiked = await db.hasLikedPost(userId, postId)
+    if (!hasLiked) {
+      return res.status(400).json({ message: 'User has not liked this post' })
+    }
+
+    await db.unlikePost(userId, postId)
+    res.status(200).json({ message: 'Post unliked' })
+  } catch (error) {
+    console.error('Error unliking post:', error)
     res.status(500).json({ message: 'Something went wrong' })
   }
 })
@@ -121,11 +156,22 @@ router.patch('/:id', checkJwt, async (req: JwtRequest, res) => {
 
 router.delete('/:id', checkJwt, async (req: JwtRequest, res) => {
   const id = parseInt(req.params.id)
+  const userId = Number(req.auth?.sub)
+
+  if (!userId) {
+    return res.status(401).json({ message: 'Unauthorized' })
+  }
+
   try {
-    await db.deletePostById(id)
+    await db.deletePostById(id, userId)
+    res.status(204).send()
   } catch (error) {
-    console.error(error)
-    res.status(500).json({ message: 'Something went wrong' })
+    if (error === 'Unauthorized: You are not the owner of this post') {
+      res.status(403).json({ message: error })
+    } else {
+      console.error(error)
+      res.status(500).json({ message: 'Something went wrong' })
+    }
   }
 })
 

@@ -68,7 +68,9 @@ function UserForm({ userID, isEditing }: UserFormProps) {
         <form onSubmit={handleSubmit} className="userFormBox">
           <div className="userFormInputBox">
             <div className="textBox">
-              <h1 className="editH1">Edit your details</h1>
+              <h1 className="editH1">
+                {isEditing ? 'Edit your details' : 'Add your details'}
+              </h1>
             </div>
             <div className="userFormInputs">
               <div className="userFormInput userName">
@@ -124,7 +126,9 @@ function UserForm({ userID, isEditing }: UserFormProps) {
               </div>
 
               <div className="userFormInput">
-                <label htmlFor="profile_picture_url">Profile Picture:</label>
+                <label htmlFor="profile_picture_url">
+                  Profile Picture URL:
+                </label>
                 <input
                   required
                   id="profile_picture_url"
@@ -178,7 +182,7 @@ function UserForm({ userID, isEditing }: UserFormProps) {
               </div>
             </div>
             <button type="submit" className="submitButton">
-              Save changes
+              {isEditing ? 'Save changes' : 'Submit'}
             </button>
           </div>
         </form>

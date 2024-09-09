@@ -400,9 +400,18 @@ input[type="file"] {
   rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
   rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
   rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
-  background-color: black;
   color: white;
   font-size: calc(0.7vh + 0.7vw);
+}
+
+.btn {
+  background-color: white;
+  color: black;
+}
+
+.btn.active {
+  background-color: black;
+  color: white;
 }
 
 .my-profile-btn, .friends-btn {
@@ -410,7 +419,6 @@ input[type="file"] {
   margin: calc(0.5vh + 0.5vw);
   width: calc(12vh + 12vw);
   border-radius: calc(0.5vh + 0.5vw);
-  background-color: rgba(255, 255, 255, 0.47);
   font-size: calc(0.7vh + 0.7vw);
 
   box-shadow: 
@@ -709,6 +717,13 @@ input[type="file"] {
   text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.475);
 }
 
+.profileBottom {
+  max-width: 100%;
+  max-height: 100%;
+  padding: 0 calc(2vh + 2vw) calc(2vh + 2vw) calc(2vh + 2vw);
+  @include flexBox(column);
+  color: rgb(0, 0, 0);
+}
 
 .profileTopBox {
   width: 100%;
@@ -717,6 +732,10 @@ input[type="file"] {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: 
+  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
+  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
+  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
 }
 
 .profilePictureBox {

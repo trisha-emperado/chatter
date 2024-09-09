@@ -22,6 +22,7 @@ function Profile() {
     getAccessTokenSilently,
     logout,
     isAuthenticated,
+    isLoading: isAuthLoading,
   } = useAuth0()
 
   const deleteMutation = useDeleteUser()
@@ -35,17 +36,20 @@ function Profile() {
   const mutation = useMutation({
     mutationFn: async () => {
       const token = await getAccessTokenSilently()
+      const url = `/api/v1/users/${userID}/profile/edit`
+      console.log('PATCH URL:', url)
+      console.log('Payload:', { header_image_url: header })
       await request
-        .patch(`/api/v1/${id}/profile/edit`)
+        .patch(url)
         .set('Authorization', `Bearer ${token}`)
         .send({ header_image_url: header })
     },
     onSuccess: () => {
       queryClient.invalidateQueries()
-      console.log('header set!')
+      console.log('Header set successfully!')
     },
     onError: (error) => {
-      console.error('Error updating header:', error) // Debug error
+      console.error('Error updating header:', error)
       throw error
     },
   })
@@ -67,6 +71,10 @@ function Profile() {
     }
     checkFollowingStatus()
   }, [authUser, user])
+
+  if (isAuthLoading) {
+    return <div>Loading authentication...</div>
+  }
 
   if (isPending) {
     return <div>Loading...</div>
@@ -150,6 +158,7 @@ function Profile() {
 
   if (!isAuthenticated) {
     navigate('/signinfirst')
+    return null
   }
 
   return (
@@ -203,45 +212,46 @@ function Profile() {
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="profileInformation">
-                <div className="profileInput">
-                  <h4>Name: </h4>
-                  <p>{user.name}</p>
-                </div>
-                <div className="profileInput">
-                  <h4>Age: </h4>
-                  <p>{user.age}</p>
-                </div>
-                <div className="profileInput">
-                  <h4>Current Role: </h4>
-                  <p>{user.current_role}</p>
-                </div>
-                <div className="profileInput">
-                  <h4>Cohort: </h4>
-                  <p>{user.cohort}</p>
-                </div>
-                <div className="profileInput">
-                  <h4>GitHub: </h4>
-                  <p>{user.github_url}</p>
-                </div>
-                <div>
-                  {authUser && authUser.sub === user.auth_id ? (
-                    <>
-                      <button onClick={handleEditProfile}>Edit</button>
-                      <br></br>
-                      <button
-                        className="deleteUserButton"
-                        onClick={handleDeleteAccount}
-                      >
-                        Delete Account
-                      </button>
-                    </>
-                  ) : isFollowing ? (
-                    <button onClick={handleUnfollow}>Unfollow</button>
-                  ) : (
-                    <button onClick={handleFollow}>Follow</button>
-                  )}
+
+                <div className="profileInformation">
+                  <div className="profileInput">
+                    <h4>Name: </h4>
+                    <p>{user.name}</p>
+                  </div>
+                  <div className="profileInput">
+                    <h4>Age: </h4>
+                    <p>{user.age}</p>
+                  </div>
+                  <div className="profileInput">
+                    <h4>Current Role: </h4>
+                    <p>{user.current_role}</p>
+                  </div>
+                  <div className="profileInput">
+                    <h4>Cohort: </h4>
+                    <p>{user.cohort}</p>
+                  </div>
+                  <div className="profileInput">
+                    <h4>GitHub: </h4>
+                    <p>{user.github_url}</p>
+                  </div>
+                  <div>
+                    {authUser && authUser.sub === user.auth_id ? (
+                      <>
+                        <button onClick={handleEditProfile}>Edit</button>
+                        <br></br>
+                        <button
+                          className="deleteUserButton"
+                          onClick={handleDeleteAccount}
+                        >
+                          Delete Account
+                        </button>
+                      </>
+                    ) : isFollowing ? (
+                      <button onClick={handleUnfollow}>Unfollow</button>
+                    ) : (
+                      <button onClick={handleFollow}>Follow</button>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
