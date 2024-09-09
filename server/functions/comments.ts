@@ -9,6 +9,25 @@ export async function getAllComments(db = connection): Promise<Comment[]> {
   return db('comments').select('*').orderBy('id', 'desc')
 }
 
+export async function getCommentById(
+  id: number,
+  db = connection,
+): Promise<
+  Comment & { username: string; profile_picture_url: string; auth_id: string }
+> {
+  return db('comments')
+    .join('users', 'comments.user_id', 'users.id')
+    .join('posts', 'comments.post_id', 'posts.id')
+    .where('comments.id', id)
+    .select(
+      'comments.*',
+      'users.username',
+      'users.profile_picture_url',
+      'users.auth_id',
+    )
+    .first()
+}
+
 // ╔════════════════════╗
 // ║   Post Functions   ║
 // ╚════════════════════╝

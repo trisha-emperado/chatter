@@ -22,6 +22,16 @@ router.get('/', async (req, res) => {
   }
 })
 
+router.get('/:id', async (req, res) => {
+  try {
+    const id = parseInt(req.params.id)
+    const commentById = await db.getCommentById(id)
+    return res.json(commentById)
+  } catch (error) {
+    res.status(500).json({ message: 'Something went wrong' })
+  }
+})
+
 // ╔═════════════════╗
 // ║   Post Routes   ║
 // ╚═════════════════╝

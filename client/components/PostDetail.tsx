@@ -8,7 +8,6 @@ import CommentForm from "./CommentForm";
 import { useNavigate } from "react-router-dom";
 import { useLikesByPostId } from '../hooks/useLikes'
 import { useUserByAuthId } from '../hooks/useUsers'
-import { useNavigate } from "react-router-dom";
 
 export default function PostDetails() {
   const { id } = useParams<{ id: string }>()
