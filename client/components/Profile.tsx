@@ -1,10 +1,13 @@
 import { useParams } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import UserForm from './UserForm'
 import { useUsersByID } from '../hooks/useUsers'
 import { useAuth0 } from '@auth0/auth0-react'
 import { useDeleteUser } from '../hooks/useUsers'
 import { useNavigate } from 'react-router-dom'
+import NavBar from './NavBar'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import request from 'superagent'
 
 function Profile() {
   const { id } = useParams()
@@ -12,6 +15,8 @@ function Profile() {
   const navigate = useNavigate()
   const { data: user, isPending, isError } = useUsersByID(userID)
   const [editUser, setEditUser] = useState(false)
+  const [inputDisplay, setInputDisplay] = useState(false)
+
   const {
     user: authUser,
     getAccessTokenSilently,
@@ -20,8 +25,30 @@ function Profile() {
   } = useAuth0()
 
   const deleteMutation = useDeleteUser()
+  const queryClient = useQueryClient()
 
   const [isFollowing, setIsFollowing] = useState(false)
+  const [header, setHeader] = useState(
+    '/public/images/wallhpuuuurpaven-g7vxoe.jpg',
+  )
+
+  const mutation = useMutation({
+    mutationFn: async () => {
+      const token = await getAccessTokenSilently()
+      await request
+        .patch(`/api/v1/${id}/profile/edit`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({ header_image_url: header })
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries()
+      console.log('header set!')
+    },
+    onError: (error) => {
+      console.error('Error updating header:', error) // Debug error
+      throw error
+    },
+  })
 
   //Check if logged-in user is following this profile
   useEffect(() => {
@@ -106,6 +133,17 @@ function Profile() {
     }
   }
 
+  const handleHeaderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault()
+    setHeader(event.target.value)
+  }
+
+  const handleSubmitHeader = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    mutation.mutate()
+    setInputDisplay(false)
+  }
+
   if (editUser) {
     return <UserForm userID={id} isEditing={true} />
   }
@@ -116,54 +154,95 @@ function Profile() {
 
   return (
     <>
-      <div>
-        <h1>Profile Information</h1>
-        <h2>{user.username}</h2>
-        <div className="profileContainer">
-          <div className="profilePicture">
-            <img
-              src={user.profile_picture_url}
-              alt={user.name}
-              className="profilePicture"
-            />
-            <div className="profileInformation">
-              <div className="profileInput">
-                <h4>Name: </h4>
-                <p>{user.name}</p>
-              </div>
-              <div className="profileInput">
-                <h4>Age: </h4>
-                <p>{user.age}</p>
-              </div>
-              <div className="profileInput">
-                <h4>Current Role: </h4>
-                <p>{user.current_role}</p>
-              </div>
-              <div className="profileInput">
-                <h4>Cohort: </h4>
-                <p>{user.cohort}</p>
-              </div>
-              <div className="profileInput">
-                <h4>GitHub: </h4>
-                <p>{user.github_url}</p>
-              </div>
-              <div>
-                {authUser && authUser.sub === user.auth_id ? (
-                  <>
-                    <button onClick={handleEditProfile}>Edit</button>
-                    <br></br>
+      <div className="Home">
+        <div className="homeContainer">
+          <div className="navBar01">
+            <NavBar />
+          </div>
+          <div className="feed023">
+            <div className="ProfilePage">
+              <div className="profileContainer">
+                <div className="profileTop">
+                  <div
+                    className="profileTopBox"
+                    style={{
+                      backgroundImage: `url(${user?.header_image_url ? user.header_image_url : header})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                    }}
+                  >
                     <button
-                      className="deleteUserButton"
-                      onClick={handleDeleteAccount}
+                      className="changeHeaderButton"
+                      onClick={() => setInputDisplay(true)}
                     >
-                      Delete Account
+                      Change Header
                     </button>
-                  </>
-                ) : isFollowing ? (
-                  <button onClick={handleUnfollow}>Unfollow</button>
-                ) : (
-                  <button onClick={handleFollow}>Follow</button>
-                )}
+                    {inputDisplay && (
+                      <div className="headerInputBox">
+                        <form onSubmit={handleSubmitHeader}>
+                          <input
+                            type="text"
+                            value={header}
+                            onChange={handleHeaderChange}
+                          />
+                          <button
+                            type="submit"
+                            className="headerSubmit"
+                          ></button>
+                        </form>
+                      </div>
+                    )}
+
+                    <h2 className="profileUserName">{user.username}</h2>
+                    <div className="profilePictureBox">
+                      <img
+                        src={user.profile_picture_url}
+                        alt={user.name}
+                        className="profilePicture"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="profileInformation">
+                <div className="profileInput">
+                  <h4>Name: </h4>
+                  <p>{user.name}</p>
+                </div>
+                <div className="profileInput">
+                  <h4>Age: </h4>
+                  <p>{user.age}</p>
+                </div>
+                <div className="profileInput">
+                  <h4>Current Role: </h4>
+                  <p>{user.current_role}</p>
+                </div>
+                <div className="profileInput">
+                  <h4>Cohort: </h4>
+                  <p>{user.cohort}</p>
+                </div>
+                <div className="profileInput">
+                  <h4>GitHub: </h4>
+                  <p>{user.github_url}</p>
+                </div>
+                <div>
+                  {authUser && authUser.sub === user.auth_id ? (
+                    <>
+                      <button onClick={handleEditProfile}>Edit</button>
+                      <br></br>
+                      <button
+                        className="deleteUserButton"
+                        onClick={handleDeleteAccount}
+                      >
+                        Delete Account
+                      </button>
+                    </>
+                  ) : isFollowing ? (
+                    <button onClick={handleUnfollow}>Unfollow</button>
+                  ) : (
+                    <button onClick={handleFollow}>Follow</button>
+                  )}
+                </div>
               </div>
             </div>
           </div>

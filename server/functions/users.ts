@@ -45,6 +45,15 @@ export async function editUserById(
   return await db('users').where('id', id).select().first()
 }
 
+export async function editUserProfileById(
+  id: number,
+  editedUser: Partial<User>,
+  db = connection,
+): Promise<User> {
+  await db('users').where('id', id).update(editedUser, ['*'])
+  return await db('users').where('id', id).select().first()
+}
+
 // ╔══════════════════════╗
 // ║   Delete Functions   ║
 // ╚══════════════════════╝

@@ -5,7 +5,7 @@
 export async function up(knex) {
   return knex.schema.createTable('users', (table) => {
     table.increments('id').primary()
-    table.string('auth_id').notNullable().unique() 
+    table.string('auth_id').notNullable().unique()
     table.string('username').unique()
     table.string('name')
     table.string('current_role')
@@ -14,6 +14,8 @@ export async function up(knex) {
     table.string('cohort')
     table.boolean('facilitator')
     table.string('github_url')
+    table.string('status')
+    table.string('header_image_url')
   })
 }
 

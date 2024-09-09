@@ -9,4 +9,6 @@ export interface User {
   facilitator: boolean
   github_url: string
   auth_id: string | undefined
+  status: string
+  header_image_url: string
 }

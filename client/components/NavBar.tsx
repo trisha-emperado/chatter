@@ -35,7 +35,7 @@ function NavBar() {
               <p className="userEmail">{user?.email}</p>
             </div>
             <div className="navButtonsBox">
-              <Link to="/feed">
+              <Link to="/Home">
                 <button className="feed-btn btn">Feed</button>
               </Link>
 

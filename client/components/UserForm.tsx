@@ -55,7 +55,7 @@ function UserForm({ userID, isEditing }: UserFormProps) {
       {isError && <div>Failed to add user details</div>}
       {isSuccess && <div>New user details have been added</div>}
       {isPending && <div>Loading...</div>}
-      <Link to="/">
+      <Link to="/Home">
         <button className="backButton">Go Back</button>
       </Link>
       <div className="userFormContainer">

@@ -135,6 +135,24 @@ router.patch('/:id', checkJwt, async (req: JwtRequest, res) => {
   }
 })
 
+router.patch('/:id/profile/edit', checkJwt, async (req: JwtRequest, res) => {
+  const { header_image_url, status } = req.body
+  const id = parseInt(req.params.id)
+
+  try {
+    const editedUserData: Partial<User> = {
+      header_image_url: header_image_url,
+      status: status,
+    }
+
+    const editedUser = await db.editUserProfileById(id, editedUserData)
+    res.json(editedUser)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: 'Something went wrong' })
+  }
+})
+
 // ╔═══════════════════╗
 // ║   Delete Routes   ║
 // ╚═══════════════════╝

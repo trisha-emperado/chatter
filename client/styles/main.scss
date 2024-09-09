@@ -293,6 +293,8 @@ $backgroundColor:  rgba(255, 255, 255, 0.683);
 }
 
 .postInput {
+  font-size: calc(0.8vh + 0.8vw);
+
   padding: calc(1vh + 1vw);
   border-radius:  calc(1vh + 1vw);
   background-color: rgba(255, 255, 255, 0.491);
@@ -348,7 +350,8 @@ input[type="file"] {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  height: 100%
+  height: 100%;
+  width: calc(15vh + 15vw)
 }
 
 .navImageBox {
@@ -399,6 +402,7 @@ input[type="file"] {
   rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
   background-color: black;
   color: white;
+  font-size: calc(0.7vh + 0.7vw);
 }
 
 .my-profile-btn, .friends-btn {
@@ -407,6 +411,7 @@ input[type="file"] {
   width: calc(12vh + 12vw);
   border-radius: calc(0.5vh + 0.5vw);
   background-color: rgba(255, 255, 255, 0.47);
+  font-size: calc(0.7vh + 0.7vw);
 
   box-shadow: 
   rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
@@ -430,6 +435,7 @@ input[type="file"] {
 .sign-out {
   margin-bottom: calc(2vh + 2vw);
   background-color: rgb(0, 0, 0);
+  font-size: calc(0.8vh + 0.8vw);
   color: white;
   width: max-content;
   padding: calc(0.5vh + 0.5vw) calc(1vh + 1vw);
@@ -674,4 +680,68 @@ input[type="file"] {
 
 .showCommentButton {
   font-family: regularFont;
+  font-size: calc(0.6vh + 0.6vw);
+}
+
+// ╔═════════════╗
+// ║   Profile   ║
+// ╚═════════════╝
+
+.feed023 {
+  width: 100%;
+  height: 100%;
+}
+
+.ProfilePage {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.profileTop {
+  max-width: 100%;
+  max-height: 100%;
+  padding: calc(2vh + 2vw);
+  @include flexBox();
+  font-size:xx-large;
+  color: white;
+  text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.475);
+}
+
+
+.profileTopBox {
+  width: 100%;
+  padding: calc(1vh + 1vw);
+  border-radius: calc(1vh + 1vw);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profilePictureBox {
+  width: calc(8vh + 8vw);
+  height: calc(8vh + 8vw);
+  overflow: hidden;
+  border-radius: 50%;
+  box-shadow: 
+  rgba(50, 50, 93, 0.25) 0px calc(20px + 1vh) calc(40px + 2vh) calc(-8px - 0.5vh), 
+  rgba(0, 0, 0, 0.3) 0px calc(12px + 1vh) calc(24px + 1.5vh) calc(-12px - 1vh);
+}
+
+.profilePicture {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.changeHeaderButton {
+  position: absolute;
+  display: flex;
+  justify-content: flex-end;
+  align-self: flex-end;
+  color: white;
+  background-color: rgba(255, 255, 255, 0.32);
+  border-radius: calc(0.5vh + 0.5vw);
+  padding:  calc(0.3vh + 0.3vw) calc(0.5vh + 0.5vw);
 }

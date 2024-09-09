@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import request from 'superagent'
 import { PostAndUser } from '../../models/posts'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 const AllPosts = () => {
   const [displayComments, setDisplayComments] = useState<Set<number>>(new Set())
@@ -40,7 +41,9 @@ const AllPosts = () => {
                 alt="profile pic"
                 className="postUserImg"
               />
-              <p className="postUsername">{post.username}</p>
+              <Link to={`/user/${post.user_id}`}>
+                <p className="postUsername">{post.username}</p>
+              </Link>
             </div>
             <div className="postContentBox">
               <p>{post.content}</p>
