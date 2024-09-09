@@ -3,6 +3,11 @@ import * as api from '../apis/apiClient'
 import { useAuth0 } from '@auth0/auth0-react'
 import { PostData } from '../../models/posts'
 
+interface DeletePostMutation {
+  id: number
+  token: string
+}
+
 export function usePostDetails(id: number) {
   return useQuery({
     queryKey: ['posts', id],
@@ -59,7 +64,8 @@ export function useToggleLike(postId: number) {
 export function useDeletePost() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (id: number) => api.deletePost(id, token),
+    mutationFn: (data: DeletePostMutation) =>
+      api.deletePost(data.id, data.token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts'] })
     },

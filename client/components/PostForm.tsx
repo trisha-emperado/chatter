@@ -3,6 +3,7 @@ import { PostData } from '../../models/posts';
 import { useNewPost } from '../hooks/usePosts';
 
 const emptyPostData: PostData = {
+  user_id: 0,
   content: '',
   image_url: '',
   file_url: '',
