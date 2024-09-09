@@ -75,7 +75,7 @@ const AllPosts = () => {
                   </div>
                   <div className="commentContentBox">
                     <p className="commentUsername">{comment.username}</p>
-                    <p>{`${comment.content} ✦ ${new Date(comment.created_at).toLocaleDateString()}`}</p>
+                    <p className="commentContent">{`${comment.content} ✦ ${new Date(comment.created_at).toLocaleDateString()}`}</p>
                   </div>
                 </div>
               ))}
