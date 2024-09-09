@@ -26,6 +26,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
+    console.log('test')
     const id = parseInt(req.params.id)
     const postById = await db.getPostById(id)
     return res.json(postById)
