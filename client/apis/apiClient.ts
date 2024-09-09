@@ -95,13 +95,20 @@ export async function likePost(
   token: string,
 ): Promise<void> {
   await request
-    .post(`${rootURL}/posts/like`)
+    .post(`${rootURL}/posts/${postId}/like`)
     .set('Authorization', `Bearer ${token}`)
     .send({ postId, userId, token })
 }
 
-export async function unlikePost(postId: number): Promise<void> {
-  await request.post(`${rootURL}/posts/${postId}/unlike`)
+export async function unlikePost(
+  postId: number,
+  userId: number,
+  token: string,
+): Promise<void> {
+  await request
+    .delete(`${rootURL}/posts/${postId}/unlike`)
+    .set('Authorization', `Bearer ${token}`)
+    .send({ userId })
 }
 
 export async function deletePost(id: number, token: string) {

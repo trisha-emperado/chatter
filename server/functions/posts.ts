@@ -44,7 +44,6 @@ export async function likePost(
   db = connection,
 ): Promise<void> {
   await db('likes').insert({ user_id: userId, post_id: postId })
-  // await db('posts').where('id', postId).increment('likes', 1)
 }
 
 export async function unlikePost(
@@ -53,7 +52,6 @@ export async function unlikePost(
   db = connection,
 ): Promise<void> {
   await db('likes').where({ user_id: userId, post_id: postId }).del()
-  await db('posts').where('id', postId).decrement('likes', 1)
 }
 
 export async function hasLikedPost(
