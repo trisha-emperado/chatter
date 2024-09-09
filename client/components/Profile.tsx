@@ -238,6 +238,7 @@ function Profile() {
                             type="text"
                             value={header}
                             onChange={handleHeaderChange}
+                            className="headerInputZ"
                           />
                           <button
                             type="submit"

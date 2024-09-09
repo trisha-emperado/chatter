@@ -808,6 +808,25 @@ input[type="file"] {
 
 }
 
+.headerInputBox {
+  position: absolute;
+  display: flex;
+  justify-content: flex-end;
+  align-self: flex-start;
+  color: white;
+  background-color: rgba(255, 255, 255, 0.32);
+  border-radius: calc(0.5vh + 0.5vw);
+  padding:  calc(0.3vh + 0.3vw) calc(0.5vh + 0.5vw);
+  font-size: calc(0.8vh + 0.8vw);
+  border: none;
+}
+
+.headerInputZ {
+  color: white;
+  background-color: rgba(255, 255, 255, 0);
+  border: none;
+}
+
 .profileNavs {
   display: flex;
   justify-content: flex-end;
@@ -994,3 +1013,4 @@ input[type="file"] {
   box-sizing: border-box;
 
 }
+
