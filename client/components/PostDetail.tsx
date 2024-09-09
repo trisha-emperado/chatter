@@ -5,9 +5,11 @@ import { useToggleLike } from "../hooks/usePosts";
 import { useDeletePost } from "../hooks/usePosts";
 import { useAuth0 } from "@auth0/auth0-react";
 import CommentForm from "./CommentForm";
-import { useNavigate } from "react-router-dom";
+import CommentsList from "./CommentsByPost"
 import { useLikesByPostId } from '../hooks/useLikes'
 import { useUserByAuthId } from '../hooks/useUsers'
+import { useNavigate } from "react-router-dom";
+
 
 export default function PostDetails() {
   const { id } = useParams<{ id: string }>()
@@ -55,14 +57,6 @@ export default function PostDetails() {
   if (isPending) return <p>Loading...</p>
   if (isError) return <p>Error loading post</p>
 
-  console.log('authUser.sub:', authUser?.sub)
-  console.log('post.user_id:', post.user_id)
-  console.log(likes)
-  console.log(userData)
-  console.log(checkIfLiked())
-  if (isPending) return <p>Loading...</p>;
-  if (isError) return <p>Error loading post</p>;
-
   const commentForm = () => {
     setIsCommentFormVisible(!isCommentFormVisible)
   }
@@ -97,6 +91,8 @@ export default function PostDetails() {
           <button onClick={handleDeletePost}>Delete</button>
         )}
       </div>
+
+      <CommentsList postId={postID} />
 
       {isCommentFormVisible && (
         <CommentForm

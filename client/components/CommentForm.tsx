@@ -5,7 +5,6 @@ import { CommentData } from '../../models/comments';
 const emptyCommentData: Omit<CommentData, 'user_id' | 'post_id'> = {
   content: '',
 }
-
 interface CommentFormProps {
   userId: number;
   postId: number;
@@ -33,7 +32,6 @@ export default function CommentForm({ userId, postId }: CommentFormProps) {
         user_id: userId,
         post_id: postId,
       });
-      console.log('New comment submitted:', newComment);
       setNewComment(emptyCommentData);
     } catch (error) {
       console.error('Error creating comment:', error);

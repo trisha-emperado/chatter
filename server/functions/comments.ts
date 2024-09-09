@@ -1,5 +1,7 @@
 import connection from '../db/connection.ts'
-import { Comment, CommentData } from '../../models/comments.ts'
+import { Comment, CommentData, DetailedComment } from '../../models/comments.ts'
+
+// type CommentWithUser = Comment & { username: string }
 
 // ╔═══════════════════╗
 // ║   Get Functions   ║
@@ -9,24 +11,31 @@ export async function getAllComments(db = connection): Promise<Comment[]> {
   return db('comments').select('*').orderBy('id', 'desc')
 }
 
-export async function getCommentById(
-  id: number,
+export async function getCommentsByPostId(
+  postId: number,
   db = connection,
-): Promise<
-  Comment & { username: string; profile_picture_url: string; auth_id: string }
-> {
+): Promise<DetailedComment[]> {
   return db('comments')
     .join('users', 'comments.user_id', 'users.id')
     .join('posts', 'comments.post_id', 'posts.id')
-    .where('comments.id', id)
+    .where('comments.post_id', postId)
     .select(
       'comments.*',
       'users.username',
       'users.profile_picture_url',
       'users.auth_id',
     )
-    .first()
 }
+
+// export async function getCommentsByPostId(
+//   post_id: number,
+//   db = connection,
+// ): Promise<CommentWithUser[]> {
+//   return db('comments')
+//     .select('comments.*', 'users.username')
+//     .where('comments.post_id', post_id)
+//     .orderBy('created_at', 'desc')
+// }
 
 // ╔════════════════════╗
 // ║   Post Functions   ║

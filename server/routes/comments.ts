@@ -22,11 +22,21 @@ router.get('/', async (req, res) => {
   }
 })
 
-router.get('/:id', async (req, res) => {
+router.get('/post/:postId/', async (req, res) => {
   try {
-    const id = parseInt(req.params.id)
-    const commentById = await db.getCommentById(id)
-    return res.json(commentById)
+    const postId = parseInt(req.params.postId)
+    const comments = await db.getCommentsByPostId(postId)
+    return res.json(comments)
+  } catch (error) {
+    res.status(500).json({ message: 'Something went wrong' })
+  }
+})
+
+router.get('/posts/:postId', async (req, res) => {
+  try {
+    const postId = parseInt(req.params.postId)
+    const commentsByPost = await db.getCommentsByPostId(postId)
+    return res.json(commentsByPost)
   } catch (error) {
     res.status(500).json({ message: 'Something went wrong' })
   }

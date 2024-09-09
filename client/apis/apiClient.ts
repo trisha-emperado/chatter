@@ -1,9 +1,8 @@
 import request from 'superagent'
 import { User } from '../../models/users'
 import { Post, PostData } from '../../models/posts'
-import { CommentData } from '../../models/comments'
+import { CommentData, DetailedComment } from '../../models/comments'
 import { Like } from '../../models/likes'
-import { CommentData } from '../../models/comments'
 
 const rootURL = '/api/v1'
 
@@ -137,7 +136,7 @@ export async function getFollowedUsers(followerId: string) {
 }
 
 // ╔═══════════════════╗
-// ║    User Routes    ║
+// ║    Likes Routes   ║
 // ╚═══════════════════╝
 
 export async function getLikesByPostId(postId: number): Promise<Like[]> {
@@ -148,4 +147,15 @@ export async function getLikesByPostId(postId: number): Promise<Like[]> {
     console.error('Failed to fetch the likes for that post', error)
     throw new Error('Unable to fetch the likes for that post')
   }
+}
+
+// ╔═══════════════════╗
+// ║ Comments Routes   ║
+// ╚═══════════════════╝
+
+export async function getCommentsByPostId(
+  postId: number,
+): Promise<DetailedComment[]> {
+  const res = await request.get(`${rootURL}/post/${postId}`)
+  return res.body as DetailedComment[]
 }
