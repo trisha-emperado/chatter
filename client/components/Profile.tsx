@@ -54,8 +54,8 @@ function Profile() {
     return <div>Error fetching your feed...</div>
   }
 
-  if (isNaN(userID)) {
-    return <div>That user ID does not exist.</div>
+  if (!userID) {
+    return <UserForm />
   }
 
   // HANDLE FOLLOW
