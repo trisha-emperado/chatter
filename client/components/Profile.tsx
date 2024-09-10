@@ -25,7 +25,6 @@ function Profile() {
   const [inputDisplay, setInputDisplay] = useState(false)
   const [displayComments, setDisplayComments] = useState<Set<number>>(new Set())
   const [activeSection, setActiveSection] = useState('aboutMe')
-  const { idx } = useParams<{ id: string }>()
   const postID = Number(id)
   const [commentVisibility, setCommentVisibility] = useState<{
     [key: number]: boolean

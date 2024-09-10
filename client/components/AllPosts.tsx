@@ -44,7 +44,9 @@ const AllPosts = ({ showFriendsPosts }: { showFriendsPosts: boolean }) => {
     queryKey: ['followedUsers', authUser?.sub],
     queryFn: async () => {
       if (!authUser?.sub) return []
-      const response = await request.get(`/api/v1/following/${authUser.sub}`)
+      const response = await request.get(
+        `/api/v1/follower/following/${authUser.sub}`,
+      )
       return response.body as { id: number }[]
     },
   })
@@ -113,7 +115,7 @@ const AllPosts = ({ showFriendsPosts }: { showFriendsPosts: boolean }) => {
                 </Link>
               </div>
               <div className="postContentBox">
-                <p>{post.content}</p>
+                <p className="contents">{post.content}</p>
               </div>
               <div className="postDetailsBox">
                 <p className="postDetail hideShowLike">

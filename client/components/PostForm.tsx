@@ -103,7 +103,11 @@ export default function PostForm() {
             </label>
           </div>
 
-          <button type="submit" disabled={content === '' || isPending}>
+          <button
+            className="makePost"
+            type="submit"
+            disabled={content === '' || isPending}
+          >
             {isPending ? 'Posting...' : 'Make Post'}
           </button>
         </div>

@@ -73,19 +73,22 @@ $backgroundColor:  rgba(255, 255, 255, 0.642);
 }
 
 .navBar01 {
-  
   height: 100%;
   width: 25%;
+  padding: calc(1vh + 1vw) 0 calc(1vh + 1vw) calc(1vh + 1vw);
+  box-sizing: border-box;
 }
 
 .feed02 {
   height: 100%;
   width: 50%;
+  box-sizing: border-box;
 }
 
 .sideBar03 {
   height: 100%;
   width: 25%;
+  box-sizing: border-box;
 }
 
 // ╔══════════╗
@@ -197,6 +200,7 @@ $backgroundColor:  rgba(255, 255, 255, 0.642);
   display: flex;
   flex-direction: column;
   font-size: calc(0.7vh + 0.7vw);
+  box-sizing: border-box;
   height: 100%;
   width: 100%;
   border-radius: calc(1vh + 1vw);
@@ -273,6 +277,10 @@ a:focus {
   font-family: regularFont
 }
 
+.contents {
+  word-wrap: break-word
+}
+
 .sideBarBox {
   @include flexBox();
   height: 100%;
@@ -282,11 +290,16 @@ a:focus {
 .pf {
   background: $backgroundColor;
   color: black;
+  font-size: calc(0.7vh + 0.7vw);
 }
 
 .pf.active {
   background: black;
   color: rgb(255, 255, 255);
+}
+
+.makePost {
+  font-size: calc(0.7vh + 0.7vw);
 }
 
 
@@ -355,6 +368,10 @@ a:focus {
   padding: calc(1vh + 1vw);
   border-radius:  calc(1vh + 1vw);
   background-color: rgba(255, 255, 255, 0.491);
+  box-shadow: 
+  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
+  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
+  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
   border: none;
   height: 90%;
   width: 80%;
@@ -408,7 +425,7 @@ input[type="file"] {
   flex-direction: column;
   justify-content: flex-start;
   height: 100%;
-  width: calc(15vh + 15vw)
+  width: 100%;
 }
 
 .navImageBox {
@@ -445,10 +462,10 @@ input[type="file"] {
 
 .navButtonsBox {
   @include flexBox(column);
-  padding-top: calc(1vh + 1vw);
+  width: 100%;
 }
 
-.feed-btn {
+.btn {
   padding: calc(0.5vh + 0.5vw) calc(1vh + 1vw);
   margin: calc(0.5vh + 0.5vw);
   width: calc(12vh + 12vw);
@@ -464,20 +481,20 @@ input[type="file"] {
 
 
 
-.my-profile-btn, .friends-btn {
-  padding: calc(0.5vh + 0.5vw) calc(1vh + 1vw);
-  margin: calc(0.5vh + 0.5vw);
-  width: calc(12vh + 12vw);
-  border-radius: calc(0.5vh + 0.5vw);
-  font-size: calc(0.7vh + 0.7vw);
-  background-color: $backgroundColor;
-  backdrop-filter: blur(calc(1vh + 1vw));
-  box-shadow: 
-  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
-  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
-  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
-  color: rgb(0, 0, 0);
-}
+// .my-profile-btn, .friends-btn {
+//   padding: calc(0.5vh + 0.5vw) calc(1vh + 1vw);
+//   margin: calc(0.5vh + 0.5vw);
+//   width: 100%;
+//   border-radius: calc(0.5vh + 0.5vw);
+//   font-size: calc(0.7vh + 0.7vw);
+//   background-color: $backgroundColor;
+//   backdrop-filter: blur(calc(1vh + 1vw));
+//   box-shadow: 
+//   rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
+//   rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
+//   rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+//   color: rgb(0, 0, 0);
+// }
 
 
 .signoutBox {
@@ -839,6 +856,10 @@ input[type="file"] {
   outline: none;
   padding: calc(1vh + 1vw);
   border-radius:  calc(1vh + 1vw) calc(1vh + 1vw) 0 0;
+  box-shadow: 
+  rgba(0, 0, 0, 0.2) 0px calc(-2px - 0.5vh) calc(2px + 0.5vw) 0px, 
+  rgba(0, 0, 0, 0.1) 0px calc(-1px - 0.25vh) calc(1px + 0.25vw) 0px, 
+  rgba(255, 255, 255, 0.05) 0px calc(-0px - 0.1vh) calc(0.1px + 0.1vw) inset;
   background-color: rgba(255, 255, 255, 0.491);
   border: none;
 }
@@ -869,7 +890,7 @@ input[type="file"] {
 // ╚═════════════╝
 
 .feed023 {
-  width: 100%;
+  width: 75%;
   height: 100%;
 }
 
@@ -883,7 +904,7 @@ input[type="file"] {
 .profileTop {
   max-width: 100%;
   max-height: 100%;
-  padding: calc(2vh + 2vw);
+  padding-top: 0;
   @include flexBox();
   font-size: calc(1.5vh + 1.5vw);
   color: white;
@@ -902,6 +923,7 @@ input[type="file"] {
   width: 100%;
   padding: calc(1vh + 1vw);
   border-radius: calc(1vh + 1vw);
+  gap: 5%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -912,21 +934,34 @@ input[type="file"] {
 }
 
 .profilePictureBox {
-  width: calc(8vh + 8vw);
-  height: calc(8vh + 8vw);
+  width: 100%;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   border-radius: 50%;
   box-shadow: 
-  rgba(50, 50, 93, 0.25) 0px calc(20px + 1vh) calc(40px + 2vh) calc(-8px - 0.5vh), 
-  rgba(0, 0, 0, 0.3) 0px calc(12px + 1vh) calc(24px + 1.5vh) calc(-12px - 1vh);
+    rgba(50, 50, 93, 0.25) 0px calc(20px + 1vh) calc(40px + 2vh) calc(-8px - 0.5vh), 
+    rgba(0, 0, 0, 0.3) 0px calc(12px + 1vh) calc(24px + 1.5vh) calc(-12px - 1vh);
   border: solid calc(0.5vh + 0.5vw) rgba(255, 255, 255, 0.37);
-  backdrop-filter: blur(calc(1vh + 1vw)); 
+  backdrop-filter: blur(calc(1vh + 1vw));
+  position: relative;
 }
 
 .profilePicture {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 50%;
+}
+
+
+.profileUserName {
+  width: max-content;
+  font-size: calc(100% + 1vw);
+  white-space: nowrap;
+  padding: calc(1vh + 1vw);
 }
 
 .changeHeaderButton {
@@ -965,7 +1000,6 @@ input[type="file"] {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 calc(2vh + 2vw)    ;
 }
 
 .followBut {
@@ -1018,6 +1052,7 @@ input[type="file"] {
 .nav001, .nav002 {
   display: flex;
   align-items: center;
+
 }
 
 .githubLogo {
@@ -1037,6 +1072,9 @@ input[type="file"] {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  justify-content: space-evenly;
+  padding: calc(2vh + 2vw);
+  gap: 5%;
 }
 
 .profileInformation {
@@ -1044,29 +1082,29 @@ input[type="file"] {
   max-width: 100%;
   justify-content: space-between;
   width: 100%;
-  max-width: 100%;
   max-height: 100%;
-  padding: calc(2vh + 2vw);
+  height: 100%;
+  gap: 5%;
   box-sizing: border-box;
 }
 
 .profileInput {
   box-sizing: border-box;
   border-radius: calc(1vh + 1vw);
-  width: calc(9vh + 9vw);
-  height: calc(9vh + 9vw);
+  width: max-content;
+  height: 100%;
+  flex: 1;
   background-image: url(/public/images/wallhpuuuurpaven-g7vxoe.jpg);
   background-size: cover;
   background-position: center;
   backdrop-filter: blur(calc(1vh + 1vw));
-
 }
 
 .InfoBackground {
   box-sizing: border-box;
   border-radius: calc(1vh + 1vw);
-  width: calc(9vh + 9vw);
-  height: calc(9vh + 9vw);
+  width: 100%;
+  height: 100%;
   box-shadow: 
   rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
   rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
@@ -1188,6 +1226,7 @@ input[type="file"] {
 .followerHeader {
   padding: calc(0.5vh + 0.5vw) calc(1vh + 1vw);
   margin: calc(1vh + 1vw) 0;
+  margin-top: 0;
   width: 100%;
   border-radius: calc(0.5vh + 0.5vw);
   text-align: center;
