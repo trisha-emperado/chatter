@@ -8,6 +8,7 @@ import CommentForm from "./CommentForm";
 import { useLikesByPostId } from '../hooks/useLikes'
 import { useUserByAuthId } from '../hooks/useUsers'
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function PostDetails() {
   const { id } = useParams<{ id: string }>()
@@ -48,7 +49,7 @@ export default function PostDetails() {
     } catch (error) {
       console.error('Error deleting post:', error)
     }
-    navigate('/feed')
+    navigate('/Home')
   }
 
   if (isPending) return <p>Loading...</p>
@@ -59,42 +60,74 @@ export default function PostDetails() {
   }
 
   return (
-    <div>
-      <div className="post-profile-picture">
-        {post.profile_picture_url && (
-          <img
-            src={post.profile_picture_url}
-            alt={`${post.username}'s profile`}
-          />
-        )}
-        <p>{post.username}</p>
-      </div>
+    <div className="postsComp">
+      <div className="postsContainer">
+        <div className="postsCard">
+          <div className="postBackground">
+            <div >
+              {post.profile_picture_url && (
+                <img
+                  src={post.profile_picture_url}
+                  alt="profile pic"
+                  className="postUserImg"
+                />
+              )}
+              <Link to={`/user/${post.user_id}`}>
+                <p className="postUsername">{post.username}</p>
+              </Link>
+              <div className="postContentBox">
+                <p>{post.content}</p>
+              </div>
+              <div className="postDetailsBox">
+                <p className="postDetail hideShowLike">
+                  {new Date(post.created_at).toLocaleDateString()}
+                </p>
+                {post.image_url && <img src={post.image_url} alt="Post" />}
+                <p className="postDetail">
+                  <button
+                    className="hideShowLike"
+                    onClick={() => handleLikeToggle(post.id)}
+                    disabled={isLiking || isUnliking}
+                  >
+                    {checkIfLiked(post.id) ? (
+                      <img
+                        className="heart"
+                        src="https://www.freeiconspng.com/thumbs/heart-icon/valentine-heart-icon-6.png"
+                        alt="heart"
+                      />
+                    ) : (
+                      <img
+                        className="heart"
+                        src="https://freesvg.org/img/heart-15.png"
+                        alt="heart"
+                      />
+                    )}
+                    {post.likes}
+                  </button>
+                </p>
+              </div>
+              <div>
+                {isAuthenticated && (
+                  <button onClick={commentForm}>
+                    {isCommentFormVisible ? 'Cancel' : 'Comment'}
+                  </button>
+                )}
 
-      <div className="post-content">
-        <p>{post.content}</p>
-      </div>
-      <div>
-        <p>Likes: {likes?.length}</p>
-        <button onClick={handleLikeToggle} disabled={isLiking || isUnliking}>
-          {checkIfLiked() ? 'Unlike' : 'Like'}
-        </button>
-        {isAuthenticated && (
-          <button onClick={commentForm}>
-            {isCommentFormVisible ? 'Cancel' : 'Comment'}
-          </button>
-        )}
+                {authUser && authUser.sub === post.auth_id && (
+                  <button onClick={handleDeletePost}>Delete</button>
+                )}
+              </div>
 
-        {authUser && authUser.sub === post.auth_id && (
-          <button onClick={handleDeletePost}>Delete</button>
-        )}
+              {isCommentFormVisible && (
+                <CommentForm
+                  postId={Number(id)}
+                  userId={Number(id)}
+                />
+              )}
+            </div>
+          </div>
+        </div>
       </div>
-
-      {isCommentFormVisible && (
-        <CommentForm
-          postId={Number(id)}
-          userId={Number(id)}
-        />
-      )}
-    </div>
+    </div >
   )
 }

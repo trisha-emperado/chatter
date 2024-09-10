@@ -116,43 +116,43 @@ const AllPosts = ({ showFriendsPosts }: { showFriendsPosts: boolean }) => {
                 <div className="postContentBox">
                   <p>{post.content}</p>
                 </div>
-                <div className="postDetailsBox">
-                  <p className="postDetail hideShowLike">
-                    {new Date(post.created_at).toLocaleDateString()}
-                  </p>
-                  {post.image_url && <img src={post.image_url} alt="Post" />}
-                  <p className="postDetail">
-                    <button
-                      className="hideShowLike"
-                      onClick={() => handleLikeToggle(post.id)}
-                      disabled={isLiking || isUnliking}
-                    >
-                      {checkIfLiked(post.id) ? (
-                        <img
-                          className="heart"
-                          src="https://www.freeiconspng.com/thumbs/heart-icon/valentine-heart-icon-6.png"
-                          alt="heart"
-                        />
-                      ) : (
-                        <img
-                          className="heart"
-                          src="https://freesvg.org/img/heart-15.png"
-                          alt="heart"
-                        />
-                      )}
-                      {post.likes}
-                    </button>
-                  </p>
+              </Link>
+              <div className="postDetailsBox">
+                <p className="postDetail hideShowLike">
+                  {new Date(post.created_at).toLocaleDateString()}
+                </p>
+                {post.image_url && <img src={post.image_url} alt="Post" />}
+                <p className="postDetail">
                   <button
                     className="hideShowLike"
-                    onClick={() => toggleComments(post.id)}
+                    onClick={() => handleLikeToggle(post.id)}
+                    disabled={isLiking || isUnliking}
                   >
-                    {commentVisibility[post.id]
-                      ? 'Hide Comments'
-                      : 'Show Comments'}
+                    {checkIfLiked(post.id) ? (
+                      <img
+                        className="heart"
+                        src="https://www.freeiconspng.com/thumbs/heart-icon/valentine-heart-icon-6.png"
+                        alt="heart"
+                      />
+                    ) : (
+                      <img
+                        className="heart"
+                        src="https://freesvg.org/img/heart-15.png"
+                        alt="heart"
+                      />
+                    )}
+                    {post.likes}
                   </button>
-                </div>
-              </Link>
+                </p>
+                <button
+                  className="hideShowLike"
+                  onClick={() => toggleComments(post.id)}
+                >
+                  {commentVisibility[post.id]
+                    ? 'Hide Comments'
+                    : 'Show Comments'}
+                </button>
+              </div>
               {commentVisibility[post.id] && (
                 <>
                   {isAuthenticated && (
