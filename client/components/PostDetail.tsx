@@ -2,11 +2,12 @@ import { useParams } from 'react-router-dom'
 import { useState } from 'react'
 import { usePostDetails } from '../hooks/usePosts'
 import { useToggleLike } from '../hooks/usePosts'
-import { useLikesByPostId } from '../hooks/useLikes'
 import { useDeletePost } from '../hooks/usePosts'
 import { useAuth0 } from '@auth0/auth0-react'
 import CommentForm from './CommentForm'
+import { useLikesByPostId } from '../hooks/useLikes'
 import { useUserByAuthId } from '../hooks/useUsers'
+import { useNavigate } from 'react-router-dom'
 
 export default function PostDetails() {
   const { id } = useParams<{ id: string }>()
@@ -18,6 +19,7 @@ export default function PostDetails() {
     Number(id),
   )
   const deleteMutation = useDeletePost()
+  const navigate = useNavigate()
   const { user: authUser, getAccessTokenSilently, isAuthenticated } = useAuth0()
   const { data: likes } = useLikesByPostId(postID)
   const { data: userData } = useUserByAuthId(authUser?.sub || '')
@@ -28,7 +30,7 @@ export default function PostDetails() {
       unlikePost({ postId: postID, userId: userData?.id, token })
       setHasLiked(false)
     } else {
-      likePost({ postId: postID, userId: userData?.id, token })
+      likePost({ postId: postID, userId: userData?.id ?? 0, token })
       setHasLiked(true)
     }
   }
@@ -47,16 +49,11 @@ export default function PostDetails() {
     } catch (error) {
       console.error('Error deleting post:', error)
     }
+    navigate('/feed')
   }
 
   if (isPending) return <p>Loading...</p>
   if (isError) return <p>Error loading post</p>
-
-  console.log('authUser.sub:', authUser?.sub)
-  console.log('post.user_id:', post.user_id)
-  console.log(likes)
-  console.log(userData)
-  console.log(checkIfLiked())
 
   const commentForm = () => {
     setIsCommentFormVisible(!isCommentFormVisible)
@@ -88,17 +85,13 @@ export default function PostDetails() {
           </button>
         )}
 
-        {authUser && authUser.sub === post.user_id && (
+        {authUser && authUser.sub === post.auth_id && (
           <button onClick={handleDeletePost}>Delete</button>
         )}
       </div>
 
       {isCommentFormVisible && (
-        <CommentForm
-          postId={Number(id)}
-          onSuccess={() => setIsCommentFormVisible(false)}
-          onError={() => alert('Failed to add comment.')}
-        />
+        <CommentForm postId={Number(id)} userId={Number(id)} />
       )}
     </div>
   )

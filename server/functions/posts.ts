@@ -44,7 +44,6 @@ export async function likePost(
   db = connection,
 ): Promise<void> {
   await db('likes').insert({ user_id: userId, post_id: postId })
-  // await db('posts').where('id', postId).increment('likes', 1)
 }
 
 export async function unlikePost(
