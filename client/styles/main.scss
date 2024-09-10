@@ -781,9 +781,9 @@ input[type="file"] {
 .commentContentBox {
   display: flex;
   flex-direction: row;
-  width: 100%; /* Ensure the container width is set */
-  overflow: hidden; /* Hides overflow */
-  box-sizing: border-box; /* Ensure padding and border are included in the width */
+  width: 100%; 
+  overflow: hidden; 
+  box-sizing: border-box; 
 }
 
 .contentxBox {
@@ -799,11 +799,11 @@ input[type="file"] {
 }
 
 .commentContent {
-  width: 100%; /* Ensures full width of the parent container */
-  box-sizing: border-box; /* Includes padding and border in width calculation */
-  overflow-wrap: break-word; /* Breaks long words */
-  word-wrap: break-word; /* Ensures long words wrap correctly */
-  white-space: normal; /* Allows text to wrap */
+  width: 100%; 
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  white-space: normal;
 }
 
 .hideShowLike {
