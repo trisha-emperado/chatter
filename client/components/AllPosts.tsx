@@ -92,7 +92,7 @@ const AllPosts = ({ showFriendsPosts }: { showFriendsPosts: boolean }) => {
     try {
       const token = await getAccessTokenSilently()
       deleteMutation.mutate({ id: postId, token })
-      navigate('/feed')
+      navigate('/Home')
     } catch (error) {
       console.error('Error deleting post:', error)
     }
