@@ -54,8 +54,8 @@ const AllPosts = ({ showFriendsPosts }: { showFriendsPosts: boolean }) => {
 
   const filteredPosts = showFriendsPosts
     ? posts?.filter((post) =>
-        followedUsers?.some((followed) => followed.id === post.user_id),
-      )
+      followedUsers?.some((followed) => followed.id === post.user_id),
+    )
     : posts
 
   const toggleComments = (postId: number) => {
@@ -90,7 +90,7 @@ const AllPosts = ({ showFriendsPosts }: { showFriendsPosts: boolean }) => {
     try {
       const token = await getAccessTokenSilently()
       deleteMutation.mutate({ id: postId, token })
-      navigate('/feed')
+      navigate('/Home')
     } catch (error) {
       console.error('Error deleting post:', error)
     }
@@ -112,45 +112,47 @@ const AllPosts = ({ showFriendsPosts }: { showFriendsPosts: boolean }) => {
                   <p className="postUsername">{post.username}</p>
                 </Link>
               </div>
-              <div className="postContentBox">
-                <p>{post.content}</p>
-              </div>
-              <div className="postDetailsBox">
-                <p className="postDetail hideShowLike">
-                  {new Date(post.created_at).toLocaleDateString()}
-                </p>
-                {post.image_url && <img src={post.image_url} alt="Post" />}
-                <p className="postDetail">
+              <Link to={`/posts/${post.id}`}>
+                <div className="postContentBox">
+                  <p>{post.content}</p>
+                </div>
+                <div className="postDetailsBox">
+                  <p className="postDetail hideShowLike">
+                    {new Date(post.created_at).toLocaleDateString()}
+                  </p>
+                  {post.image_url && <img src={post.image_url} alt="Post" />}
+                  <p className="postDetail">
+                    <button
+                      className="hideShowLike"
+                      onClick={() => handleLikeToggle(post.id)}
+                      disabled={isLiking || isUnliking}
+                    >
+                      {checkIfLiked(post.id) ? (
+                        <img
+                          className="heart"
+                          src="https://www.freeiconspng.com/thumbs/heart-icon/valentine-heart-icon-6.png"
+                          alt="heart"
+                        />
+                      ) : (
+                        <img
+                          className="heart"
+                          src="https://freesvg.org/img/heart-15.png"
+                          alt="heart"
+                        />
+                      )}
+                      {post.likes}
+                    </button>
+                  </p>
                   <button
                     className="hideShowLike"
-                    onClick={() => handleLikeToggle(post.id)}
-                    disabled={isLiking || isUnliking}
+                    onClick={() => toggleComments(post.id)}
                   >
-                    {checkIfLiked(post.id) ? (
-                      <img
-                        className="heart"
-                        src="https://www.freeiconspng.com/thumbs/heart-icon/valentine-heart-icon-6.png"
-                        alt="heart"
-                      />
-                    ) : (
-                      <img
-                        className="heart"
-                        src="https://freesvg.org/img/heart-15.png"
-                        alt="heart"
-                      />
-                    )}
-                    {post.likes}
+                    {commentVisibility[post.id]
+                      ? 'Hide Comments'
+                      : 'Show Comments'}
                   </button>
-                </p>
-                <button
-                  className="hideShowLike"
-                  onClick={() => toggleComments(post.id)}
-                >
-                  {commentVisibility[post.id]
-                    ? 'Hide Comments'
-                    : 'Show Comments'}
-                </button>
-              </div>
+                </div>
+              </Link>
               {commentVisibility[post.id] && (
                 <>
                   {isAuthenticated && (
