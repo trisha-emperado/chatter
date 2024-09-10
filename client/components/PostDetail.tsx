@@ -1,22 +1,24 @@
-import { useParams } from "react-router-dom";
-import { useState } from "react";
-import { usePostDetails } from "../hooks/usePosts";
-import { useToggleLike } from "../hooks/usePosts";
-import { useDeletePost } from "../hooks/usePosts";
-import { useAuth0 } from "@auth0/auth0-react";
-import CommentForm from "./CommentForm";
+import { useParams } from 'react-router-dom'
+import { useState } from 'react'
+import { usePostDetails } from '../hooks/usePosts'
+import { useToggleLike } from '../hooks/usePosts'
+import { useDeletePost } from '../hooks/usePosts'
+import { useAuth0 } from '@auth0/auth0-react'
+import CommentForm from './CommentForm'
 import { useLikesByPostId } from '../hooks/useLikes'
 import { useUserByAuthId } from '../hooks/useUsers'
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom'
 
 export default function PostDetails() {
   const { id } = useParams<{ id: string }>()
   const postID = Number(id)
-  const { data: post, isPending, isError } = usePostDetails(Number(id));
-  const [isCommentFormVisible, setIsCommentFormVisible] = useState(false);
-  const [hasLiked, setHasLiked] = useState(false);
-  const { likePost, unlikePost, isLiking, isUnliking } = useToggleLike(Number(id));
-  const deleteMutation = useDeletePost();
+  const { data: post, isPending, isError } = usePostDetails(Number(id))
+  const [isCommentFormVisible, setIsCommentFormVisible] = useState(false)
+  const [hasLiked, setHasLiked] = useState(false)
+  const { likePost, unlikePost, isLiking, isUnliking } = useToggleLike(
+    Number(id),
+  )
+  const deleteMutation = useDeletePost()
   const navigate = useNavigate()
   const { user: authUser, getAccessTokenSilently, isAuthenticated } = useAuth0()
   const { data: likes } = useLikesByPostId(postID)
@@ -24,8 +26,8 @@ export default function PostDetails() {
 
   const handleLikeToggle = async () => {
     const token = await getAccessTokenSilently()
-    if (hasLiked) {
-      unlikePost({ postId: postID, userId: userData?.id ?? 0, token })
+    if (checkIfLiked()) {
+      unlikePost({ postId: postID, userId: userData?.id, token })
       setHasLiked(false)
     } else {
       likePost({ postId: postID, userId: userData?.id ?? 0, token })
@@ -50,6 +52,8 @@ export default function PostDetails() {
     }
     navigate('/feed')
   }
+
+  console.log(likes)
 
   if (isPending) return <p>Loading...</p>
   if (isError) return <p>Error loading post</p>
@@ -90,10 +94,7 @@ export default function PostDetails() {
       </div>
 
       {isCommentFormVisible && (
-        <CommentForm
-          postId={Number(id)}
-          userId={Number(id)}
-        />
+        <CommentForm postId={Number(id)} userId={Number(id)} />
       )}
     </div>
   )

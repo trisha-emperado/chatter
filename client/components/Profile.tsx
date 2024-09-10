@@ -301,13 +301,13 @@ function Profile() {
                   <div className="nav001">
                     {authUser && authUser.sub === user.auth_id ? (
                       <>
-                        {/* <button onClick={handleEditProfile}>Edit</button> */}
-                        {/* <button
-                        className="deleteUserButton"
-                        onClick={handleDeleteAccount}
-                      >
-                        Delete Account
-                      </button> */}
+                        <button onClick={handleEditProfile}>Edit</button>
+                        <button
+                          className="deleteUserButton"
+                          onClick={handleDeleteAccount}
+                        >
+                          Delete Account
+                        </button>
                       </>
                     ) : isFollowing ? (
                       <button className="unfollowBut" onClick={handleUnfollow}>

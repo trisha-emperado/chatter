@@ -9,7 +9,6 @@ const router = Router()
 
 router.get('/:id', async (req, res) => {
   try {
-    console.log('test')
     const postId = parseInt(req.params.id)
     const likes = await db.getLikesByPostId(postId)
     res.json(likes)

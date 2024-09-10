@@ -43,8 +43,7 @@ button {
   align-items: center;
 }
 
-$backgroundColor:  rgba(255, 255, 255, 0.642); 
-
+$backgroundColor: rgba(255, 255, 255, 0.642);
 
 // ╔══════════╗
 // ║   Home   ║
@@ -64,16 +63,16 @@ $backgroundColor:  rgba(255, 255, 255, 0.642);
   height: 85%;
   @include flexBox();
   overflow: hidden;
-  box-shadow: 
-  rgba(50, 50, 93, 0.25) 0px calc(20px + 1vh) calc(40px + 2vh) calc(-8px - 0.5vh), 
-  rgba(0, 0, 0, 0.3) 0px calc(12px + 1vh) calc(24px + 1.5vh) calc(-12px - 1vh);
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px calc(20px + 1vh) calc(40px + 2vh)
+      calc(-8px - 0.5vh),
+    rgba(0, 0, 0, 0.3) 0px calc(12px + 1vh) calc(24px + 1.5vh) calc(-12px - 1vh);
   border-radius: calc(2vh + 2vw);
   backdrop-filter: blur(calc(0.3vh + 0.3vw));
   background-color: $backgroundColor;
 }
 
 .navBar01 {
-  
   height: 100%;
   width: 25%;
 }
@@ -95,7 +94,7 @@ $backgroundColor:  rgba(255, 255, 255, 0.642);
 .feedBox {
   display: flex;
   flex-direction: column;
-  height: 100%; 
+  height: 100%;
 }
 
 .feedNavBox {
@@ -103,7 +102,6 @@ $backgroundColor:  rgba(255, 255, 255, 0.642);
   justify-content: space-between;
   font-size: calc(0.8vh + 0.8vw);
   margin-top: calc(0.5vh + 0.5vw);
-
 }
 
 .feedFilters {
@@ -112,7 +110,9 @@ $backgroundColor:  rgba(255, 255, 255, 0.642);
   height: 100%;
 }
 
-.allPosts, .friendsPosts, .feedTitle {
+.allPosts,
+.friendsPosts,
+.feedTitle {
   margin: 0 calc(0.5vh + 0.5vw);
   padding: calc(0.3vh + 0.3vw) calc(0.5vh + 0.5vw);
   border-radius: calc(0.5vh + 0.5vw);
@@ -137,7 +137,7 @@ $backgroundColor:  rgba(255, 255, 255, 0.642);
 
 .postsBox {
   @include flexBox(column);
-  flex-grow: 9; 
+  flex-grow: 9;
   width: 100%;
   overflow-y: scroll;
   scrollbar-width: none;
@@ -152,11 +152,11 @@ $backgroundColor:  rgba(255, 255, 255, 0.642);
   @include flexBox();
   align-items: flex-end;
   margin-bottom: calc(3.5vh + 3.5vw);
-  max-height: 80vh; 
+  max-height: 80vh;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  bottom: 0; 
+  bottom: 0;
 }
 
 .theForm {
@@ -214,12 +214,11 @@ $backgroundColor:  rgba(255, 255, 255, 0.642);
   background-position: center;
   box-sizing: border-box;
   overflow-x: hidden;
-  box-shadow: 
-  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
-  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
-  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+  box-shadow:
+    rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px,
+    rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px,
+    rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
   border-radius: calc(1vh + 1vw);
-
 }
 
 .postDetailsBox {
@@ -230,12 +229,12 @@ $backgroundColor:  rgba(255, 255, 255, 0.642);
 .postDetail {
   padding-right: calc(1vh + 1vw);
   font-size: calc(0.7vh + 0.7vw);
-  font-family: regularFont
+  font-family: regularFont;
 }
 
 .postNav {
   display: flex;
-  align-items: center; 
+  align-items: center;
 }
 
 .postUsername {
@@ -253,7 +252,6 @@ a {
   text-decoration: none;
   outline: none;
   color: black;
-
 }
 
 a:focus {
@@ -270,7 +268,7 @@ a:focus {
 .postContentBox {
   padding: calc(1vh + 1vw) 0;
   font-size: calc(0.8vh + 0.8vw);
-  font-family: regularFont
+  font-family: regularFont;
 }
 
 .sideBarBox {
@@ -289,12 +287,12 @@ a:focus {
   color: rgb(255, 255, 255);
 }
 
-
 // ╔══════════════╗
 // ║   AllPosts   ║
 // ╚══════════════╝
 
-.postForm, .feedFormPage {
+.postForm,
+.feedFormPage {
   height: 100%;
 }
 
@@ -309,10 +307,10 @@ a:focus {
   justify-content: flex-start;
   align-items: center;
   padding: calc(1vh + 1vw);
-  box-shadow: 
-  rgba(0, 0, 0, 0.2) 0px calc(-2px - 0.5vh) calc(2px + 0.5vw) 0px, 
-  rgba(0, 0, 0, 0.1) 0px calc(-1px - 0.25vh) calc(1px + 0.25vw) 0px, 
-  rgba(255, 255, 255, 0.05) 0px calc(-0px - 0.1vh) calc(0.1px + 0.1vw) inset;
+  box-shadow:
+    rgba(0, 0, 0, 0.2) 0px calc(-2px - 0.5vh) calc(2px + 0.5vw) 0px,
+    rgba(0, 0, 0, 0.1) 0px calc(-1px - 0.25vh) calc(1px + 0.25vw) 0px,
+    rgba(255, 255, 255, 0.05) 0px calc(-0px - 0.1vh) calc(0.1px + 0.1vw) inset;
   border-radius: calc(1vh + 1vw) calc(1vh + 1vw) 0 0;
   background-color: $backgroundColor;
   backdrop-filter: blur(calc(1vh + 1vw));
@@ -325,10 +323,10 @@ a:focus {
   display: flex;
   justify-content: space-evenly;
   border-radius: 0 0 calc(1vh + 1vw) calc(1vh + 1vw);
-  box-shadow: 
-  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
-  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
-  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+  box-shadow:
+    rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px,
+    rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px,
+    rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
   background-color: $backgroundColor;
   backdrop-filter: blur(calc(0.5vh + 0.5vw));
   align-items: center;
@@ -345,7 +343,7 @@ a:focus {
 
 .formTopInput {
   width: 90%;
-  @include flexBox()
+  @include flexBox();
 }
 
 .postInput {
@@ -353,24 +351,26 @@ a:focus {
   resize: none;
   outline: none;
   padding: calc(1vh + 1vw);
-  border-radius:  calc(1vh + 1vw);
+  border-radius: calc(1vh + 1vw);
   background-color: rgba(255, 255, 255, 0.491);
   border: none;
   height: 90%;
   width: 80%;
 }
 
-.fileIcon, .imgIcon {
+.fileIcon,
+.imgIcon {
   width: calc(1vh + 1vw);
   height: auto;
 }
 
-.files, .images {
+.files,
+.images {
   display: flex;
   padding-right: calc(1vh + 1vw);
 }
 
-input[type="file"] {
+input[type='file'] {
   opacity: 0;
   position: absolute;
   z-index: -1;
@@ -385,7 +385,8 @@ input[type="file"] {
   font-family: medium;
 }
 
-.filesContain, .imagesContain {
+.filesContain,
+.imagesContain {
   display: flex;
 }
 
@@ -398,7 +399,6 @@ input[type="file"] {
   font-size: calc(0.5vh + 0.5vw);
 }
 
-
 // ╔═════════╗
 // ║   Nav   ║
 // ╚═════════╝
@@ -408,20 +408,19 @@ input[type="file"] {
   flex-direction: column;
   justify-content: flex-start;
   height: 100%;
-  width: calc(15vh + 15vw)
+  width: calc(15vh + 15vw);
 }
 
 .navImageBox {
   @include flexBox(column);
   justify-content: space-evenly;
-  
 }
 
 .navImage {
   border-radius: 50%;
   height: calc(4vh + 4vw);
   padding: calc(1vh + 1vw);
-  margin-left:  calc(3vh + 3vw);
+  margin-left: calc(3vh + 3vw);
 }
 
 .navImages {
@@ -436,7 +435,6 @@ input[type="file"] {
 
 .navText {
   font-size: calc(0.8vh + 0.8vw);
-
 }
 
 .navTextEmail {
@@ -453,18 +451,17 @@ input[type="file"] {
   margin: calc(0.5vh + 0.5vw);
   width: calc(12vh + 12vw);
   border-radius: calc(0.5vh + 0.5vw);
-  box-shadow: 
-  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
-  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
-  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+  box-shadow:
+    rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px,
+    rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px,
+    rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
   font-size: calc(0.7vh + 0.7vw);
   background-color: $backgroundColor;
   backdrop-filter: blur(calc(1vh + 1vw));
 }
 
-
-
-.my-profile-btn, .friends-btn {
+.my-profile-btn,
+.friends-btn {
   padding: calc(0.5vh + 0.5vw) calc(1vh + 1vw);
   margin: calc(0.5vh + 0.5vw);
   width: calc(12vh + 12vw);
@@ -472,13 +469,12 @@ input[type="file"] {
   font-size: calc(0.7vh + 0.7vw);
   background-color: $backgroundColor;
   backdrop-filter: blur(calc(1vh + 1vw));
-  box-shadow: 
-  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
-  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
-  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+  box-shadow:
+    rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px,
+    rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px,
+    rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
   color: rgb(0, 0, 0);
 }
-
 
 .signoutBox {
   height: 100%;
@@ -496,15 +492,14 @@ input[type="file"] {
   width: max-content;
   padding: calc(0.5vh + 0.5vw) calc(1vh + 1vw);
   border-radius: calc(0.5vh + 0.5vw);
-  box-shadow: 
-  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
-  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
-  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
-
+  box-shadow:
+    rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px,
+    rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px,
+    rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
 }
 
 .userEmail {
-  font-size: calc(0.5vh + 0.5vw) !important; 
+  font-size: calc(0.5vh + 0.5vw) !important;
 }
 
 // ╔══════════════╗
@@ -517,10 +512,9 @@ input[type="file"] {
   @include flexBox();
   background-image: url(/public/images/wallhaven-833p72.png);
   background-size: cover;
-  background-color: rgba(255, 255, 255, 0.443); 
+  background-color: rgba(255, 255, 255, 0.443);
   background-blend-mode: overlay;
 }
-
 
 .userFormContainer {
   @include flexBox();
@@ -528,13 +522,12 @@ input[type="file"] {
   background-color: white;
   width: 70%;
   height: 80%;
-  box-shadow: 
-  rgba(50, 50, 93, 0.25) 0px calc(20px + 1vh) calc(40px + 2vh) calc(-8px - 0.5vh), 
-  rgba(0, 0, 0, 0.3) 0px calc(12px + 1vh) calc(24px + 1.5vh) calc(-12px - 1vh);
-
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px calc(20px + 1vh) calc(40px + 2vh)
+      calc(-8px - 0.5vh),
+    rgba(0, 0, 0, 0.3) 0px calc(12px + 1vh) calc(24px + 1.5vh) calc(-12px - 1vh);
 
   border-radius: calc(1vh + 1vw);
-
 }
 
 .userFormImageBox {
@@ -547,14 +540,13 @@ input[type="file"] {
   width: 40%;
   height: 100%;
   overflow: hidden;
-  border-radius: calc(1vh + 1vw) 0 0  calc(1vh + 1vw);;
-
+  border-radius: calc(1vh + 1vw) 0 0 calc(1vh + 1vw);
 }
 
 .welcome {
   padding-top: calc(5vh + 5vw);
   font-size: calc(1.8vh + 1.8vw);
-  font-family: bold
+  font-family: bold;
 }
 
 .userFormBox {
@@ -576,14 +568,11 @@ input[type="file"] {
   box-sizing: border-box;
   overflow-y: scroll;
   scrollbar-width: none;
-
 }
-
 
 .inputContains::-webkit-scrollbar {
   display: none;
 }
-
 
 .userFormInputs {
   display: flex;
@@ -595,7 +584,6 @@ input[type="file"] {
   width: 100%;
   height: max-content;
   box-sizing: border-box;
-
 }
 
 .userFormInputs::-webkit-scrollbar {
@@ -614,18 +602,17 @@ input[type="file"] {
 .textBox {
   width: 100%;
   font-size: calc(0.8vh + 0.8vw);
-  padding:  calc(1vh + 1vw) 0;
+  padding: calc(1vh + 1vw) 0;
   color: rgb(0, 102, 255);
 }
 
-.textInput, .not {
+.textInput,
+.not {
   font-size: calc(0.8vh + 0.8vw);
-
 }
 
 .editH1 {
   font-family: bold;
-
 }
 
 .submitButton {
@@ -637,7 +624,6 @@ input[type="file"] {
   margin: calc(0.5vh + 0.5vw);
   font-family: bold;
   font-size: calc(0.8vh + 0.8vw);
-
 }
 
 .userFormInput {
@@ -652,7 +638,6 @@ input[type="file"] {
   border-radius: calc(1vh + 1vw);
   padding: calc(0.5vh + 0.5vw) calc(1vh + 1vw);
   width: calc(8vh + 8vw);
-  
 }
 
 .backButton {
@@ -666,24 +651,22 @@ input[type="file"] {
   font-family: bold;
   margin: calc(1vh + 1vw);
   font-size: calc(0.8vh + 0.8vw);
-  box-shadow: 
-  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
-  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
-  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
-
-
+  box-shadow:
+    rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px,
+    rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px,
+    rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
 }
 
 .userFormInput label {
   color: rgb(255, 149, 0);
-  text-shadow: 0 0 calc(0.5vh + 1vw)  rgb(255, 149, 0);
+  text-shadow: 0 0 calc(0.5vh + 1vw) rgb(255, 149, 0);
 }
 
 // ╔════════════════╗
 // ║   SignInPage   ║
 // ╚════════════════╝
 
-.officalBox { 
+.officalBox {
   height: 100vh;
   width: 100%;
 }
@@ -691,7 +674,6 @@ input[type="file"] {
 .app {
   height: 100%;
   width: 100%;
-  
 }
 
 .signInPageContainer {
@@ -716,9 +698,9 @@ input[type="file"] {
   border-radius: calc(0.5vh + 0.5vw);
   font-size: calc(2vh + 2vw);
   box-shadow:
-  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
-  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
-  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+    rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px,
+    rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px,
+    rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
   background-color: black;
   color: white;
 }
@@ -739,10 +721,10 @@ input[type="file"] {
 
 .comment {
   display: flex;
-  box-shadow: 
-  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
-  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
-  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+  box-shadow:
+    rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px,
+    rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px,
+    rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
   border-radius: calc(1vh + 1vw);
   margin-bottom: calc(1vh + 1vw);
   background-color: rgba(255, 255, 255, 0.317);
@@ -750,7 +732,6 @@ input[type="file"] {
   flex-direction: column;
   width: 100%;
   width: 100%;
-
 }
 
 .commentNav {
@@ -764,7 +745,6 @@ input[type="file"] {
   margin-right: calc(0.5vh + 0.5vw);
   border-radius: 50%;
 }
-
 
 .imgx {
   opacity: 0;
@@ -781,25 +761,25 @@ input[type="file"] {
 .commentContentBox {
   display: flex;
   flex-direction: row;
-  width: 100%; 
-  overflow: hidden; 
-  box-sizing: border-box; 
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .contentxBox {
-  flex: 1; 
+  flex: 1;
   display: flex;
   max-width: 100%;
   width: 100%;
   overflow: hidden;
   flex-direction: column;
   overflow-wrap: break-word;
-  word-wrap: break-word; 
+  word-wrap: break-word;
   box-sizing: border-box;
 }
 
 .commentContent {
-  width: 100%; 
+  width: 100%;
   box-sizing: border-box;
   overflow-wrap: break-word;
   word-wrap: break-word;
@@ -807,6 +787,9 @@ input[type="file"] {
 }
 
 .hideShowLike {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: calc(0.7vh + 0.7vw);
   font-family: regularFont;
 }
@@ -814,7 +797,6 @@ input[type="file"] {
 .commentContentBox::-webkit-scrollbar {
   display: none;
 }
-
 
 .showCommentButton {
   font-family: regularFont;
@@ -827,7 +809,8 @@ input[type="file"] {
 
 .makeCommentBox {
   width: 100%;
-  box-sizing: border-box;  border-radius:  calc(1vh + 1vw) calc(1vh + 1vw) 0 0;
+  box-sizing: border-box;
+  border-radius: calc(1vh + 1vw) calc(1vh + 1vw) 0 0;
 }
 
 .commentInput {
@@ -838,13 +821,13 @@ input[type="file"] {
   resize: none;
   outline: none;
   padding: calc(1vh + 1vw);
-  border-radius:  calc(1vh + 1vw) calc(1vh + 1vw) 0 0;
+  border-radius: calc(1vh + 1vw) calc(1vh + 1vw) 0 0;
   background-color: rgba(255, 255, 255, 0.491);
   border: none;
 }
 
 .makeCommentButton {
-  border-radius:  0 0 calc(1vh + 1vw) calc(1vh + 1vw);
+  border-radius: 0 0 calc(1vh + 1vw) calc(1vh + 1vw);
   width: 100%;
   margin-bottom: calc(1vh + 1vw);
   background-color: rgb(0, 0, 0);
@@ -852,10 +835,10 @@ input[type="file"] {
   backdrop-filter: blur(calc(1vh + 1vw));
   font-size: calc(0.6vh + 0.6vw);
   padding: calc(0.5vh + 0.5vw) 0;
-  box-shadow: 
-  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
-  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
-  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+  box-shadow:
+    rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px,
+    rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px,
+    rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
 }
 
 .heart {
@@ -905,10 +888,10 @@ input[type="file"] {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 
-  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
-  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
-  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+  box-shadow:
+    rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px,
+    rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px,
+    rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
 }
 
 .profilePictureBox {
@@ -916,11 +899,12 @@ input[type="file"] {
   height: calc(8vh + 8vw);
   overflow: hidden;
   border-radius: 50%;
-  box-shadow: 
-  rgba(50, 50, 93, 0.25) 0px calc(20px + 1vh) calc(40px + 2vh) calc(-8px - 0.5vh), 
-  rgba(0, 0, 0, 0.3) 0px calc(12px + 1vh) calc(24px + 1.5vh) calc(-12px - 1vh);
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px calc(20px + 1vh) calc(40px + 2vh)
+      calc(-8px - 0.5vh),
+    rgba(0, 0, 0, 0.3) 0px calc(12px + 1vh) calc(24px + 1.5vh) calc(-12px - 1vh);
   border: solid calc(0.5vh + 0.5vw) rgba(255, 255, 255, 0.37);
-  backdrop-filter: blur(calc(1vh + 1vw)); 
+  backdrop-filter: blur(calc(1vh + 1vw));
 }
 
 .profilePicture {
@@ -937,9 +921,8 @@ input[type="file"] {
   color: white;
   background-color: rgba(255, 255, 255, 0.32);
   border-radius: calc(0.5vh + 0.5vw);
-  padding:  calc(0.3vh + 0.3vw) calc(0.5vh + 0.5vw);
+  padding: calc(0.3vh + 0.3vw) calc(0.5vh + 0.5vw);
   font-size: calc(0.8vh + 0.8vw);
-
 }
 
 .headerInputBox {
@@ -950,7 +933,7 @@ input[type="file"] {
   color: white;
   background-color: rgba(255, 255, 255, 0.32);
   border-radius: calc(0.5vh + 0.5vw);
-  padding:  calc(0.3vh + 0.3vw) calc(0.5vh + 0.5vw);
+  padding: calc(0.3vh + 0.3vw) calc(0.5vh + 0.5vw);
   font-size: calc(0.8vh + 0.8vw);
   border: none;
 }
@@ -965,7 +948,7 @@ input[type="file"] {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 calc(2vh + 2vw)    ;
+  padding: 0 calc(2vh + 2vw);
 }
 
 .followBut {
@@ -973,10 +956,10 @@ input[type="file"] {
   align-self: flex-start;
   padding: calc(0.5vh + 0.5vw) calc(1vh + 1vw);
   border-radius: calc(0.5vh + 0.5vw);
-  box-shadow: 
-  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
-  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
-  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+  box-shadow:
+    rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px,
+    rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px,
+    rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
   background-color: $backgroundColor;
   backdrop-filter: blur(calc(1vh + 1vw));
   font-size: calc(0.7vh + 0.7vw);
@@ -987,10 +970,10 @@ input[type="file"] {
   align-self: flex-start;
   padding: calc(0.5vh + 0.5vw) calc(1vh + 1vw);
   border-radius: calc(0.5vh + 0.5vw);
-  box-shadow: 
-  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
-  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
-  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+  box-shadow:
+    rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px,
+    rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px,
+    rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
   background-color: black;
   color: white;
   backdrop-filter: blur(calc(1vh + 1vw));
@@ -1001,10 +984,10 @@ input[type="file"] {
   margin-right: calc(1vh + 1vw);
   padding: calc(0.5vh + 0.5vw) calc(1vh + 1vw);
   border-radius: calc(0.5vh + 0.5vw);
-  box-shadow: 
-  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
-  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
-  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+  box-shadow:
+    rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px,
+    rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px,
+    rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
   background-color: $backgroundColor;
   backdrop-filter: blur(calc(1vh + 1vw));
   font-size: calc(0.7vh + 0.7vw);
@@ -1015,7 +998,8 @@ input[type="file"] {
   color: white;
 }
 
-.nav001, .nav002 {
+.nav001,
+.nav002 {
   display: flex;
   align-items: center;
 }
@@ -1024,10 +1008,10 @@ input[type="file"] {
   width: calc(2vh + 2vw);
   height: calc(2vh + 2vw);
   border-radius: calc(0.3vh + 0.3vw);
-  box-shadow: 
-  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
-  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
-  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+  box-shadow:
+    rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px,
+    rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px,
+    rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
 }
 
 .profileContainer {
@@ -1059,7 +1043,6 @@ input[type="file"] {
   background-size: cover;
   background-position: center;
   backdrop-filter: blur(calc(1vh + 1vw));
-
 }
 
 .InfoBackground {
@@ -1067,10 +1050,10 @@ input[type="file"] {
   border-radius: calc(1vh + 1vw);
   width: calc(9vh + 9vw);
   height: calc(9vh + 9vw);
-  box-shadow: 
-  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
-  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
-  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+  box-shadow:
+    rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px,
+    rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px,
+    rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
   padding: calc(1vh + 1vw);
   box-sizing: border-box;
   display: flex;
@@ -1082,7 +1065,7 @@ input[type="file"] {
 }
 
 .informationBox {
-  flex: 1; 
+  flex: 1;
   box-sizing: border-box;
   @include flexBox();
   font-family: bold;
@@ -1099,7 +1082,6 @@ input[type="file"] {
   font-family: bold;
   font-size: calc(1.3vh + 1.3vw);
   box-sizing: border-box;
-
 }
 
 .myPostsBox {
@@ -1122,7 +1104,7 @@ input[type="file"] {
 }
 
 .followerContain {
-  display: flex; 
+  display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
@@ -1134,8 +1116,8 @@ input[type="file"] {
 
 .followersBox {
   flex-grow: 1;
-  overflow-y: auto; 
-  width: 100%; 
+  overflow-y: auto;
+  width: 100%;
   height: 100%;
   box-sizing: border-box;
   scrollbar-width: none;
@@ -1143,7 +1125,6 @@ input[type="file"] {
   flex-direction: column;
   align-items: center;
 }
-
 
 .followersBox::-webkit-scrollbar {
   display: none;
@@ -1154,10 +1135,10 @@ input[type="file"] {
   height: calc(2vh + 2vw);
   margin-right: calc(0.3vh + 0.3vw);
   border-radius: 50%;
-  box-shadow: 
-  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
-  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
-  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+  box-shadow:
+    rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px,
+    rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px,
+    rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
 }
 
 .followTitle {
@@ -1171,18 +1152,17 @@ input[type="file"] {
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  padding:  calc(0.8vh + 0.8vw);
+  padding: calc(0.8vh + 0.8vw);
   margin: calc(0.5vh + 0.5vw) 0;
   background-color: $backgroundColor;
   backdrop-filter: blur(calc(1vh + 1vw));
   width: 90%;
   border-radius: calc(0.5vh + 0.5vw);
-  box-shadow: 
-  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
-  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
-  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
-  box-sizing: border-box; 
-
+  box-shadow:
+    rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px,
+    rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px,
+    rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+  box-sizing: border-box;
 }
 
 .followerHeader {
@@ -1191,17 +1171,15 @@ input[type="file"] {
   width: 100%;
   border-radius: calc(0.5vh + 0.5vw);
   text-align: center;
-  box-shadow: 
-  rgba(0, 0, 0, 0.087) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
-  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
-  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+  box-shadow:
+    rgba(0, 0, 0, 0.087) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px,
+    rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px,
+    rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
   color: white;
   background-color: black;
   font-size: calc(0.7vh + 0.7vw);
   box-sizing: border-box;
-
 }
-
 
 .friendsBoxx {
   display: flex;
@@ -1212,5 +1190,5 @@ input[type="file"] {
 }
 
 .foll {
-  width: 40%
+  width: 40%;
 }
