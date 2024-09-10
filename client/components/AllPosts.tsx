@@ -1,4 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import request from 'superagent'
 import { PostAndUser } from '../../models/posts'
 import { useState } from 'react'
@@ -11,9 +12,15 @@ import { useUserByAuthId } from '../hooks/useUsers'
 import LikesCounter from './LikeButtonAndCounter'
 
 const AllPosts = ({ showFriendsPosts }: { showFriendsPosts: boolean }) => {
-  const [commentVisibility, setCommentVisibility] = useState<{
-    [key: number]: boolean
-  }>({})
+  const [commentVisibility, setCommentVisibility] = useState<{ [key: number]: boolean }>({});
+
+  useEffect(() => {
+    const storedVisibility = localStorage.getItem('commentVisibility');
+    if (storedVisibility) {
+      setCommentVisibility(JSON.parse(storedVisibility));
+    }
+  }, []);
+
   const [likedPosts, setLikedPosts] = useState<{ [key: number]: boolean }>({})
   const { id } = useParams<{ id: string }>()
   const postID = Number(id)
@@ -57,16 +64,23 @@ const AllPosts = ({ showFriendsPosts }: { showFriendsPosts: boolean }) => {
 
   const filteredPosts = showFriendsPosts
     ? posts?.filter((post) =>
-        followedUsers?.some((followed) => followed.id === post.user_id),
-      )
+      followedUsers?.some((followed) => followed.id === post.user_id),
+    )
     : posts
 
   const toggleComments = (postId: number) => {
-    setCommentVisibility((prev) => ({
-      ...prev,
-      [postId]: !prev[postId],
-    }))
-  }
+    setCommentVisibility((prev) => {
+      const newVisibility = !prev[postId];
+      localStorage.setItem('commentVisibility', JSON.stringify({
+        ...prev,
+        [postId]: newVisibility
+      }));
+      return {
+        ...prev,
+        [postId]: newVisibility
+      };
+    });
+  };
 
   const handleLikeToggle = async (postId: number, isAlreadyLiked: boolean) => {
     const token = await getAccessTokenSilently()

@@ -188,6 +188,7 @@ export async function getAllPostsWithComments(db = connection): Promise<
   (Post & {
     username: string
     profile_picture_url: string
+    auth_id: string
     comments: Array<{
       id: number
       content: string
@@ -197,74 +198,86 @@ export async function getAllPostsWithComments(db = connection): Promise<
     }>
   })[]
 > {
-  const postsWithComments = await db('posts')
-    .join('users', 'posts.user_id', 'users.id')
-    .leftJoin('comments', 'posts.id', 'comments.post_id')
-    .leftJoin('users as comment_users', 'comments.user_id', 'comment_users.id')
-    .select(
-      'posts.id as post_id',
-      'posts.user_id',
-      'posts.content as post_content',
-      'posts.image_url',
-      'posts.file_url',
-      'posts.likes',
-      'posts.created_at as post_created_at',
-      'users.username as post_username',
-      'users.profile_picture_url as post_profile_picture_url',
+  try {
+    const postsWithComments = await db('posts')
+      .join('users', 'posts.user_id', 'users.id')
+      .leftJoin('comments', 'posts.id', 'comments.post_id')
+      .leftJoin(
+        'users as comment_users',
+        'comments.user_id',
+        'comment_users.id',
+      )
+      .select(
+        'posts.id as post_id',
+        'posts.user_id',
+        'posts.content as post_content',
+        'posts.image_url',
+        'posts.file_url',
+        'posts.likes',
+        'posts.created_at as post_created_at',
+        'users.username as post_username',
+        'users.auth_id as post_auth_id',
+        'users.profile_picture_url as post_profile_picture_url',
 
-      'comments.id as comment_id',
-      'comments.content as comment_content',
-      'comments.created_at as comment_created_at',
-      'comment_users.username as comment_username',
-      'comment_users.profile_picture_url as comment_profile_picture_url',
-    )
-    .orderBy('posts.created_at', 'desc')
+        'comments.id as comment_id',
+        'comments.content as comment_content',
+        'comments.created_at as comment_created_at',
+        'comment_users.username as comment_username',
+        'comment_users.profile_picture_url as comment_profile_picture_url',
+      )
+      .orderBy('posts.created_at', 'desc')
 
-  const postsMap: Record<
-    number,
-    Post & {
-      username: string
-      profile_picture_url: string
-      comments: Array<{
-        id: number
-        content: string
-        created_at: Date
+    const postsMap: Record<
+      number,
+      Post & {
         username: string
         profile_picture_url: string
-      }>
-    }
-  > = {}
-
-  postsWithComments.forEach((row) => {
-    const postId = row.post_id
-
-    if (!postsMap[postId]) {
-      postsMap[postId] = {
-        id: postId,
-        user_id: row.user_id,
-        content: row.post_content,
-        image_url: row.image_url,
-        file_url: row.file_url,
-        likes: row.likes,
-        created_at: row.post_created_at,
-        username: row.post_username,
-        profile_picture_url: row.post_profile_picture_url,
-        comments: [],
+        auth_id: string
+        comments: Array<{
+          id: number
+          content: string
+          created_at: Date
+          username: string
+          profile_picture_url: string
+        }>
       }
-    }
+    > = {}
 
-    if (row.comment_id) {
-      postsMap[postId].comments.push({
-        id: row.comment_id,
-        content: row.comment_content,
-        created_at: row.comment_created_at,
-        username: row.comment_username,
-        profile_picture_url: row.comment_profile_picture_url,
-      })
-    }
-  })
+    postsWithComments.forEach((row) => {
+      const postId = row.post_id
 
-  return Object.values(postsMap)
+      if (!postsMap[postId]) {
+        postsMap[postId] = {
+          id: postId,
+          user_id: row.user_id,
+          content: row.post_content,
+          image_url: row.image_url,
+          file_url: row.file_url,
+          likes: row.likes,
+          created_at: row.post_created_at,
+          username: row.post_username,
+          profile_picture_url: row.post_profile_picture_url,
+          auth_id: row.post_auth_id,
+          comments: [],
+        }
+      }
+
+      if (row.comment_id) {
+        postsMap[postId].comments.push({
+          id: row.comment_id,
+          content: row.comment_content,
+          created_at: row.comment_created_at,
+          username: row.comment_username,
+          profile_picture_url: row.comment_profile_picture_url,
+        })
+      }
+    })
+
+    return Object.values(postsMap)
+  } catch (error) {
+    console.error('Error fetching posts with comments:', error)
+    throw new Error('Failed to fetch posts with comments.')
+  }
 }
 
 // ╔════════════════════╗

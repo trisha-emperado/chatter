@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useAddComment } from '../hooks/useComments'
 import { CommentData } from '../../models/comments'
 
+
 const emptyCommentData: Omit<CommentData, 'user_id' | 'post_id'> = {
   content: '',
 }
@@ -15,6 +16,7 @@ export default function CommentForm({ userId, postId }: CommentFormProps) {
   const { content } = newComment
   const { mutate: addComment, isPending, isError } = useAddComment()
 
+
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = e.target
     setNewComment({
@@ -27,11 +29,18 @@ export default function CommentForm({ userId, postId }: CommentFormProps) {
     e.preventDefault()
 
     try {
+
+      const scrollPosition = window.scrollY
+
       await addComment({
         ...newComment,
         user_id: userId,
         post_id: postId,
       })
+
+      window.location.reload()
+      window.scrollTo(0, scrollPosition)
+
       setNewComment(emptyCommentData)
     } catch (error) {
       console.error('Error creating comment:', error)
