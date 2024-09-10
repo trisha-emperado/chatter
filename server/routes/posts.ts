@@ -114,6 +114,7 @@ router.post('/unlike', checkJwt, async (req, res) => {
     //   return res.status(400).json({ message: 'User has not liked this post' })
     // }
     await db.unlikePost(userId, postId)
+    res.status(200).json({ message: 'Post liked' })
   } catch (error) {
     console.error('Error unliking post:', error)
     res.status(500).json({ message: 'Something went wrong' })

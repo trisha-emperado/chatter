@@ -96,7 +96,7 @@ export async function likePost(
   token: string,
 ): Promise<void> {
   await request
-    .post(`${rootURL}/posts/${postId}/like`)
+    .post(`${rootURL}/posts/like`)
     .set('Authorization', `Bearer ${token}`)
     .send({ postId, userId, token })
 }
