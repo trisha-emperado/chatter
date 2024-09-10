@@ -133,7 +133,7 @@ export async function addComment(newComment: CommentData, token: string) {
 export async function getFollowedUsers(followerId: string) {
   try {
     const res = await request.get(
-      rootURL + `/followers/following/${followerId}`,
+      `${rootURL}/followers/following/${followerId}`,
     )
     return res.body
   } catch (error) {
@@ -166,4 +166,3 @@ export async function getCommentsByPostId(
   const res = await request.get(`${rootURL}/post/${postId}`)
   return res.body as DetailedComment[]
 }
-

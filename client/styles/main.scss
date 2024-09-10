@@ -201,11 +201,7 @@ $backgroundColor:  rgba(255, 255, 255, 0.642);
   width: 100%;
   border-radius: calc(1vh + 1vw);
   padding: calc(1vh + 1vw);
-  box-shadow: 
-  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
-  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
-  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
-  background-color: rgba(255, 255, 255, 0.445);
+  background-color: rgb(255, 255, 255);
   backdrop-filter: blur(calc(1vh + 1vw));
 }
 
@@ -217,6 +213,11 @@ $backgroundColor:  rgba(255, 255, 255, 0.642);
   background-size: cover;
   background-position: center;
   box-sizing: border-box;
+  overflow-x: hidden;
+  box-shadow: 
+  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
+  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
+  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
   border-radius: calc(1vh + 1vw);
 
 }
@@ -607,6 +608,7 @@ input[type="file"] {
   border-radius: calc(1vh + 1vw);
   padding: calc(0.5vh + 0.5vw) calc(1vh + 1vw);
   width: calc(8vh + 8vw);
+  font-size: calc(0.8vh + 0.8vw);
 }
 
 .textBox {
@@ -614,6 +616,11 @@ input[type="file"] {
   font-size: calc(0.8vh + 0.8vw);
   padding:  calc(1vh + 1vw) 0;
   color: rgb(0, 102, 255);
+}
+
+.textInput, .not {
+  font-size: calc(0.8vh + 0.8vw);
+
 }
 
 .editH1 {
@@ -780,15 +787,15 @@ input[type="file"] {
 }
 
 .contentxBox {
-  flex: 1; /* Allows the box to grow and fill available space */
+  flex: 1; 
   display: flex;
   max-width: 100%;
   width: 100%;
   overflow: hidden;
   flex-direction: column;
-  overflow-wrap: break-word; /* Breaks long words */
-  word-wrap: break-word; /* Ensures long words break correctly */
-  box-sizing: border-box; /* Includes padding and border in width calculation */
+  overflow-wrap: break-word;
+  word-wrap: break-word; 
+  box-sizing: border-box;
 }
 
 .commentContent {
@@ -1145,7 +1152,12 @@ input[type="file"] {
 .followImage {
   width: calc(2vh + 2vw);
   height: calc(2vh + 2vw);
+  margin-right: calc(0.3vh + 0.3vw);
   border-radius: 50%;
+  box-shadow: 
+  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
+  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
+  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
 }
 
 .followTitle {
@@ -1157,7 +1169,7 @@ input[type="file"] {
 .following {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   padding:  calc(0.8vh + 0.8vw);
   margin: calc(0.5vh + 0.5vw) 0;

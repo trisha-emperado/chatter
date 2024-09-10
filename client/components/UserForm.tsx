@@ -121,7 +121,7 @@ function UserForm({ userID, isEditing }: UserFormProps) {
                     type="number"
                     name="age"
                     value={newUser.age}
-                    className="numberInput"
+                    className="textInput"
                     onChange={handleChange}
                   />
                 </div>

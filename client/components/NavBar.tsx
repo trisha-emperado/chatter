@@ -79,7 +79,7 @@ function NavBar() {
                   style={getUserFormStyles()}
                   className="my-profile-btn btn"
                 >
-                  My details
+                  Edit My details
                 </button>
               </Link>
             </div>
