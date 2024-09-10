@@ -3,20 +3,19 @@ import request from 'superagent'
 import { PostAndUser } from '../../models/posts'
 import { useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { usePostDetails, useToggleLike, useDeletePost } from '../hooks/usePosts'
+import { useToggleLike, useDeletePost } from '../hooks/usePosts'
 import { useAuth0 } from '@auth0/auth0-react'
 import CommentForm from './CommentForm'
 import { useLikesByPostId } from '../hooks/useLikes'
 import { useUserByAuthId } from '../hooks/useUsers'
 
-const AllPosts = () => {
-  const [displayComments, setDisplayComments] = useState<Set<number>>(new Set())
-  const { id } = useParams<{ id: string }>()
-  const postID = Number(id)
+const AllPosts = ({ showFriendsPosts }: { showFriendsPosts: boolean }) => {
   const [commentVisibility, setCommentVisibility] = useState<{
     [key: number]: boolean
   }>({})
   const [likedPosts, setLikedPosts] = useState<{ [key: number]: boolean }>({})
+  const { id } = useParams<{ id: string }>()
+  const postID = Number(id)
   const { likePost, unlikePost, isLiking, isUnliking } = useToggleLike(postID)
   const deleteMutation = useDeletePost()
   const navigate = useNavigate()
@@ -37,8 +36,27 @@ const AllPosts = () => {
     },
   })
 
+  const {
+    data: followedUsers,
+    isLoading: isLoadingFollowedUsers,
+    isError: isErrorFollowedUsers,
+  } = useQuery({
+    queryKey: ['followedUsers', authUser?.sub],
+    queryFn: async () => {
+      if (!authUser?.sub) return []
+      const response = await request.get(`/api/v1/following/${authUser.sub}`)
+      return response.body as { id: number }[]
+    },
+  })
+
   if (isPending) return <div>Loading posts</div>
   if (isError) return <div>Error loading posts</div>
+
+  const filteredPosts = showFriendsPosts
+    ? posts?.filter((post) =>
+        followedUsers?.some((followed) => followed.id === post.user_id),
+      )
+    : posts
 
   const toggleComments = (postId: number) => {
     setCommentVisibility((prev) => ({
@@ -80,7 +98,7 @@ const AllPosts = () => {
 
   return (
     <div className="postsComp">
-      {posts?.map((post: PostAndUser) => (
+      {filteredPosts?.map((post: PostAndUser) => (
         <div key={post.id} className="postsContainer">
           <div className="postsCard">
             <div className="postBackground">
