@@ -1,21 +1,58 @@
 import { useState } from 'react'
-import { useAddComment } from '../hooks/useComments'
 import { CommentData } from '../../models/comments'
-
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import request from 'superagent'
+import { useAuth0 } from '@auth0/auth0-react'
+import { useEffect } from 'react'
 
 const emptyCommentData: Omit<CommentData, 'user_id' | 'post_id'> = {
   content: '',
 }
+
 interface CommentFormProps {
   userId: number
   postId: number
+  onCommentAdded: () => void
 }
 
-export default function CommentForm({ userId, postId }: CommentFormProps) {
+export default function CommentForm({
+  userId,
+  postId,
+  onCommentAdded,
+}: CommentFormProps) {
   const [newComment, setNewComment] = useState(emptyCommentData)
   const { content } = newComment
-  const { mutate: addComment, isPending, isError } = useAddComment()
+  const { getAccessTokenSilently } = useAuth0()
 
+  const queryClient = useQueryClient()
+
+  const { isError, isPending, refetch } = useQuery({
+    queryKey: ['comments', postId],
+    queryFn: async () => {
+      const response = await request.get(`/api/v1/comments/post/${postId}`)
+      return response.body
+    },
+  })
+
+  const addCommentMutation = useMutation({
+    mutationFn: async (newComment: CommentData) => {
+      const token = await getAccessTokenSilently()
+      await request
+        .post(`/api/v1/comments`)
+        .set('Authorization', `Bearer ${token}`)
+        .send(newComment)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['comments', postId] })
+      onCommentAdded()
+    },
+  })
+
+  useEffect(() => {
+    if (addCommentMutation.isSuccess) {
+      refetch()
+    }
+  }, [addCommentMutation.isSuccess, refetch])
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = e.target
@@ -29,18 +66,15 @@ export default function CommentForm({ userId, postId }: CommentFormProps) {
     e.preventDefault()
 
     try {
-
       const scrollPosition = window.scrollY
 
-      await addComment({
+      await addCommentMutation.mutate({
         ...newComment,
         user_id: userId,
         post_id: postId,
       })
 
-      window.location.reload()
       window.scrollTo(0, scrollPosition)
-
       setNewComment(emptyCommentData)
     } catch (error) {
       console.error('Error creating comment:', error)

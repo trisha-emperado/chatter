@@ -40,7 +40,7 @@ const LikesCounter = ({ handleLikeToggle, postId, likedPosts }) => {
           alt="heart"
         />
       )}
-      <p>{likes?.length}</p>
+      <p className="like">{likes?.length}</p>
     </button>
   )
 }

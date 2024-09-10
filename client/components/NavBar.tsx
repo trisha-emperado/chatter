@@ -25,15 +25,6 @@ function NavBar() {
     }
   }
 
-  const getUserFormStyles = () => {
-    switch (location.pathname) {
-      case '/userForm':
-        return { backgroundColor: 'black', color: 'white' }
-      default:
-        return { backgroundColor: 'defaultColor', color: 'black' }
-    }
-  }
-
   const getFriendsStyles = () => {
     switch (location.pathname) {
       case '/friends':

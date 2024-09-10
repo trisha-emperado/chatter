@@ -87,7 +87,7 @@ export default function PostForm() {
             <div className="images">
               <img
                 src="https://pixsector.com/cache/517d8be6/av5c8336583e291842624.png"
-                alt="image icon"
+                alt="img icon"
                 className="imgIcon"
               />
             </div>

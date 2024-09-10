@@ -1,5 +1,4 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useEffect } from 'react'
 import request from 'superagent'
 import { PostAndUser } from '../../models/posts'
 import { useState } from 'react'
@@ -7,28 +6,28 @@ import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useToggleLike, useDeletePost } from '../hooks/usePosts'
 import { useAuth0 } from '@auth0/auth0-react'
 import CommentForm from './CommentForm'
-import { useLikesByPostId } from '../hooks/useLikes'
 import { useUserByAuthId } from '../hooks/useUsers'
 import LikesCounter from './LikeButtonAndCounter'
 
 const AllPosts = ({ showFriendsPosts }: { showFriendsPosts: boolean }) => {
-  const [commentVisibility, setCommentVisibility] = useState<{ [key: number]: boolean }>({});
+  const [commentVisibility, setCommentVisibility] = useState<{
+    [key: number]: boolean
+  }>({})
 
-  useEffect(() => {
-    const storedVisibility = localStorage.getItem('commentVisibility');
-    if (storedVisibility) {
-      setCommentVisibility(JSON.parse(storedVisibility));
-    }
-  }, []);
+  // useEffect(() => {
+  //   const storedVisibility = localStorage.getItem('commentVisibility')
+  //   if (storedVisibility) {
+  //     setCommentVisibility(JSON.parse(storedVisibility))
+  //   }
+  // }, [])
 
   const [likedPosts, setLikedPosts] = useState<{ [key: number]: boolean }>({})
   const { id } = useParams<{ id: string }>()
   const postID = Number(id)
-  const { likePost, unlikePost, isLiking, isUnliking } = useToggleLike(postID)
+  const { likePost, unlikePost } = useToggleLike(postID)
   const deleteMutation = useDeletePost()
   const navigate = useNavigate()
   const { user: authUser, getAccessTokenSilently, isAuthenticated } = useAuth0()
-  const { data: likes } = useLikesByPostId(postID)
   const { data: userData } = useUserByAuthId(authUser?.sub || '')
   const queryClient = useQueryClient()
 
@@ -37,18 +36,14 @@ const AllPosts = ({ showFriendsPosts }: { showFriendsPosts: boolean }) => {
     isPending,
     isError,
   } = useQuery({
-    queryKey: ['posts'],
+    queryKey: ['posts', 'comments'],
     queryFn: async () => {
       const response = await request.get('/api/v1/posts')
       return response.body as PostAndUser[]
     },
   })
 
-  const {
-    data: followedUsers,
-    isLoading: isLoadingFollowedUsers,
-    isError: isErrorFollowedUsers,
-  } = useQuery({
+  const { data: followedUsers } = useQuery({
     queryKey: ['followedUsers', authUser?.sub],
     queryFn: async () => {
       if (!authUser?.sub) return []
@@ -64,23 +59,30 @@ const AllPosts = ({ showFriendsPosts }: { showFriendsPosts: boolean }) => {
 
   const filteredPosts = showFriendsPosts
     ? posts?.filter((post) =>
-      followedUsers?.some((followed) => followed.id === post.user_id),
-    )
+        followedUsers?.some((followed) => followed.id === post.user_id),
+      )
     : posts
 
   const toggleComments = (postId: number) => {
     setCommentVisibility((prev) => {
-      const newVisibility = !prev[postId];
-      localStorage.setItem('commentVisibility', JSON.stringify({
-        ...prev,
-        [postId]: newVisibility
-      }));
+      const newVisibility = !prev[postId]
+      localStorage.setItem(
+        'commentVisibility',
+        JSON.stringify({
+          ...prev,
+          [postId]: newVisibility,
+        }),
+      )
       return {
         ...prev,
-        [postId]: newVisibility
-      };
-    });
-  };
+        [postId]: newVisibility,
+      }
+    })
+  }
+
+  const handleCommentAdded = () => {
+    queryClient.invalidateQueries({ queryKey: ['posts', 'comments'] })
+  }
 
   const handleLikeToggle = async (postId: number, isAlreadyLiked: boolean) => {
     const token = await getAccessTokenSilently()
@@ -146,18 +148,30 @@ const AllPosts = ({ showFriendsPosts }: { showFriendsPosts: boolean }) => {
                   />
                 </p>
                 <button
-                  className="hideShowLike"
+                  className="hideShowLike showC"
                   onClick={() => toggleComments(post.id)}
                 >
                   {commentVisibility[post.id]
                     ? 'Hide Comments'
                     : 'Show Comments'}
                 </button>
+                {authUser && authUser.sub === post.auth_id && (
+                  <button
+                    className="postDetail deleteB"
+                    onClick={() => handleDeletePost(post.id)}
+                  >
+                    Delete
+                  </button>
+                )}
               </div>
               {commentVisibility[post.id] && (
                 <>
                   {isAuthenticated && (
-                    <CommentForm postId={post.id} userId={userData?.id ?? 0} />
+                    <CommentForm
+                      onCommentAdded={handleCommentAdded}
+                      postId={post.id}
+                      userId={userData?.id ?? 0}
+                    />
                   )}
                   {post.comments.map((comment) => (
                     <div key={comment.id} className="comment">
@@ -184,11 +198,6 @@ const AllPosts = ({ showFriendsPosts }: { showFriendsPosts: boolean }) => {
                     </div>
                   ))}
                 </>
-              )}
-              {authUser && authUser.sub === post.auth_id && (
-                <button onClick={() => handleDeletePost(post.id)}>
-                  Delete
-                </button>
               )}
             </div>
           </div>
