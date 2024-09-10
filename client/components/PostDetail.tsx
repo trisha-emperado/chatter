@@ -24,8 +24,8 @@ export default function PostDetails() {
 
   const handleLikeToggle = async () => {
     const token = await getAccessTokenSilently()
-    if (hasLiked) {
-      unlikePost()
+    if (checkIfLiked()) {
+      unlikePost({ postId: postID, userId: userData?.id, token })
       setHasLiked(false)
     } else {
       likePost({ postId: postID, userId: userData?.id, token })
@@ -34,10 +34,9 @@ export default function PostDetails() {
   }
 
   const checkIfLiked = () => {
-    if (hasLiked && likes?.find((like) => like.user_id === userData?.id)) {
+    if (hasLiked || likes?.find((like) => like.user_id === userData?.id)) {
       return true
     }
-
     return false
   }
 

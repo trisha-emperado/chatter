@@ -100,8 +100,15 @@ export async function likePost(
     .send({ postId, userId, token })
 }
 
-export async function unlikePost(postId: number): Promise<void> {
-  await request.post(`${rootURL}/posts/${postId}/unlike`)
+export async function unlikePost(
+  postId: number,
+  userId: number,
+  token: string,
+): Promise<void> {
+  await request
+    .post(`${rootURL}/posts/unlike`)
+    .set('Authorization', `Bearer ${token}`)
+    .send({ postId, userId, token })
 }
 
 export async function deletePost(id: number, token: string) {

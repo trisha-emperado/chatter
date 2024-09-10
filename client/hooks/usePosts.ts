@@ -48,14 +48,15 @@ export function useToggleLike(postId: number) {
     mutationFn: (data: LikeMutation) =>
       api.likePost(data.postId, data.userId, data.token),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['posts', postId] })
+      queryClient.invalidateQueries({ queryKey: ['likes', postId] })
     },
   })
 
   const unlikeMutation = useMutation({
-    mutationFn: () => api.unlikePost(postId),
+    mutationFn: (data: LikeMutation) =>
+      api.unlikePost(data.postId, data.userId, data.token),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['posts', postId] })
+      queryClient.invalidateQueries({ queryKey: ['likes', postId] })
     },
   })
 
