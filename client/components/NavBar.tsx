@@ -91,14 +91,6 @@ function NavBar() {
                   Friends
                 </button>
               </Link>
-              <Link to={`/userForm`}>
-                <button
-                  style={getUserFormStyles()}
-                  className="my-profile-btn btn"
-                >
-                  Edit My details
-                </button>
-              </Link>
             </div>
             <div className="signoutBox">
               <button className="sign-out" onClick={handleSignOut}>
