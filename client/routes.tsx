@@ -4,7 +4,6 @@ import UserForm from './components/UserForm.tsx'
 import Layout from './components/Layout.tsx'
 import Profile from './components/Profile.tsx'
 import Feed from './components/Feed.tsx'
-import PostDetails from './components/PostDetail.tsx'
 import PostForm from './components/PostForm.tsx'
 import SignInPage from './components/SignInPage.tsx'
 import Home from './components/Home.tsx'
@@ -21,7 +20,6 @@ const routes = createRoutesFromElements(
     <Route path="/Home" element={<Home />} />
     <Route path="/user/:id" element={<Profile />} />
     <Route path="/feed" element={<Feed />} />
-    <Route path="/posts/:id" element={<PostDetails />} />
     <Route path="/postForm" element={<PostForm />} />
     <Route path="/signInPage" element={<SignInPage />} />
     <Route path="/following" element={<Following />} />
