@@ -7,9 +7,14 @@ import { useDeleteUser } from '../hooks/useUsers'
 import { useNavigate } from 'react-router-dom'
 import NavBar from './NavBar'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import request, { post } from 'superagent'
+import { post } from 'superagent'
+import request from 'superagent'
 import { PostAndUser } from '../../models/posts'
 import { Link } from 'react-router-dom'
+import { usePostDetails, useToggleLike, useDeletePost } from '../hooks/usePosts'
+import CommentForm from './CommentForm'
+import { useLikesByPostId } from '../hooks/useLikes'
+import { useUserByAuthId } from '../hooks/useUsers'
 
 function Profile() {
   const { id } = useParams()
@@ -20,7 +25,14 @@ function Profile() {
   const [inputDisplay, setInputDisplay] = useState(false)
   const [displayComments, setDisplayComments] = useState<Set<number>>(new Set())
   const [activeSection, setActiveSection] = useState('aboutMe')
-
+  const { idx } = useParams<{ id: string }>()
+  const postID = Number(id)
+  const [commentVisibility, setCommentVisibility] = useState<{
+    [key: number]: boolean
+  }>({})
+  const [likedPosts, setLikedPosts] = useState<{ [key: number]: boolean }>({})
+  const { likePost, unlikePost, isLiking, isUnliking } = useToggleLike(postID)
+  const { data: likes } = useLikesByPostId(postID)
   const {
     user: authUser,
     getAccessTokenSilently,
@@ -28,18 +40,7 @@ function Profile() {
     isAuthenticated,
     isLoading: isAuthLoading,
   } = useAuth0()
-
-  const toggleComments = (postId: number) => {
-    setDisplayComments((prev) => {
-      const newDisplayComments = new Set(prev)
-      if (newDisplayComments.has(postId)) {
-        newDisplayComments.delete(postId)
-      } else {
-        newDisplayComments.add(postId)
-      }
-      return newDisplayComments
-    })
-  }
+  const { data: userData } = useUserByAuthId(authUser?.sub || '')
 
   const deleteMutation = useDeleteUser()
   const queryClient = useQueryClient()
@@ -68,6 +69,44 @@ function Profile() {
       return []
     },
   })
+
+  const toggleComments = (postId: number) => {
+    setCommentVisibility((prev) => ({
+      ...prev,
+      [postId]: !prev[postId],
+    }))
+  }
+
+  const handleLikeToggle = async (postId: number) => {
+    const token = await getAccessTokenSilently()
+    if (likedPosts[postId]) {
+      unlikePost({ postId, userId: userData?.id ?? 0, token })
+      setLikedPosts((prev) => ({ ...prev, [postId]: false }))
+      queryClient.invalidateQueries({ queryKey: ['likes'] })
+    } else {
+      likePost({ postId, userId: userData?.id ?? 0, token })
+      setLikedPosts((prev) => ({ ...prev, [postId]: true }))
+    }
+  }
+
+  const checkIfLiked = (postId: number) => {
+    return (
+      likedPosts[postId] ||
+      likes?.some(
+        (like) => like.post_id === postId && like.user_id === userData?.id,
+      )
+    )
+  }
+
+  const handleDeletePost = async (postId: number) => {
+    try {
+      const token = await getAccessTokenSilently()
+      deleteMutation.mutate({ id: postId, token })
+      navigate('/feed')
+    } catch (error) {
+      console.error('Error deleting post:', error)
+    }
+  }
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -259,29 +298,53 @@ function Profile() {
                   </div>
                 </div>
                 <div className="profileNavs">
-                  <button
-                    className={`aboutMeButton PN ${activeSection === 'aboutMe' ? 'active' : ''}`}
-                    onClick={handleAboutMeClick}
-                  >
-                    About Me
-                  </button>
-                  <button
-                    className={`myPostsButton PN ${activeSection === 'myPosts' ? 'active' : ''}`}
-                    onClick={handleMyPostsClick}
-                  >
-                    My Posts
-                  </button>
-                  <a
-                    href={user.github_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <img
-                      className="githubLogo"
-                      src="https://w7.pngwing.com/pngs/646/324/png-transparent-github-computer-icons-github-logo-monochrome-head-thumbnail.png"
-                      alt="github logo"
-                    />
-                  </a>
+                  <div className="nav001">
+                    {authUser && authUser.sub === user.auth_id ? (
+                      <>
+                        {/* <button onClick={handleEditProfile}>Edit</button> */}
+                        {/* <button
+                        className="deleteUserButton"
+                        onClick={handleDeleteAccount}
+                      >
+                        Delete Account
+                      </button> */}
+                      </>
+                    ) : isFollowing ? (
+                      <button className="unfollowBut" onClick={handleUnfollow}>
+                        Following
+                      </button>
+                    ) : (
+                      <button className="followBut" onClick={handleFollow}>
+                        Follow
+                      </button>
+                    )}
+                  </div>
+                  <div className="nav002">
+                    {' '}
+                    <button
+                      className={`aboutMeButton PN ${activeSection === 'aboutMe' ? 'active' : ''}`}
+                      onClick={handleAboutMeClick}
+                    >
+                      About Me
+                    </button>
+                    <button
+                      className={`myPostsButton PN ${activeSection === 'myPosts' ? 'active' : ''}`}
+                      onClick={handleMyPostsClick}
+                    >
+                      My Posts
+                    </button>
+                    <a
+                      href={user.github_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <img
+                        className="githubLogo"
+                        src="https://w7.pngwing.com/pngs/646/324/png-transparent-github-computer-icons-github-logo-monochrome-head-thumbnail.png"
+                        alt="github logo"
+                      />
+                    </a>
+                  </div>
                 </div>
 
                 {/* Conditionally render the active section */}
@@ -290,54 +353,100 @@ function Profile() {
                     {data?.map((post: PostAndUser) => (
                       <div key={post.id} className="postsContainer">
                         <div className="postsCard">
-                          <div className="postNav">
-                            <img
-                              src={user.profile_picture_url}
-                              alt="profile pic"
-                              className="postUserImg"
-                            />
-                            <Link to={`/user/${post.user_id}`}>
-                              <p className="postUsername">{user.name}</p>
-                            </Link>
-                          </div>
-                          <div className="postContentBox">
-                            <p>{post.content}</p>
-                          </div>
-                          <div className="postDetailsBox">
-                            <p className="postDetail">
-                              {new Date(post.created_at).toLocaleDateString()}
-                            </p>
-                            {post.image_url && (
-                              <img src={post.image_url} alt="Post" />
-                            )}
-                            <p className="postDetail">Likes: {post.likes}</p>
-                            <button
-                              className="showCommentButton"
-                              onClick={() => toggleComments(post.id)}
-                            >
-                              {displayComments.has(post.id)
-                                ? 'Hide Comments'
-                                : 'Show Comments'}
-                            </button>
-                          </div>
-                          {displayComments.has(post.id) &&
-                            post.comments.map((comment) => (
-                              <div key={comment.id} className="comment">
-                                <div className="commentNav">
-                                  <img
-                                    src={comment.profile_picture_url}
-                                    alt="commenter pic"
-                                    className="commentUserImg"
+                          <div className="postBackground">
+                            <div className="postNav">
+                              <img
+                                src={post.profile_picture_url}
+                                alt="profile pic"
+                                className="postUserImg"
+                              />
+                              <Link to={`/user/${post.user_id}`}>
+                                <p className="postUsername">{post.username}</p>
+                              </Link>
+                            </div>
+                            <div className="postContentBox">
+                              <p>{post.content}</p>
+                            </div>
+                            <div className="postDetailsBox">
+                              <p className="postDetail hideShowLike">
+                                {new Date(post.created_at).toLocaleDateString()}
+                              </p>
+                              {post.image_url && (
+                                <img src={post.image_url} alt="Post" />
+                              )}
+                              <p className="postDetail">
+                                <button
+                                  className="hideShowLike"
+                                  onClick={() => handleLikeToggle(post.id)}
+                                  disabled={isLiking || isUnliking}
+                                >
+                                  {checkIfLiked(post.id) ? (
+                                    <img
+                                      className="heart"
+                                      src="https://www.freeiconspng.com/thumbs/heart-icon/valentine-heart-icon-6.png"
+                                      alt="heart"
+                                    />
+                                  ) : (
+                                    <img
+                                      className="heart"
+                                      src="https://freesvg.org/img/heart-15.png"
+                                      alt="heart"
+                                    />
+                                  )}
+                                  {post.likes}
+                                </button>
+                              </p>
+                              <button
+                                className="hideShowLike"
+                                onClick={() => toggleComments(post.id)}
+                              >
+                                {commentVisibility[post.id]
+                                  ? 'Hide Comments'
+                                  : 'Show Comments'}
+                              </button>
+                            </div>
+                            {commentVisibility[post.id] && (
+                              <>
+                                {isAuthenticated && (
+                                  <CommentForm
+                                    postId={post.id}
+                                    userId={userData?.id ?? 0}
                                   />
-                                </div>
-                                <div className="commentContentBox">
-                                  <p className="commentUsername">
-                                    {comment.username}
-                                  </p>
-                                  <p>{`${comment.content} ✦ ${new Date(comment.created_at).toLocaleDateString()}`}</p>
-                                </div>
-                              </div>
-                            ))}
+                                )}
+                                {post.comments.map((comment) => (
+                                  <div key={comment.id} className="comment">
+                                    <div className="commentData">
+                                      <div className="commentNav">
+                                        <img
+                                          src={comment.profile_picture_url}
+                                          alt="commenter pic"
+                                          className="commentUserImg"
+                                        />
+                                        <p className="commentUsername">
+                                          {comment.username}
+                                        </p>
+                                      </div>
+                                      <div className="commentContentBox">
+                                        <img
+                                          src={comment.profile_picture_url}
+                                          alt="commenter pic"
+                                          className="commentUserImg imgx"
+                                        />
+                                        <div className="contentxBox">
+                                          <p className="commentContent">{`${comment.content} ✦ ${new Date(comment.created_at).toLocaleDateString()}`}</p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </>
+                            )}
+                            {authUser && authUser.sub === post.auth_id && (
+                              <button onClick={() => handleDeletePost(post.id)}>
+                                Delete
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -347,50 +456,39 @@ function Profile() {
                 {activeSection === 'aboutMe' && (
                   <div className="profileInformation">
                     <div className="profileInput">
-                      <p className="titleNav">Name </p>
-                      <div className="informationBox">
-                        <p>{user.name}</p>
+                      <div className="InfoBackground">
+                        <p className="titleNav">Name </p>
+                        <div className="informationBox">
+                          <p>{user.name}</p>
+                        </div>
                       </div>
                     </div>
                     <div className="profileInput">
-                      <p className="titleNav">Age </p>
-                      <div className="informationBox">
-                        <p>{user.age}</p>
+                      <div className="InfoBackground">
+                        <p className="titleNav">Age </p>
+                        <div className="informationBox">
+                          <p>{user.age}</p>
+                        </div>
                       </div>
                     </div>
                     <div className="profileInput">
-                      <p className="titleNav">Role </p>
-                      <div className="informationBox">
-                        <p>{user.current_role}</p>
+                      <div className="InfoBackground">
+                        <p className="titleNav">Role </p>
+                        <div className="informationBox">
+                          <p>{user.current_role}</p>
+                        </div>
                       </div>
                     </div>
                     <div className="profileInput">
-                      <p className="titleNav">Cohort </p>
-                      <div className="informationBox">
-                        <p>{user.cohort}</p>
+                      <div className="InfoBackground">
+                        <p className="titleNav">Cohort </p>
+                        <div className="informationBox">
+                          <p>{user.cohort}</p>
+                        </div>
                       </div>
                     </div>
                   </div>
                 )}
-
-                {/* <div>
-                  {authUser && authUser.sub === user.auth_id ? (
-                    <>
-                      <button onClick={handleEditProfile}>Edit</button>
-                      <br></br>
-                      <button
-                        className="deleteUserButton"
-                        onClick={handleDeleteAccount}
-                      >
-                        Delete Account
-                      </button>
-                    </>
-                  ) : isFollowing ? (
-                    <button onClick={handleUnfollow}>Unfollow</button>
-                  ) : (
-                    <button onClick={handleFollow}>Follow</button>
-                  )}
-                </div> */}
               </div>
             </div>
           </div>

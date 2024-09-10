@@ -1,5 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react'
 import { useFollowedUsers } from '../hooks/useFollowedUsers'
+import { Link } from 'react-router-dom'
 
 function Following() {
   const { user } = useAuth0()
@@ -35,7 +36,9 @@ function Following() {
                   src={user.profile_picture_url}
                   alt={user.username}
                 />
-                <p className="followTitle"> {user.username}</p>
+                <Link to={`/user/${user?.id}`}>
+                  <p className="followTitle"> {user.username}</p>{' '}
+                </Link>
               </div>
             ),
           )

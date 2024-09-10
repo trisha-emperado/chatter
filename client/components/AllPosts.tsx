@@ -1,13 +1,35 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import request from 'superagent'
 import { PostAndUser } from '../../models/posts'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
+import { usePostDetails, useToggleLike, useDeletePost } from '../hooks/usePosts'
+import { useAuth0 } from '@auth0/auth0-react'
+import CommentForm from './CommentForm'
+import { useLikesByPostId } from '../hooks/useLikes'
+import { useUserByAuthId } from '../hooks/useUsers'
 
 const AllPosts = () => {
   const [displayComments, setDisplayComments] = useState<Set<number>>(new Set())
+  const { id } = useParams<{ id: string }>()
+  const postID = Number(id)
+  const [commentVisibility, setCommentVisibility] = useState<{
+    [key: number]: boolean
+  }>({})
+  const [likedPosts, setLikedPosts] = useState<{ [key: number]: boolean }>({})
+  const { likePost, unlikePost, isLiking, isUnliking } = useToggleLike(postID)
+  const deleteMutation = useDeletePost()
+  const navigate = useNavigate()
+  const { user: authUser, getAccessTokenSilently, isAuthenticated } = useAuth0()
+  const { data: likes } = useLikesByPostId(postID)
+  const { data: userData } = useUserByAuthId(authUser?.sub || '')
+  const queryClient = useQueryClient()
 
-  const { data, isPending, isError } = useQuery({
+  const {
+    data: posts,
+    isPending,
+    isError,
+  } = useQuery({
     queryKey: ['posts'],
     queryFn: async () => {
       const response = await request.get('/api/v1/posts')
@@ -19,66 +41,135 @@ const AllPosts = () => {
   if (isError) return <div>Error loading posts</div>
 
   const toggleComments = (postId: number) => {
-    setDisplayComments((prev) => {
-      const newDisplayComments = new Set(prev)
-      if (newDisplayComments.has(postId)) {
-        newDisplayComments.delete(postId)
-      } else {
-        newDisplayComments.add(postId)
-      }
-      return newDisplayComments
-    })
+    setCommentVisibility((prev) => ({
+      ...prev,
+      [postId]: !prev[postId],
+    }))
+  }
+
+  const handleLikeToggle = async (postId: number) => {
+    const token = await getAccessTokenSilently()
+    if (likedPosts[postId]) {
+      unlikePost({ postId, userId: userData?.id ?? 0, token })
+      setLikedPosts((prev) => ({ ...prev, [postId]: false }))
+      queryClient.invalidateQueries({ queryKey: ['likes'] })
+    } else {
+      likePost({ postId, userId: userData?.id ?? 0, token })
+      setLikedPosts((prev) => ({ ...prev, [postId]: true }))
+    }
+  }
+
+  const checkIfLiked = (postId: number) => {
+    return (
+      likedPosts[postId] ||
+      likes?.some(
+        (like) => like.post_id === postId && like.user_id === userData?.id,
+      )
+    )
+  }
+
+  const handleDeletePost = async (postId: number) => {
+    try {
+      const token = await getAccessTokenSilently()
+      deleteMutation.mutate({ id: postId, token })
+      navigate('/feed')
+    } catch (error) {
+      console.error('Error deleting post:', error)
+    }
   }
 
   return (
     <div className="postsComp">
-      {data?.map((post: PostAndUser) => (
+      {posts?.map((post: PostAndUser) => (
         <div key={post.id} className="postsContainer">
           <div className="postsCard">
-            <div className="postNav">
-              <img
-                src={post.profile_picture_url}
-                alt="profile pic"
-                className="postUserImg"
-              />
-              <Link to={`/user/${post.user_id}`}>
-                <p className="postUsername">{post.username}</p>
-              </Link>
+            <div className="postBackground">
+              <div className="postNav">
+                <img
+                  src={post.profile_picture_url}
+                  alt="profile pic"
+                  className="postUserImg"
+                />
+                <Link to={`/user/${post.user_id}`}>
+                  <p className="postUsername">{post.username}</p>
+                </Link>
+              </div>
+              <div className="postContentBox">
+                <p>{post.content}</p>
+              </div>
+              <div className="postDetailsBox">
+                <p className="postDetail hideShowLike">
+                  {new Date(post.created_at).toLocaleDateString()}
+                </p>
+                {post.image_url && <img src={post.image_url} alt="Post" />}
+                <p className="postDetail">
+                  <button
+                    className="hideShowLike"
+                    onClick={() => handleLikeToggle(post.id)}
+                    disabled={isLiking || isUnliking}
+                  >
+                    {checkIfLiked(post.id) ? (
+                      <img
+                        className="heart"
+                        src="https://www.freeiconspng.com/thumbs/heart-icon/valentine-heart-icon-6.png"
+                        alt="heart"
+                      />
+                    ) : (
+                      <img
+                        className="heart"
+                        src="https://freesvg.org/img/heart-15.png"
+                        alt="heart"
+                      />
+                    )}
+                    {post.likes}
+                  </button>
+                </p>
+                <button
+                  className="hideShowLike"
+                  onClick={() => toggleComments(post.id)}
+                >
+                  {commentVisibility[post.id]
+                    ? 'Hide Comments'
+                    : 'Show Comments'}
+                </button>
+              </div>
+              {commentVisibility[post.id] && (
+                <>
+                  {isAuthenticated && (
+                    <CommentForm postId={post.id} userId={userData?.id ?? 0} />
+                  )}
+                  {post.comments.map((comment) => (
+                    <div key={comment.id} className="comment">
+                      <div className="commentData">
+                        <div className="commentNav">
+                          <img
+                            src={comment.profile_picture_url}
+                            alt="commenter pic"
+                            className="commentUserImg"
+                          />
+                          <p className="commentUsername">{comment.username}</p>
+                        </div>
+                        <div className="commentContentBox">
+                          <img
+                            src={comment.profile_picture_url}
+                            alt="commenter pic"
+                            className="commentUserImg imgx"
+                          />
+                          <div className="contentxBox">
+                            <p className="commentContent">{`${comment.content} ✦ ${new Date(comment.created_at).toLocaleDateString()}`}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
+              {authUser && authUser.sub === post.auth_id && (
+                <button onClick={() => handleDeletePost(post.id)}>
+                  Delete
+                </button>
+              )}
             </div>
-            <div className="postContentBox">
-              <p>{post.content}</p>
-            </div>
-            <div className="postDetailsBox">
-              <p className="postDetail">
-                {new Date(post.created_at).toLocaleDateString()}
-              </p>
-              {post.image_url && <img src={post.image_url} alt="Post" />}
-              <p className="postDetail">Likes: {post.likes}</p>
-              <button
-                className="showCommentButton"
-                onClick={() => toggleComments(post.id)}
-              >
-                {displayComments.has(post.id)
-                  ? 'Hide Comments'
-                  : 'Show Comments'}
-              </button>
-            </div>
-            {displayComments.has(post.id) &&
-              post.comments.map((comment) => (
-                <div key={comment.id} className="comment">
-                  <div className="commentNav">
-                    <img
-                      src={comment.profile_picture_url}
-                      alt="commenter pic"
-                      className="commentUserImg"
-                    />
-                  </div>
-                  <div className="commentContentBox">
-                    <p className="commentUsername">{comment.username}</p>
-                    <p className="commentContent">{`${comment.content} ✦ ${new Date(comment.created_at).toLocaleDateString()}`}</p>
-                  </div>
-                </div>
-              ))}
           </div>
         </div>
       ))}

@@ -53,11 +53,22 @@ router.get('/:userId/:id', async (req, res) => {
 router.get('/users/:userId/posts', async (req, res) => {
   const userId = parseInt(req.params.userId, 10)
 
+  if (isNaN(userId)) {
+    return res.status(400).json({ error: 'Invalid user ID' })
+  }
+
   try {
-    const posts = await db.getPostsFromUserId(userId)
+    if (typeof db.getPostsFromUserIdWithComments !== 'function') {
+      console.error(
+        'getPostsFromUserIdWithComments is not a function or not properly imported',
+      )
+      return res.status(500).json({ error: 'Server configuration error' })
+    }
+
+    const posts = await db.getPostsFromUserIdWithComments(userId)
     res.json(posts)
   } catch (error) {
-    console.error(error)
+    console.error('Error fetching posts:', error)
     res.status(500).json({ error: 'An error occurred while fetching posts' })
   }
 })

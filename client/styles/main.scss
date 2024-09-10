@@ -43,7 +43,7 @@ button {
   align-items: center;
 }
 
-$backgroundColor:  rgba(255, 255, 255, 0.532); 
+$backgroundColor:  rgba(255, 255, 255, 0.642); 
 
 
 // ╔══════════╗
@@ -185,26 +185,37 @@ $backgroundColor:  rgba(255, 255, 255, 0.532);
   display: none;
 }
 
-.postsCard {
+.postBackground {
   display: flex;
   flex-direction: column;
-  padding: calc(1vh + 1vw);
-  box-sizing: border-box;
-  margin: calc(1vh + 1vw);
   font-size: calc(0.7vh + 0.7vw);
-  width: 80%;
-  height: max-content;
+  height: 100%;
+  width: 100%;
   border-radius: calc(1vh + 1vw);
+  padding: calc(1vh + 1vw);
   box-shadow: 
   rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
   rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
   rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
-    backdrop-filter: blur(calc(0.5vh + 0.5vw));
-    background-color: rgba(255, 255, 255, 0.121)
+  background-color: rgba(255, 255, 255, 0.509);
+  backdrop-filter: blur(calc(1vh + 1vw));
+}
+
+.postsCard {
+  width: 80%;
+  height: max-content;
+  margin: calc(1vh + 1vw);
+  background-image: url(/public/images/wallhpuuuurpaven-g7vxoe.jpg);
+  background-size: cover;
+  background-position: center;
+  box-sizing: border-box;
+  border-radius: calc(1vh + 1vw);
+
 }
 
 .postDetailsBox {
   display: flex;
+  align-items: center;
 }
 
 .postDetail {
@@ -300,7 +311,6 @@ a:focus {
   rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
   rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
   background-color: $backgroundColor;
-  backdrop-filter: blur(calc(1vh + 1vw));
   backdrop-filter: blur(calc(0.5vh + 0.5vw));
   align-items: center;
 }
@@ -704,12 +714,24 @@ input[type="file"] {
 
 .comment {
   display: flex;
-  padding: calc(1vh + 1vw) 0;
+  box-shadow: 
+  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
+  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
+  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+  border-radius: calc(1vh + 1vw);
+  margin-bottom: calc(1vh + 1vw);
+  background-color: rgba(255, 255, 255, 0.317);
+  max-width: 100%;
+  flex-direction: column;
+  width: 100%;
+  width: 100%;
+
 }
 
 .commentNav {
   display: flex;
   align-items: flex-start;
+  align-items: center;
 }
 
 .commentUserImg {
@@ -718,17 +740,51 @@ input[type="file"] {
   border-radius: 50%;
 }
 
-.commentContentBox {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  flex-wrap: wrap;
-  max-width: 100%;
-  box-sizing: border-box;
-  overflow-x: scroll;
-  scrollbar-width: none;
+
+.imgx {
+  opacity: 0;
+  height: 1px;
 }
 
+.commentData {
+  width: 100%;
+  height: 100%;
+  padding: calc(1vh + 1vw);
+  box-sizing: border-box;
+}
+
+.commentContentBox {
+  display: flex;
+  flex-direction: row;
+  width: 100%; /* Ensure the container width is set */
+  overflow: hidden; /* Hides overflow */
+  box-sizing: border-box; /* Ensure padding and border are included in the width */
+}
+
+.contentxBox {
+  flex: 1; /* Allows the box to grow and fill available space */
+  display: flex;
+  max-width: 100%;
+  width: 100%;
+  overflow: hidden;
+  flex-direction: column;
+  overflow-wrap: break-word; /* Breaks long words */
+  word-wrap: break-word; /* Ensures long words break correctly */
+  box-sizing: border-box; /* Includes padding and border in width calculation */
+}
+
+.commentContent {
+  width: 100%; /* Ensures full width of the parent container */
+  box-sizing: border-box; /* Includes padding and border in width calculation */
+  overflow-wrap: break-word; /* Breaks long words */
+  word-wrap: break-word; /* Ensures long words wrap correctly */
+  white-space: normal; /* Allows text to wrap */
+}
+
+.hideShowLike {
+  font-size: calc(0.7vh + 0.7vw);
+  font-family: regularFont;
+}
 
 .commentContentBox::-webkit-scrollbar {
   display: none;
@@ -738,6 +794,49 @@ input[type="file"] {
 .showCommentButton {
   font-family: regularFont;
   font-size: calc(0.6vh + 0.6vw);
+}
+
+// ╔═══════════════════╗
+// ║   Make comments   ║
+// ╚═══════════════════╝
+
+.makeCommentBox {
+  width: 100%;
+  box-sizing: border-box;  border-radius:  calc(1vh + 1vw) calc(1vh + 1vw) 0 0;
+}
+
+.commentInput {
+  width: 100%;
+  margin-top: calc(1vh + 1vw);
+  box-sizing: border-box;
+  font-size: calc(0.8vh + 0.8vw);
+  resize: none;
+  outline: none;
+  padding: calc(1vh + 1vw);
+  border-radius:  calc(1vh + 1vw) calc(1vh + 1vw) 0 0;
+  background-color: rgba(255, 255, 255, 0.491);
+  border: none;
+}
+
+.makeCommentButton {
+  border-radius:  0 0 calc(1vh + 1vw) calc(1vh + 1vw);
+  width: 100%;
+  margin-bottom: calc(1vh + 1vw);
+  background-color: rgb(0, 0, 0);
+  color: white;
+  backdrop-filter: blur(calc(1vh + 1vw));
+  font-size: calc(0.6vh + 0.6vw);
+  padding: calc(0.5vh + 0.5vw) 0;
+  box-shadow: 
+  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
+  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
+  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+}
+
+.heart {
+  width: calc(0.6vh + 0.6vw);
+  height: calc(0.6vh + 0.6vw);
+  margin-right: calc(0.3vh + 0.3vw);
 }
 
 // ╔═════════════╗
@@ -839,9 +938,38 @@ input[type="file"] {
 
 .profileNavs {
   display: flex;
-  justify-content: flex-end;
-  padding: 0 calc(2vh + 2vw) calc(0.5vh + 0.5vw) 0 ;
-  ;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 calc(2vh + 2vw)    ;
+}
+
+.followBut {
+  margin-left: calc(1vh + 1vw);
+  align-self: flex-start;
+  padding: calc(0.5vh + 0.5vw) calc(1vh + 1vw);
+  border-radius: calc(0.5vh + 0.5vw);
+  box-shadow: 
+  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
+  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
+  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+  background-color: $backgroundColor;
+  backdrop-filter: blur(calc(1vh + 1vw));
+  font-size: calc(0.7vh + 0.7vw);
+}
+
+.unfollowBut {
+  margin-left: calc(1vh + 1vw);
+  align-self: flex-start;
+  padding: calc(0.5vh + 0.5vw) calc(1vh + 1vw);
+  border-radius: calc(0.5vh + 0.5vw);
+  box-shadow: 
+  rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
+  rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
+  rgba(255, 255, 255, 0.05) 0px calc(0px + 0.1vh) calc(0.1px + 0.1vw) inset;
+  background-color: black;
+  color: white;
+  backdrop-filter: blur(calc(1vh + 1vw));
+  font-size: calc(0.7vh + 0.7vw);
 }
 
 .PN {
@@ -860,6 +988,11 @@ input[type="file"] {
 .active {
   background-color: black;
   color: white;
+}
+
+.nav001, .nav002 {
+  display: flex;
+  align-items: center;
 }
 
 .githubLogo {
@@ -897,6 +1030,18 @@ input[type="file"] {
   border-radius: calc(1vh + 1vw);
   width: calc(9vh + 9vw);
   height: calc(9vh + 9vw);
+  background-image: url(/public/images/wallhpuuuurpaven-g7vxoe.jpg);
+  background-size: cover;
+  background-position: center;
+  backdrop-filter: blur(calc(1vh + 1vw));
+
+}
+
+.InfoBackground {
+  box-sizing: border-box;
+  border-radius: calc(1vh + 1vw);
+  width: calc(9vh + 9vw);
+  height: calc(9vh + 9vw);
   box-shadow: 
   rgba(0, 0, 0, 0.2) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
   rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
@@ -907,6 +1052,8 @@ input[type="file"] {
   flex-direction: column;
   background-size: cover;
   background-position: center;
+  background-color: rgba(255, 255, 255, 0.454);
+  backdrop-filter: blur(calc(1vh + 1vw));
 }
 
 .informationBox {
