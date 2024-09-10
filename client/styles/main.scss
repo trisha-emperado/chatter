@@ -1190,6 +1190,7 @@ input[type="file"] {
   margin: calc(1vh + 1vw) 0;
   width: 100%;
   border-radius: calc(0.5vh + 0.5vw);
+  text-align: center;
   box-shadow: 
   rgba(0, 0, 0, 0.087) 0px calc(2px + 0.5vh) calc(2px + 0.5vw) 0px, 
   rgba(0, 0, 0, 0.1) 0px calc(1px + 0.25vh) calc(1px + 0.25vw) 0px, 
@@ -1201,3 +1202,15 @@ input[type="file"] {
 
 }
 
+
+.friendsBoxx {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.foll {
+  width: 40%
+}

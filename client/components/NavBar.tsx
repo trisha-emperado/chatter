@@ -34,6 +34,15 @@ function NavBar() {
     }
   }
 
+  const getFriendsStyles = () => {
+    switch (location.pathname) {
+      case '/friends':
+        return { backgroundColor: 'black', color: 'white' }
+      default:
+        return { backgroundColor: 'defaultColor', color: 'black' }
+    }
+  }
+
   const handleSignOut = () => {
     logout()
   }
@@ -72,6 +81,14 @@ function NavBar() {
                   className="my-profile-btn btn"
                 >
                   My Profile
+                </button>
+              </Link>
+              <Link to={`/friends`}>
+                <button
+                  style={getFriendsStyles()}
+                  className="my-profile-btn btn"
+                >
+                  Friends
                 </button>
               </Link>
               <Link to={`/userForm`}>

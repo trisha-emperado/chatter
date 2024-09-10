@@ -2,12 +2,7 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import request from 'superagent'
-
-type FollowedUser = {
-  id: number
-  username: string
-  profile_picture_url: string
-}
+import { User } from '../../models/users'
 
 function Following() {
   const { user } = useAuth0()
@@ -16,7 +11,7 @@ function Following() {
     queryKey: ['followers', user?.sub],
     queryFn: async () => {
       const response = await request
-        .get(`/api/v1/followers/following/${user?.sub}`)
+        .get('/api/v1/users')
         .then((res) => res.body)
       return response
     },
@@ -33,24 +28,27 @@ function Following() {
 
   return (
     <div className="followerContain">
-      <div className="followerHeader">Friends list!</div>
+      <div className="followerHeader">Find Users</div>
       <div className="followersBox">
-        {data && data.length > 0 ? (
-          data.map((user: FollowedUser) => (
-            <div key={user.id} className="following">
-              <img
-                className="followImage"
-                src={user.profile_picture_url}
-                alt={user.username}
-              />
-              <Link to={`/user/${user.id}`}>
-                <p className="followTitle">{user.username}</p>
-              </Link>
-            </div>
-          ))
-        ) : (
-          <p className="not">You are not following anyone yet.</p>
-        )}
+        {data?.map((user: User) => (
+          <div key={user.id} className="following">
+            <img
+              className="followImage"
+              src={
+                user.profile_picture_url ||
+                'https://static.vecteezy.com/system/resources/previews/020/765/399/non_2x/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg'
+              }
+              alt={user.username}
+              onError={(e) =>
+                (e.currentTarget.src =
+                  'https://static.vecteezy.com/system/resources/previews/020/765/399/non_2x/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg')
+              }
+            />
+            <Link to={`/user/${user.id}`}>
+              <p className="followTitle">{user.username}</p>
+            </Link>
+          </div>
+        ))}
       </div>
     </div>
   )
