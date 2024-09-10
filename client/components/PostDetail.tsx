@@ -1,3 +1,6 @@
+import { useQuery } from '@tanstack/react-query'
+import request from 'superagent'
+import { PostAndUser } from '../../models/posts'
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { usePostDetails } from "../hooks/usePosts";
@@ -13,7 +16,7 @@ import { Link } from "react-router-dom";
 export default function PostDetails() {
   const { id } = useParams<{ id: string }>()
   const postID = Number(id)
-  const { data: post, isPending, isError } = usePostDetails(Number(id));
+  const { data } = usePostDetails(Number(id));
   const [isCommentFormVisible, setIsCommentFormVisible] = useState(false);
   const [hasLiked, setHasLiked] = useState(false);
   const { likePost, unlikePost, isLiking, isUnliking } = useToggleLike(Number(id));
@@ -22,7 +25,17 @@ export default function PostDetails() {
   const { user: authUser, getAccessTokenSilently, isAuthenticated } = useAuth0()
   const { data: likes } = useLikesByPostId(postID)
   const { data: userData } = useUserByAuthId(authUser?.sub || '')
-
+  const {
+    data: posts,
+    isPending,
+    isError,
+  } = useQuery({
+    queryKey: ['posts'],
+    queryFn: async () => {
+      const response = await request.get('/api/v1/posts/')
+      return response.body as PostAndUser[]
+    },
+  })
   const handleLikeToggle = async () => {
     const token = await getAccessTokenSilently()
     if (hasLiked) {
@@ -64,10 +77,10 @@ export default function PostDetails() {
       <div className="postsContainer">
         <div className="postsCard">
           <div className="postBackground">
-            <div >
-              {post.profile_picture_url && (
+            <div>
+              {posts.profile_picture_url && (
                 <img
-                  src={post.profile_picture_url}
+                  src={posts.profile_picture_url}
                   alt="profile pic"
                   className="postUserImg"
                 />
@@ -113,9 +126,7 @@ export default function PostDetails() {
                   </button>
                 )}
 
-                {authUser && authUser.sub === post.auth_id && (
-                  <button onClick={handleDeletePost}>Delete</button>
-                )}
+
               </div>
 
               {isCommentFormVisible && (
@@ -123,6 +134,10 @@ export default function PostDetails() {
                   postId={Number(id)}
                   userId={Number(id)}
                 />
+              )}
+              <br></br>
+              {authUser && authUser.sub === post.auth_id && (
+                <button className="sign-out" onClick={handleDeletePost}>Delete post</button>
               )}
             </div>
           </div>

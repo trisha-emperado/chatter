@@ -31,7 +31,7 @@ const AllPosts = ({ showFriendsPosts }: { showFriendsPosts: boolean }) => {
   } = useQuery({
     queryKey: ['posts'],
     queryFn: async () => {
-      const response = await request.get('/api/v1/posts')
+      const response = await request.get('/api/v1/posts/')
       return response.body as PostAndUser[]
     },
   })
@@ -85,6 +85,7 @@ const AllPosts = ({ showFriendsPosts }: { showFriendsPosts: boolean }) => {
       )
     )
   }
+
 
   const handleDeletePost = async (postId: number) => {
     try {
@@ -156,7 +157,7 @@ const AllPosts = ({ showFriendsPosts }: { showFriendsPosts: boolean }) => {
               {commentVisibility[post.id] && (
                 <>
                   {isAuthenticated && (
-                    <CommentForm postId={post.id} userId={userData?.id ?? 0} />
+                    <CommentForm postId={post.id} userId={userData?.id ?? 0} onNewComment={handleNewComment} />
                   )}
                   {post.comments.map((comment) => (
                     <div key={comment.id} className="comment">
@@ -190,6 +191,7 @@ const AllPosts = ({ showFriendsPosts }: { showFriendsPosts: boolean }) => {
                 </button>
               )}
             </div>
+
           </div>
         </div>
       ))}

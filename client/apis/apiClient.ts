@@ -69,7 +69,7 @@ export async function deleteUserById(id: number, token: string) {
 // ╚═══════════════════╝
 
 export async function getAllPosts() {
-  const res = await request.get(rootURL + '/posts/')
+  const res = await request.get(rootURL + '/posts/?order=desc')
   return res.body
 }
 
