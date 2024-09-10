@@ -267,24 +267,24 @@ function Profile() {
                       className="changeHeaderButton"
                       onClick={() => setInputDisplay(true)}
                     >
-                      Change Header
+                      Change Header{' '}
+                      {inputDisplay && (
+                        <div className="headerInputBox">
+                          <form onSubmit={handleSubmitHeader}>
+                            <input
+                              type="text"
+                              value={header}
+                              onChange={handleHeaderChange}
+                              className="headerInputZ"
+                            />
+                            <button
+                              type="submit"
+                              className="headerSubmit"
+                            ></button>
+                          </form>
+                        </div>
+                      )}
                     </button>
-                    {inputDisplay && (
-                      <div className="headerInputBox">
-                        <form onSubmit={handleSubmitHeader}>
-                          <input
-                            type="text"
-                            value={header}
-                            onChange={handleHeaderChange}
-                            className="headerInputZ"
-                          />
-                          <button
-                            type="submit"
-                            className="headerSubmit"
-                          ></button>
-                        </form>
-                      </div>
-                    )}
 
                     <h2 className="profileUserName">{user.username}</h2>
                     <div className="profilePictureBox">
@@ -300,13 +300,15 @@ function Profile() {
                   <div className="nav001">
                     {authUser && authUser.sub === user.auth_id ? (
                       <>
-                        {/* <button onClick={handleEditProfile}>Edit</button> */}
-                        {/* <button
-                        className="deleteUserButton"
-                        onClick={handleDeleteAccount}
-                      >
-                        Delete Account
-                      </button> */}
+                        <button className="DN PN" onClick={handleEditProfile}>
+                          Edit
+                        </button>
+                        <button
+                          className="deleteUserButton DN PN"
+                          onClick={handleDeleteAccount}
+                        >
+                          Delete Account
+                        </button>
                       </>
                     ) : isFollowing ? (
                       <button className="unfollowBut" onClick={handleUnfollow}>

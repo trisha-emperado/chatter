@@ -52,6 +52,8 @@ export default function PostDetails() {
     navigate('/feed')
   }
 
+  console.log(likes)
+
   if (isPending) return <p>Loading...</p>
   if (isError) return <p>Error loading post</p>
 

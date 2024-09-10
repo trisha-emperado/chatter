@@ -8,6 +8,7 @@ import { useAuth0 } from '@auth0/auth0-react'
 import CommentForm from './CommentForm'
 import { useLikesByPostId } from '../hooks/useLikes'
 import { useUserByAuthId } from '../hooks/useUsers'
+import LikesCounter from './LikeButtonAndCounter'
 
 const AllPosts = ({ showFriendsPosts }: { showFriendsPosts: boolean }) => {
   const [commentVisibility, setCommentVisibility] = useState<{
@@ -45,7 +46,7 @@ const AllPosts = ({ showFriendsPosts }: { showFriendsPosts: boolean }) => {
     queryFn: async () => {
       if (!authUser?.sub) return []
       const response = await request.get(
-        `/api/v1/follower/following/${authUser.sub}`,
+        `/api/v1/followers/following/${authUser.sub}`,
       )
       return response.body as { id: number }[]
     },
@@ -67,9 +68,10 @@ const AllPosts = ({ showFriendsPosts }: { showFriendsPosts: boolean }) => {
     }))
   }
 
-  const handleLikeToggle = async (postId: number) => {
+  const handleLikeToggle = async (postId: number, isAlreadyLiked: boolean) => {
     const token = await getAccessTokenSilently()
-    if (likedPosts[postId]) {
+
+    if (isAlreadyLiked) {
       unlikePost({ postId, userId: userData?.id ?? 0, token })
       setLikedPosts((prev) => ({ ...prev, [postId]: false }))
       queryClient.invalidateQueries({ queryKey: ['likes'] })
@@ -77,22 +79,22 @@ const AllPosts = ({ showFriendsPosts }: { showFriendsPosts: boolean }) => {
       likePost({ postId, userId: userData?.id ?? 0, token })
       setLikedPosts((prev) => ({ ...prev, [postId]: true }))
     }
-  }
 
-  const checkIfLiked = (postId: number) => {
-    return (
-      likedPosts[postId] ||
-      likes?.some(
-        (like) => like.post_id === postId && like.user_id === userData?.id,
-      )
-    )
+    // if (likedPosts[postId]) {
+    //   unlikePost({ postId, userId: userData?.id ?? 0, token })
+    //   setLikedPosts((prev) => ({ ...prev, [postId]: false }))
+    //   queryClient.invalidateQueries({ queryKey: ['likes'] })
+    // } else {
+    //   likePost({ postId, userId: userData?.id ?? 0, token })
+    //   setLikedPosts((prev) => ({ ...prev, [postId]: true }))
+    // }
   }
 
   const handleDeletePost = async (postId: number) => {
     try {
       const token = await getAccessTokenSilently()
       deleteMutation.mutate({ id: postId, token })
-      navigate('/feed')
+      navigate('/Home')
     } catch (error) {
       console.error('Error deleting post:', error)
     }
@@ -123,26 +125,11 @@ const AllPosts = ({ showFriendsPosts }: { showFriendsPosts: boolean }) => {
                 </p>
                 {post.image_url && <img src={post.image_url} alt="Post" />}
                 <p className="postDetail">
-                  <button
-                    className="hideShowLike"
-                    onClick={() => handleLikeToggle(post.id)}
-                    disabled={isLiking || isUnliking}
-                  >
-                    {checkIfLiked(post.id) ? (
-                      <img
-                        className="heart"
-                        src="https://www.freeiconspng.com/thumbs/heart-icon/valentine-heart-icon-6.png"
-                        alt="heart"
-                      />
-                    ) : (
-                      <img
-                        className="heart"
-                        src="https://freesvg.org/img/heart-15.png"
-                        alt="heart"
-                      />
-                    )}
-                    {post.likes}
-                  </button>
+                  <LikesCounter
+                    postId={post.id}
+                    likedPosts={likedPosts}
+                    handleLikeToggle={handleLikeToggle}
+                  />
                 </p>
                 <button
                   className="hideShowLike"
