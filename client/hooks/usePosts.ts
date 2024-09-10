@@ -8,6 +8,12 @@ interface DeletePostMutation {
   token: string
 }
 
+interface LikeMutation {
+  postId: number
+  userId: number
+  token: string
+}
+
 export function usePostDetails(id: number) {
   return useQuery({
     queryKey: ['posts', id],
@@ -38,16 +44,17 @@ export function useNewPost() {
 
 export function useToggleLike(postId: number) {
   const queryClient = useQueryClient()
-
   const likeMutation = useMutation({
-    mutationFn: () => api.likePost(postId),
+    mutationFn: (data: LikeMutation) =>
+      api.likePost(data.postId, data.userId, data.token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts', postId] })
     },
   })
 
   const unlikeMutation = useMutation({
-    mutationFn: () => api.unlikePost(postId),
+    mutationFn: (data: LikeMutation) =>
+      api.unlikePost(data.postId, data.userId, data.token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts', postId] })
     },

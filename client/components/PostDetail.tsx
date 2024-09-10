@@ -5,30 +5,41 @@ import { useToggleLike } from "../hooks/usePosts";
 import { useDeletePost } from "../hooks/usePosts";
 import { useAuth0 } from "@auth0/auth0-react";
 import CommentForm from "./CommentForm";
+import { useLikesByPostId } from '../hooks/useLikes'
+import { useUserByAuthId } from '../hooks/useUsers'
+import { useNavigate } from "react-router-dom";
 
 export default function PostDetails() {
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams<{ id: string }>()
   const postID = Number(id)
   const { data: post, isPending, isError } = usePostDetails(Number(id));
   const [isCommentFormVisible, setIsCommentFormVisible] = useState(false);
   const [hasLiked, setHasLiked] = useState(false);
   const { likePost, unlikePost, isLiking, isUnliking } = useToggleLike(Number(id));
   const deleteMutation = useDeletePost();
-  const {
-    user: authUser,
-    getAccessTokenSilently,
-    isAuthenticated
-  } = useAuth0()
+  const navigate = useNavigate()
+  const { user: authUser, getAccessTokenSilently, isAuthenticated } = useAuth0()
+  const { data: likes } = useLikesByPostId(postID)
+  const { data: userData } = useUserByAuthId(authUser?.sub || '')
 
-  const handleLikeToggle = () => {
+  const handleLikeToggle = async () => {
+    const token = await getAccessTokenSilently()
     if (hasLiked) {
-      unlikePost();
-      setHasLiked(false);
+      unlikePost({ postId: postID, userId: userData?.id ?? 0, token })
+      setHasLiked(false)
     } else {
-      likePost();
-      setHasLiked(true);
+      likePost({ postId: postID, userId: userData?.id ?? 0, token })
+      setHasLiked(true)
     }
-  };
+  }
+
+  const checkIfLiked = () => {
+    if (hasLiked && likes?.find((like) => like.user_id === userData?.id)) {
+      return true
+    }
+
+    return false
+  }
 
   const handleDeletePost = async () => {
     try {
@@ -37,18 +48,15 @@ export default function PostDetails() {
     } catch (error) {
       console.error('Error deleting post:', error)
     }
+    navigate('/feed')
   }
 
-  if (isPending) return <p>Loading...</p>;
-  if (isError) return <p>Error loading post</p>;
-
-  console.log("authUser.sub:", authUser?.sub);
-  console.log("post.user_id:", post.user_id);
+  if (isPending) return <p>Loading...</p>
+  if (isError) return <p>Error loading post</p>
 
   const commentForm = () => {
-    setIsCommentFormVisible(!isCommentFormVisible);
-  };
-
+    setIsCommentFormVisible(!isCommentFormVisible)
+  }
 
   return (
     <div>
@@ -66,9 +74,9 @@ export default function PostDetails() {
         <p>{post.content}</p>
       </div>
       <div>
-        <p>Likes: {post.likes}</p>
+        <p>Likes: {likes?.length}</p>
         <button onClick={handleLikeToggle} disabled={isLiking || isUnliking}>
-          {hasLiked ? 'Unlike' : 'Like'}
+          {checkIfLiked() ? 'Unlike' : 'Like'}
         </button>
         {isAuthenticated && (
           <button onClick={commentForm}>
@@ -76,7 +84,7 @@ export default function PostDetails() {
           </button>
         )}
 
-        {authUser && authUser.sub === post.user_id && (
+        {authUser && authUser.sub === post.auth_id && (
           <button onClick={handleDeletePost}>Delete</button>
         )}
       </div>
@@ -84,10 +92,9 @@ export default function PostDetails() {
       {isCommentFormVisible && (
         <CommentForm
           postId={Number(id)}
-          onSuccess={() => setIsCommentFormVisible(false)}
-          onError={() => alert('Failed to add comment.')}
+          userId={Number(id)}
         />
       )}
     </div>
-  );
+  )
 }

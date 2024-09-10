@@ -33,7 +33,8 @@ export async function getPostById(
     .select(
       'posts.*',
       'users.username',
-      'users.profile_picture_url, users.auth_id',
+      'users.profile_picture_url',
+      'users.auth_id',
     )
     .select(
       'posts.id',
@@ -74,7 +75,6 @@ export async function likePost(
   db = connection,
 ): Promise<void> {
   await db('likes').insert({ user_id: userId, post_id: postId })
-  await db('posts').where('id', postId).increment('likes', 1)
 }
 
 export async function unlikePost(
@@ -83,7 +83,6 @@ export async function unlikePost(
   db = connection,
 ): Promise<void> {
   await db('likes').where({ user_id: userId, post_id: postId }).del()
-  await db('posts').where('id', postId).decrement('likes', 1)
 }
 
 export async function hasLikedPost(
@@ -202,7 +201,7 @@ export async function editPostById(
   db = connection,
 ): Promise<Post[]> {
   await db('posts').where('id', id).update(editedPost, ['*'])
-  return db('posts').where('id', id).select()
+  return db('posts').where('id', id).select('*')
 }
 
 // ╔══════════════════════╗

@@ -1,6 +1,8 @@
 import request from 'superagent'
 import { User } from '../../models/users'
 import { Post, PostData } from '../../models/posts'
+import { CommentData, DetailedComment } from '../../models/comments'
+import { Like } from '../../models/likes'
 
 const rootURL = '/api/v1'
 
@@ -88,12 +90,26 @@ export async function addNewPost(newPost: PostData, token: string) {
   return res.body
 }
 
-export async function likePost(postId: number): Promise<void> {
-  await request.post(`${rootURL}/posts/${postId}/like`)
+export async function likePost(
+  postId: number,
+  userId: number,
+  token: string,
+): Promise<void> {
+  await request
+    .post(`${rootURL}/posts/${postId}/like`)
+    .set('Authorization', `Bearer ${token}`)
+    .send({ postId, userId, token })
 }
 
-export async function unlikePost(postId: number): Promise<void> {
-  await request.post(`${rootURL}/posts/${postId}/unlike`)
+export async function unlikePost(
+  postId: number,
+  userId: number,
+  token: string,
+): Promise<void> {
+  await request
+    .delete(`${rootURL}/posts/${postId}/unlike`)
+    .set('Authorization', `Bearer ${token}`)
+    .send({ userId })
 }
 
 export async function deletePost(id: number, token: string) {
@@ -102,18 +118,13 @@ export async function deletePost(id: number, token: string) {
     .set('Authorization', `Bearer ${token}`)
 }
 
-export async function addComment(
-  postId: number,
-  content: string,
-  token: string,
-): Promise<void> {
-  await request
-    .post(`${rootURL}/comments/${postId}`)
+export async function addComment(newComment: CommentData, token: string) {
+  const res = await request
+    .post(rootURL + '/comments/')
     .set('Authorization', `Bearer ${token}`)
-    .send({ content, postId })
+    .send(newComment)
+  return res.body
 }
-
-
 
 // ╔════════════════════════╗
 // ║     Following Routes   ║
@@ -121,10 +132,38 @@ export async function addComment(
 
 export async function getFollowedUsers(followerId: string) {
   try {
-    const res = await request.get(rootURL +`/followers/following/${followerId}`)
-    return res.body 
+    const res = await request.get(
+      rootURL + `/followers/following/${followerId}`,
+    )
+    return res.body
   } catch (error) {
     console.error('Failed to fetch followed users', error)
     throw new Error('Unable to fetch followed users')
   }
 }
+
+// ╔═══════════════════╗
+// ║    Likes Routes   ║
+// ╚═══════════════════╝
+
+export async function getLikesByPostId(postId: number): Promise<Like[]> {
+  try {
+    const res = await request.get(rootURL + `/likes/${postId}`)
+    return res.body as Like[]
+  } catch (error) {
+    console.error('Failed to fetch the likes for that post', error)
+    throw new Error('Unable to fetch the likes for that post')
+  }
+}
+
+// ╔═══════════════════╗
+// ║ Comments Routes   ║
+// ╚═══════════════════╝
+
+export async function getCommentsByPostId(
+  postId: number,
+): Promise<DetailedComment[]> {
+  const res = await request.get(`${rootURL}/post/${postId}`)
+  return res.body as DetailedComment[]
+}
+
