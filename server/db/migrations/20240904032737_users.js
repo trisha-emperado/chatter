@@ -14,7 +14,6 @@ export async function up(knex) {
     table.string('cohort')
     table.boolean('facilitator')
     table.string('github_url')
-    table.string('status')
     table.string('header_image_url')
   })
 }
