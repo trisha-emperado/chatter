@@ -6,14 +6,14 @@ export async function seed(knex) {
       id: 1,
       user_id: 3,
       post_id: 1,
-      content: 'Me! Me! 🙋🏻‍♀️ I want to know!',
+      content: 'Me! Me! I want to know!',
       created_at: '2024-09-04T12:00:00.000',
     },
     {
       id: 2,
       user_id: 2,
       post_id: 1,
-      content: 'Wow amazing ☺️',
+      content: 'Wow amazing',
       created_at: '2024-09-04T12:00:00.000',
     },
     {
@@ -24,10 +24,10 @@ export async function seed(knex) {
       created_at: '2024-09-04T12:00:00.000',
     },
     {
-      id: 3,
+      id: 4,
       user_id: 5,
       post_id: 3,
-      content: 'We can help 👩🏻‍💻👨🏻‍💻!',
+      content: 'We can help!',
       created_at: '2024-09-04T12:00:00.000',
     },
   ])
