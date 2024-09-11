@@ -15,7 +15,7 @@ export async function seed(knex) {
     {
       id: 2,
       user_id: 2,
-      content: 'How is everyone going?',
+      content: 'How is everyone after graduation?',
       image_url: '',
       file_url: '',
       likes: 10,

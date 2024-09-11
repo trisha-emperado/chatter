@@ -10,7 +10,7 @@ export async function seed(knex) {
       current_role: 'Expert AWS Engineer',
       age: 30,
       profile_picture_url:
-        'https://en.wikipedia.org/wiki/Snowboarding#/media/File:Snowboarding.jpg',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeUqKd_Bdt2PyKhVeuL5R7dQ9BsPon6Y32YA&s',
       cohort: 'Karaka-24',
       facilitator: false,
       github_url: 'https://github.com/giovanni-ambriz',
@@ -25,12 +25,12 @@ export async function seed(knex) {
       current_role: 'Poor Unemployed Graduate',
       age: 27,
       profile_picture_url:
-        'https://upload.wikimedia.org/wikipedia/en/1/1f/WomanYellingAtACat_meme.jpg',
+        'https://m.media-amazon.com/images/I/513eV9QFlAL._AC_UF894,1000_QL80_.jpg',
       cohort: 'Karaka-24',
       facilitator: true,
       github_url: 'https://github.com/gharris26',
       header_image_url:
-        'https://m.media-amazon.com/images/I/513eV9QFlAL._AC_UF894,1000_QL80_.jpg',
+        'https://upload.wikimedia.org/wikipedia/en/1/1f/WomanYellingAtACat_meme.jpg',
     },
     {
       id: 3,
@@ -70,7 +70,7 @@ export async function seed(knex) {
       current_role: 'Fantastic Facilitators',
       age: 32,
       profile_picture_url:
-        'https://static.vechttps://yt3.googleusercontent.com/ytc/AIdro_ljM7ZAf1j0Lwv2-Bh3hqPcgJ9s84KeVScieEQx7J6NI8A=s900-c-k-c0x00ffffff-no-rjteezy.com/system/resources/thumbnails/002/387/696/small_2x/user-profile-icon-free-vector.jpg',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFxdYaM7ucFUnQlBcwauGbD52dVd3rDoBCcA&s',
       cohort: 'Karaka-18',
       facilitator: true,
       github_url: 'https://github.com/dev-academy-admin',
