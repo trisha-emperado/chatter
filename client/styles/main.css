@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.my-profile-btn,
+.feed-btn,
+.following-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 5px;
+  display: block;
+}
+
+.profile-info-btn:hover,
+.feed-btn:hover {
+  background-color: #0056b3;
+}

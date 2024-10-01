@@ -1,15 +1,18 @@
+import { IfAuthenticated, IfNotAuthenticated } from './Authenticated.tsx'
+import SignInPage from './SignInPage.tsx'
 import { Outlet } from 'react-router-dom'
 
-export default function Layout() {
+function NavBar() {
   return (
-    <>
-      <header>
-        <h1>Fullstack Boilerplate - with Fruits!</h1>
-      </header>
-      <main>
+    <div className="officalBox">
+      <IfAuthenticated>
         <Outlet />
-      </main>
-      <footer></footer>
-    </>
+      </IfAuthenticated>
+      <IfNotAuthenticated>
+        <SignInPage />
+      </IfNotAuthenticated>
+    </div>
   )
 }
+
+export default NavBar
